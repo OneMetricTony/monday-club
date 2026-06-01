@@ -29,6 +29,17 @@ var QUESTIONS=[
  {topic:"Applications",q:"Police speed radar measures a car's speed using…",options:["the echo's loudness","the Doppler frequency shift of reflected waves","the time of sunrise","the car's colour"],answer:1,explain:"The reflected wave's frequency shift gives the speed (Doppler radar)."},
  {topic:"Scope",q:"The Doppler effect applies to…",options:["sound only","light only","all waves (sound and light)","standing waves only"],answer:2,explain:"It's a general wave phenomenon — both sound and light (and other waves)."},
  {topic:"Concept",q:"The Doppler shift happens because relative motion changes the…",options:["wave's speed in the medium","number of wavefronts reaching the observer per second","amplitude only","temperature"],answer:1,explain:"Relative motion changes how many wavefronts arrive per second → the observed frequency."}
+,
+ {topic:"Calc · approach",q:"A 300 Hz source moves toward a still observer at 40 m/s (v = 340). f′ = f·v/(v − v_s) =…",options:["268 Hz","340 Hz","300 Hz","383 Hz"],answer:1,explain:"f′ = 300 × 340/(340−40) = 300 × 340/300 = 340 Hz."},
+ {topic:"Calc · recede",q:"The same 300 Hz source now recedes at 40 m/s. f′ = f·v/(v + v_s) =…",options:["340 Hz","268 Hz","300 Hz","240 Hz"],answer:1,explain:"f′ = 300 × 340/(340+40) = 102000/380 ≈ 268 Hz."},
+ {topic:"Calc · observer",q:"An observer moves toward a still 400 Hz source at 34 m/s (v = 340). f′ = f·(v + v_o)/v =…",options:["360 Hz","440 Hz","400 Hz","374 Hz"],answer:1,explain:"f′ = 400 × (340+34)/340 = 400 × 374/340 = 440 Hz."},
+ {topic:"Calc · observer",q:"An observer moves away from a still 400 Hz source at 34 m/s (v = 340). f′ = f·(v − v_o)/v =…",options:["440 Hz","360 Hz","400 Hz","306 Hz"],answer:1,explain:"f′ = 400 × (340−34)/340 = 400 × 306/340 = 360 Hz."},
+ {topic:"Calc · approach",q:"A 200 Hz source approaches at 20 m/s (v = 340). f′ = f·v/(v − v_s) =…",options:["188.9 Hz","212.5 Hz","200 Hz","220 Hz"],answer:1,explain:"f′ = 200 × 340/320 = 68000/320 = 212.5 Hz."},
+ {topic:"Calc · recede",q:"A 500 Hz source recedes at 34 m/s (v = 340). f′ = f·v/(v + v_s) =…",options:["550 Hz","455 Hz","500 Hz","466 Hz"],answer:1,explain:"f′ = 500 × 340/374 = 170000/374 ≈ 455 Hz."},
+ {topic:"Calc · approach",q:"A 340 Hz source approaches at 34 m/s (v = 340). f′ = f·v/(v − v_s) =…",options:["306 Hz","378 Hz","340 Hz","408 Hz"],answer:1,explain:"f′ = 340 × 340/306 = 115600/306 ≈ 378 Hz."},
+ {topic:"Calc · basics",q:"A stationary source emits sound of wavelength 2 m (v = 340 m/s). Its frequency is…",options:["170 Hz","680 Hz","2 Hz","342 Hz"],answer:0,explain:"f = v/λ = 340/2 = 170 Hz (no motion, so no shift)."},
+ {topic:"Calc · reasoning",q:"As a source approaches you, the observed wavelength of its sound becomes…",options:["longer","shorter","unchanged","zero"],answer:1,explain:"Approaching crowds the wavefronts → shorter wavelength (higher frequency)."},
+ {topic:"Calc · reasoning",q:"Doubling a source's approach speed (still below v) makes the frequency shift…",options:["smaller","larger","unchanged","negative"],answer:1,explain:"A bigger v_s shrinks (v − v_s), raising f′ further → a larger shift."}
 ];
 MondayQuiz("quiz",QUESTIONS,{claudeHelp:true});
 </script></body></html>

@@ -30,6 +30,22 @@ var QUESTIONS=[
  {topic:"Harmonics",q:"How many antinodes does the nth harmonic of a string (fixed both ends) have?",options:["n","n − 1","2n","1"],answer:0,explain:"The nth harmonic has n antinodes (and n+1 nodes counting the ends)."},
  {topic:"Compare",q:"Compared with a travelling wave, a standing wave has…",options:["nodes that move along","fixed nodes and no net energy transport","a single moving crest","no amplitude"],answer:1,explain:"Standing waves have stationary nodes/antinodes and don't transport energy along the medium."},
  {topic:"String",q:"Increasing the tension in a string (same length) makes the wave speed…",options:["lower, lowering the frequency","higher, raising the frequency","unchanged","zero"],answer:1,explain:"Higher tension → higher wave speed → higher resonant frequencies (the string sounds higher)."}
+,
+ {topic:"Calc · string",q:"A string fixed at both ends has L = 1 m and wave speed 200 m/s. Its fundamental frequency is…",options:["50 Hz","100 Hz","200 Hz","400 Hz"],answer:1,explain:"f₁ = v/2L = 200/(2·1) = 100 Hz."},
+ {topic:"Calc · harmonics",q:"For that same string (f₁ = 100 Hz), the 3rd harmonic is…",options:["103 Hz","300 Hz","33 Hz","150 Hz"],answer:1,explain:"fₙ = n·f₁, so f₃ = 3 × 100 = 300 Hz."},
+ {topic:"Calc · string",q:"A string fixed at both ends has L = 0.5 m. Its fundamental wavelength is…",options:["0.5 m","1 m","0.25 m","2 m"],answer:1,explain:"Fundamental: λ = 2L = 2 × 0.5 = 1 m."},
+ {topic:"Calc · pipe",q:"A pipe open at both ends, L = 0.5 m, sound speed 340 m/s. Fundamental frequency is…",options:["170 Hz","340 Hz","680 Hz","85 Hz"],answer:1,explain:"Open–open: f₁ = v/2L = 340/1 = 340 Hz."},
+ {topic:"Calc · pipe",q:"A pipe closed at one end, L = 0.25 m, sound speed 340 m/s. Fundamental frequency is…",options:["170 Hz","340 Hz","680 Hz","85 Hz"],answer:1,explain:"Closed–open: f₁ = v/4L = 340/(4·0.25) = 340 Hz."},
+ {topic:"Calc · pipe",q:"For a closed-end pipe with fundamental f₁, the next possible harmonic is…",options:["2f₁","3f₁","1.5f₁","4f₁"],answer:1,explain:"Closed pipes have only odd harmonics, so the next is 3f₁."},
+ {topic:"Calc · geometry",q:"Adjacent nodes of a standing wave are 0.4 m apart. The wavelength is…",options:["0.2 m","0.8 m","0.4 m","1.6 m"],answer:1,explain:"Node spacing = λ/2, so λ = 2 × 0.4 = 0.8 m."},
+ {topic:"Calc · harmonics",q:"A guitar string sounds its fundamental at 256 Hz. Its 2nd harmonic is…",options:["128 Hz","512 Hz","258 Hz","768 Hz"],answer:1,explain:"f₂ = 2 × 256 = 512 Hz."},
+ {topic:"Calc · string",q:"A string fixed at both ends, L = 0.6 m, wave speed 300 m/s. Fundamental frequency is…",options:["250 Hz","500 Hz","180 Hz","125 Hz"],answer:0,explain:"f₁ = v/2L = 300/(2·0.6) = 250 Hz."},
+ {topic:"Calc · harmonics",q:"A string's 5th harmonic is 600 Hz. Its fundamental frequency is…",options:["3000 Hz","120 Hz","60 Hz","300 Hz"],answer:1,explain:"f₁ = f₅/5 = 600/5 = 120 Hz."},
+ {topic:"Calc · harmonics",q:"How many antinodes does the 4th harmonic of a string fixed at both ends have?",options:["3","4","5","8"],answer:1,explain:"The nth harmonic has n antinodes → 4."},
+ {topic:"Calc · pipe",q:"A pipe open at both ends has fundamental 170 Hz. Its 2nd harmonic is…",options:["85 Hz","340 Hz","510 Hz","170 Hz"],answer:1,explain:"Open–open supports all harmonics: f₂ = 2 × 170 = 340 Hz."},
+ {topic:"Calc · pipe",q:"A pipe closed at one end has L = 0.85 m. Its fundamental wavelength is…",options:["0.85 m","1.7 m","3.4 m","0.43 m"],answer:2,explain:"Closed–open fundamental: λ = 4L = 4 × 0.85 = 3.4 m."},
+ {topic:"Calc · v=fλ",q:"A standing wave has wavelength 1.2 m at frequency 250 Hz. The wave speed is…",options:["208 m/s","300 m/s","0.0048 m/s","251 m/s"],answer:1,explain:"v = f λ = 250 × 1.2 = 300 m/s."},
+ {topic:"Calc · reasoning",q:"Increasing a string's length (same wave speed) makes its fundamental frequency…",options:["higher","lower","unchanged","zero"],answer:1,explain:"f₁ = v/2L: larger L → lower f₁."}
 ];
 MondayQuiz("quiz",QUESTIONS,{claudeHelp:true});
 </script></body></html>

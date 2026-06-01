@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>Waves — Textbook · Monday 6–8 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 6–8</a> / Textbook</div></div>
+  <h1>🌊 Waves — the essentials</h1>
+  <p class="lede">Watch each animation, read the definition, then test yourself in the section quizzes (every question has a 🤖 Claude help button).</p>
+
+  <h2>1 · Travelling waves</h2>
+  <canvas id="anim1" class="tb-canvas"></canvas>
+  <p class="tb-cap">A travelling wave carries energy (and the disturbance) along — but the medium itself only oscillates in place (watch the red dot).</p>
+  <div class="defn"><h3>Wave basics</h3><p><b>Amplitude</b> = max displacement from rest. <b>Wavelength (λ)</b> = distance between two points in phase (e.g. crest to crest). <b>Frequency (f)</b> = oscillations per second (Hz). <b>Period (T)</b> = time for one cycle, T = 1/f.</p></div>
+  <div class="defn"><h3>Wave equation</h3><p>Wave speed <span class="eqn">v = f λ</span>. <b>Transverse</b> waves oscillate perpendicular to travel (light, water surface); <b>longitudinal</b> waves oscillate along the travel direction (sound).</p></div>
+  <div class="defn"><h3>C3 — Wave phenomena</h3><p><b>Reflection</b> (bounces back), <b>refraction</b> (bends when speed changes, Snell's law n₁sinθ₁ = n₂sinθ₂), <b>diffraction</b> (spreads through gaps/around edges, strongest when gap ≈ λ), and <b>interference</b> (waves superpose: in phase → constructive, antiphase → destructive).</p></div>
+
+  <h2>2 · Standing waves</h2>
+  <canvas id="anim2" class="tb-canvas"></canvas>
+  <p class="tb-cap">Two identical waves travelling opposite ways superpose into a standing wave. Yellow dots = <b>nodes</b> (never move); halfway between = <b>antinodes</b> (max swing).</p>
+  <div class="defn"><h3>C4 — Standing waves</h3><p>Formed by superposition of two waves of equal frequency/amplitude moving in opposite directions. <b>Nodes</b> have zero amplitude; <b>antinodes</b> have maximum. They don't transfer energy along the medium. Boundary conditions fix which wavelengths "fit" → the <b>harmonics</b>.</p></div>
+  <div class="defn"><h3>Harmonics</h3><p>String / pipe open at both ends: fₙ = n·v/2L. Pipe closed at one end (only odd harmonics): fₙ = n·v/4L, n = 1,3,5… The lowest is the <b>fundamental</b> (first harmonic).</p></div>
+
+  <h2>3 · The Doppler effect</h2>
+  <canvas id="anim3" class="tb-canvas"></canvas>
+  <p class="tb-cap">A moving source (red) crowds its wavefronts ahead of it (higher frequency / pitch) and stretches them behind (lower) — that's the Doppler effect.</p>
+  <div class="defn"><h3>C5 — Doppler effect</h3><p>The observed frequency changes when source and observer move relative to each other. <b>Approaching → higher</b> observed frequency; <b>receding → lower</b>. For sound: f′ = f · (v ± v_o)/(v ∓ v_s). For light, a receding source is <b>red-shifted</b>, approaching is <b>blue-shifted</b>.</p></div>
+
+  <div class="choices" style="margin-top:24px">
+    <a class="choice" href="c3-wave-phenomena.html"><span class="emoji">🌐</span><span><span class="t">Quiz: C3 Wave Phenomena</span><span class="s">reflection, refraction, diffraction, interference</span></span><span class="go">→</span></a>
+    <a class="choice" href="c4-standing-waves.html"><span class="emoji">🎻</span><span><span class="t">Quiz: C4 Standing Waves</span><span class="s">nodes, antinodes, harmonics</span></span><span class="go">→</span></a>
+    <a class="choice" href="c5-doppler.html"><span class="emoji">🚓</span><span><span class="t">Quiz: C5 Doppler Effect</span><span class="s">pitch shifts, red/blue shift</span></span><span class="go">→</span></a>
+  </div>
+  <footer>Monday Club · Physics · 6–8 PM</footer>
+</div>
+<script src="waves-anim.js"></script>
+<script>WAVES.traveling("anim1"); WAVES.standing("anim2"); WAVES.doppler("anim3");</script>
+</body>
+</html>

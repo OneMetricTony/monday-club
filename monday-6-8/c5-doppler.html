@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>C5 Doppler Effect — Monday 6–8 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css"></head>
+<body><div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 6–8</a> / C5 Doppler Effect</div></div>
+  <h1>🚓 C5 — Doppler Effect</h1>
+  <p class="lede">Frequency shifts from relative motion — sound and light. 3 tries + hints, and a 🤖 Claude help button on every question.</p>
+  <div id="quiz"></div>
+  <footer>Monday Club · Physics · C5</footer>
+</div>
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS=[
+ {topic:"Definition",q:"The Doppler effect is the change in observed <b>frequency</b> due to…",options:["the amplitude of the wave","relative motion between source and observer","the colour of the source","the medium's temperature only"],answer:1,explain:"It's the apparent frequency change caused by relative motion of source and observer."},
+ {topic:"Approach",q:"As a source moves <b>toward</b> a stationary observer, the observed frequency is…",options:["higher than emitted","lower than emitted","unchanged","zero"],answer:0,explain:"Approaching → wavefronts bunch up → higher observed frequency (higher pitch)."},
+ {topic:"Recede",q:"As a source moves <b>away</b> from a stationary observer, the observed frequency is…",options:["higher","lower","unchanged","doubled"],answer:1,explain:"Receding → wavefronts stretch out → lower observed frequency."},
+ {topic:"Wavefronts",q:"In front of a moving source, the wavefronts are…",options:["stretched (longer λ)","compressed (shorter λ)","unchanged","destroyed"],answer:1,explain:"Ahead of the source the fronts crowd together → shorter wavelength → higher frequency."},
+ {topic:"Wavefronts",q:"Behind a moving source, the wavefronts are…",options:["compressed","stretched (longer λ)","at right angles","stationary"],answer:1,explain:"Behind the source they spread out → longer wavelength → lower frequency."},
+ {topic:"Observer",q:"If the observer moves <b>toward</b> a stationary source, the observed frequency…",options:["increases","decreases","stays equal","becomes zero"],answer:0,explain:"Moving into the wavefronts means meeting more per second → higher frequency."},
+ {topic:"Pass-by",q:"As an ambulance passes you, the siren pitch…",options:["rises then stays high","is constant","drops from high to low as it passes","only rises"],answer:2,explain:"Approaching = higher pitch; receding after passing = lower pitch — a clear drop as it goes by."},
+ {topic:"Formula",q:"For sound, a source moving toward a stationary observer gives…",options:["f′ = f (v − v_s)/v","f′ = f v/(v − v_s)","f′ = f v/(v + v_s)","f′ = f (v + v_s)/v"],answer:1,explain:"Approaching source: f′ = f · v/(v − v_s) — denominator shrinks, so f′ rises."},
+ {topic:"No shift",q:"If source and observer move together with the <b>same</b> velocity, the observed frequency is…",options:["higher","lower","unchanged (no relative motion)","zero"],answer:2,explain:"No relative motion → no Doppler shift."},
+ {topic:"Light",q:"Light from a galaxy moving <b>away</b> from us is…",options:["blue-shifted","red-shifted","unchanged","polarized"],answer:1,explain:"Receding light source → longer wavelength → shifted toward red (red-shift)."},
+ {topic:"Light",q:"Light from a source moving <b>toward</b> us is…",options:["red-shifted","blue-shifted","unchanged","slowed"],answer:1,explain:"Approaching → shorter wavelength → blue-shift."},
+ {topic:"Cosmology",q:"The red-shift of distant galaxies is evidence for…",options:["a static universe","an expanding universe","cooling of stars","the Doppler effect not applying to light"],answer:1,explain:"Galaxies receding (red-shifted) in all directions supports an expanding universe."},
+ {topic:"Magnitude",q:"A larger source speed produces a…",options:["smaller frequency shift","larger frequency shift","shift only for light","no shift"],answer:1,explain:"Faster relative motion → bigger Doppler shift."},
+ {topic:"Applications",q:"Police speed radar measures a car's speed using…",options:["the echo's loudness","the Doppler frequency shift of reflected waves","the time of sunrise","the car's colour"],answer:1,explain:"The reflected wave's frequency shift gives the speed (Doppler radar)."},
+ {topic:"Scope",q:"The Doppler effect applies to…",options:["sound only","light only","all waves (sound and light)","standing waves only"],answer:2,explain:"It's a general wave phenomenon — both sound and light (and other waves)."},
+ {topic:"Concept",q:"The Doppler shift happens because relative motion changes the…",options:["wave's speed in the medium","number of wavefronts reaching the observer per second","amplitude only","temperature"],answer:1,explain:"Relative motion changes how many wavefronts arrive per second → the observed frequency."}
+];
+MondayQuiz("quiz",QUESTIONS,{claudeHelp:true});
+</script></body></html>

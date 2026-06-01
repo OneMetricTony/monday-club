@@ -1,6 +1,7 @@
 /* Monday Club — shared engine: multiple-choice quiz, fake terminal, notes download. */
 (function () {
   var KEYS = ["A", "B", "C", "D", "E"];
+  function stripTags(h){ return String(h).replace(/<[^>]*>/g, ""); }
 
   /* ---------------- multiple-choice quiz ----------------
      Each question silently allows up to 3 wrong tries; every wrong try shows a
@@ -34,6 +35,9 @@
           '<div class="qtext">' + q.q + '</div>' +
           (q.code ? '<pre>' + q.code + '</pre>' : '') +
           '<div class="opts">' + optsHtml + '</div>' +
+          (opts.claudeHelp ? '<div class="qclaude"><a class="btn ghost claude-btn" target="_blank" rel="noopener" href="https://claude.ai/new?q=' +
+            encodeURIComponent("I'm working on a physics question and want a HINT, not the full answer. Question: " + stripTags(q.q) + "  Options: " + q.options.join(" | ")) +
+            '">🤖 Claude help</a></div>' : '') +
           '<div class="explain"></div>' +
           '<div class="qnav"><button class="btn next" disabled>' + (i === questions.length - 1 ? "See results" : "Next question") + '</button></div>' +
         '</div>';

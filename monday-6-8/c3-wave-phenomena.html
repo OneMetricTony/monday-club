@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>C3 Wave Phenomena — Monday 6–8 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css"></head>
+<body><div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 6–8</a> / C3 Wave Phenomena</div></div>
+  <h1>🌐 C3 — Wave Phenomena</h1>
+  <p class="lede">Definitions and concepts: types of waves, reflection, refraction, diffraction, interference. 3 tries + hints, and a 🤖 Claude help button on every question.</p>
+  <div id="quiz"></div>
+  <footer>Monday Club · Physics · C3</footer>
+</div>
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS=[
+ {topic:"Wave types",q:"In a <b>transverse</b> wave, the oscillation is…",options:["along the direction of travel","perpendicular to the direction of travel","always vertical","absent"],answer:1,explain:"Transverse = oscillation perpendicular to the direction of energy travel (e.g. light, water surface)."},
+ {topic:"Wave types",q:"Which is a <b>longitudinal</b> wave?",options:["light","a wave on a string","sound in air","a water surface ripple"],answer:2,explain:"Sound is longitudinal — air particles oscillate along the travel direction (compressions & rarefactions)."},
+ {topic:"Wave equation",q:"The wave speed equation is…",options:["v = f / λ","v = f λ","v = λ / f","v = f + λ"],answer:1,explain:"v = f λ (speed = frequency × wavelength)."},
+ {topic:"Definitions",q:"Frequency is measured in…",options:["metres","seconds","hertz (Hz)","newtons"],answer:2,explain:"Frequency (cycles per second) is measured in hertz."},
+ {topic:"Definitions",q:"The period T and frequency f are related by…",options:["T = f","T = 1/f","T = f²","T = v f"],answer:1,explain:"Period is the time for one cycle: T = 1/f."},
+ {topic:"Definitions",q:"Wavelength is the distance between…",options:["a crest and the next trough","two adjacent points in phase (e.g. crest to crest)","the source and observer","two nodes"],answer:1,explain:"Wavelength λ is the distance between two consecutive in-phase points, like crest to crest."},
+ {topic:"Reflection",q:"The law of reflection states that the angle of incidence…",options:["is larger than the angle of reflection","equals the angle of reflection","is always 90°","equals the wavelength"],answer:1,explain:"Angle of incidence = angle of reflection (both measured from the normal)."},
+ {topic:"Refraction",q:"Refraction is the…",options:["bouncing of a wave off a surface","bending of a wave when its speed changes (new medium)","spreading of a wave through a gap","cancelling of two waves"],answer:1,explain:"Refraction = change of direction caused by a change in wave speed entering a new medium."},
+ {topic:"Refraction",q:"Snell's law is written…",options:["n₁ sinθ₁ = n₂ sinθ₂","n₁ cosθ₁ = n₂ cosθ₂","n₁ θ₁ = n₂ θ₂","sinθ₁ = sinθ₂"],answer:0,explain:"n₁ sinθ₁ = n₂ sinθ₂."},
+ {topic:"Refraction",q:"Entering a denser (higher-n) medium, light…",options:["speeds up and bends away from the normal","slows down and bends toward the normal","is unaffected","reflects only"],answer:1,explain:"Higher index → slower → bends toward the normal."},
+ {topic:"Diffraction",q:"Diffraction is the…",options:["bending at a boundary due to speed change","spreading of waves through a gap or around an obstacle","reflection off a mirror","change in pitch from motion"],answer:1,explain:"Diffraction = spreading of waves as they pass through gaps or around edges."},
+ {topic:"Diffraction",q:"Diffraction is most pronounced when the gap width is…",options:["much larger than the wavelength","about equal to the wavelength","zero","much smaller than an atom"],answer:1,explain:"Greatest spreading when the gap ≈ the wavelength."},
+ {topic:"Superposition",q:"The principle of superposition says the resultant displacement is…",options:["the larger of the two waves","the sum of the individual displacements","always zero","the product of the two"],answer:1,explain:"Overlapping waves add: resultant = sum of the individual displacements."},
+ {topic:"Interference",q:"Two waves interfere <b>constructively</b> when their path difference is…",options:["a whole number of wavelengths (nλ)","a half-odd number of wavelengths","exactly λ/4","always zero"],answer:0,explain:"Constructive (in phase): path difference = nλ."},
+ {topic:"Interference",q:"<b>Destructive</b> interference occurs when the path difference is…",options:["nλ","(n + ½)λ","2λ","λ/8"],answer:1,explain:"Destructive (antiphase): path difference = (n + ½)λ."},
+ {topic:"Interference",q:"Two sources are <b>coherent</b> if they have…",options:["different frequencies","the same frequency and a constant phase difference","the same amplitude only","no relationship"],answer:1,explain:"Coherent = same frequency and a constant phase relationship — needed for a stable interference pattern."},
+ {topic:"Polarization",q:"Polarization can occur only for…",options:["longitudinal waves","transverse waves","sound waves","all waves equally"],answer:1,explain:"Only transverse waves can be polarized (they have a direction of oscillation perpendicular to travel)."},
+ {topic:"Phase",q:"Two points oscillating in <b>antiphase</b> differ in phase by…",options:["0°","90°","180° (π rad)","360°"],answer:2,explain:"Antiphase = exactly out of step, a phase difference of 180° (π)."}
+];
+MondayQuiz("quiz",QUESTIONS,{claudeHelp:true});
+</script></body></html>

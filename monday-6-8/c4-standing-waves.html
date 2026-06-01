@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>C4 Standing Waves — Monday 6–8 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css"></head>
+<body><div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 6–8</a> / C4 Standing Waves</div></div>
+  <h1>🎻 C4 — Standing Waves</h1>
+  <p class="lede">Nodes, antinodes, boundary conditions and harmonics. 3 tries + hints, and a 🤖 Claude help button on every question.</p>
+  <div id="quiz"></div>
+  <footer>Monday Club · Physics · C4</footer>
+</div>
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS=[
+ {topic:"Formation",q:"A standing wave is formed by two waves that have…",options:["different frequencies travelling the same way","equal frequency & amplitude travelling in opposite directions","the same direction and different speeds","no relationship"],answer:1,explain:"Two identical waves (equal f and amplitude) travelling opposite ways superpose into a standing wave."},
+ {topic:"Nodes",q:"A <b>node</b> is a point of…",options:["maximum amplitude","zero amplitude","maximum speed","maximum frequency"],answer:1,explain:"At a node the two waves always cancel → zero amplitude."},
+ {topic:"Antinodes",q:"An <b>antinode</b> is a point of…",options:["zero amplitude","maximum amplitude","zero velocity always","fixed boundary"],answer:1,explain:"Antinodes oscillate with maximum amplitude."},
+ {topic:"Geometry",q:"The distance between two adjacent nodes is…",options:["λ","λ/2","λ/4","2λ"],answer:1,explain:"Adjacent nodes are half a wavelength apart (λ/2)."},
+ {topic:"Geometry",q:"The distance from a node to the next antinode is…",options:["λ/2","λ/4","λ","λ/8"],answer:1,explain:"Node to adjacent antinode is a quarter wavelength (λ/4)."},
+ {topic:"Energy",q:"A standing wave transfers energy along the medium…",options:["yes, like a travelling wave","no — energy stays localised (no net transport)","only at nodes","only at high frequency"],answer:1,explain:"Standing waves store energy in place; there is no net energy transport along the medium."},
+ {topic:"String",q:"For a string fixed at both ends, the fundamental wavelength is…",options:["λ = L","λ = 2L","λ = 4L","λ = L/2"],answer:1,explain:"Both ends are nodes; the simplest fit is half a wavelength along L → λ = 2L."},
+ {topic:"String",q:"The fundamental frequency of a string fixed at both ends is…",options:["v/L","v/2L","v/4L","2v/L"],answer:1,explain:"f₁ = v/(2L), since λ₁ = 2L and f = v/λ."},
+ {topic:"Harmonics",q:"For a string fixed at both ends, the nth harmonic frequency is…",options:["fₙ = n v/2L","fₙ = n v/4L","fₙ = v/(nL)","fₙ = n²v/2L"],answer:0,explain:"fₙ = n·v/2L for n = 1, 2, 3, …"},
+ {topic:"Pipes",q:"A pipe <b>open at both ends</b> has, at each open end, a…",options:["node","antinode","fixed point","zero of pressure only"],answer:1,explain:"Open ends are displacement antinodes; it supports all harmonics (n = 1,2,3,…)."},
+ {topic:"Pipes",q:"A pipe <b>closed at one end</b> supports…",options:["all harmonics","only even harmonics","only odd harmonics","no harmonics"],answer:2,explain:"Closed-one-end pipes have a node at the closed end and antinode at the open end → only odd harmonics (n = 1,3,5…)."},
+ {topic:"Pipes",q:"For a pipe closed at one end, the fundamental wavelength is…",options:["λ = 2L","λ = 4L","λ = L","λ = L/2"],answer:1,explain:"Node at closed end + antinode at open end fits a quarter wave → λ = 4L."},
+ {topic:"Phase",q:"At a node, the two superposing waves are…",options:["in phase (reinforce)","in antiphase (cancel)","at 90°","absent"],answer:1,explain:"At a node the waves are always in antiphase, so they cancel to zero."},
+ {topic:"Resonance",q:"Resonance happens when a system is driven at…",options:["any frequency","one of its natural (resonant) frequencies","zero frequency","double its length"],answer:1,explain:"Driving at a natural frequency gives a large-amplitude standing wave — resonance."},
+ {topic:"Harmonics",q:"How many antinodes does the nth harmonic of a string (fixed both ends) have?",options:["n","n − 1","2n","1"],answer:0,explain:"The nth harmonic has n antinodes (and n+1 nodes counting the ends)."},
+ {topic:"Compare",q:"Compared with a travelling wave, a standing wave has…",options:["nodes that move along","fixed nodes and no net energy transport","a single moving crest","no amplitude"],answer:1,explain:"Standing waves have stationary nodes/antinodes and don't transport energy along the medium."},
+ {topic:"String",q:"Increasing the tension in a string (same length) makes the wave speed…",options:["lower, lowering the frequency","higher, raising the frequency","unchanged","zero"],answer:1,explain:"Higher tension → higher wave speed → higher resonant frequencies (the string sounds higher)."}
+];
+MondayQuiz("quiz",QUESTIONS,{claudeHelp:true});
+</script></body></html>

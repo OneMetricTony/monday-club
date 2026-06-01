@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>Python For Loops — Monday 5–6 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css"></head>
+<body><div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / <a href="python.html">Python</a> / For Loops</div></div>
+  <h1>🐍 Python — For Loops</h1>
+  <p class="lede">Iterating over sequences and strings, <code>range</code>, <code>break</code>/<code>continue</code>, and the loop <code>else</code>. 3 tries + hints. Notes at the end.</p>
+  <div id="quiz"></div>
+  <div class="term-wrap"><h2>Playground terminal <span class="tag">just for fun</span></h2><p class="muted">Type <code>help</code>, <code>run</code>, <code>code</code>.</p><div id="term"></div></div>
+  <div class="notes-cta"><h2>📥 Today's notes</h2><p>For-loop quick summary.</p><button class="btn" id="dlNotes">Download notes (.html)</button></div>
+  <footer>Monday Club · Python · For Loops</footer>
+</div>
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS=[
+ {topic:"For",q:"A Python <code>for</code> loop iterates over…",options:["only numbers","a sequence (list, tuple, string, range…)","only ranges","files only"],answer:1,explain:"It steps through the items of any iterable/sequence."},
+ {topic:"For",q:"What does <code>for x in \"abc\":</code> loop over?",options:["the whole string once","each character: a, b, c","nothing","the length"],answer:1,explain:"Looping a string gives each character."},
+ {topic:"For",q:"What prints?",code:"for i in [1, 2, 3]:\n    print(i)",options:["[1, 2, 3]","1 2 3 (each on a line)","3","123"],answer:1,explain:"It prints each list item: 1, then 2, then 3."},
+ {topic:"For",q:"<code>for i in range(3):</code> gives i =",options:["1, 2, 3","0, 1, 2","0, 1, 2, 3","3"],answer:1,explain:"range(3) → 0, 1, 2."},
+ {topic:"For",q:"What does <code>break</code> do in a for loop?",options:["skips one item","stops the loop entirely","restarts","nothing"],answer:1,explain:"<code>break</code> ends the loop immediately."},
+ {topic:"For",q:"What does <code>continue</code> do?",options:["ends the loop","skips to the next item","prints the index","reverses the loop"],answer:1,explain:"<code>continue</code> skips the rest of this pass and moves on."},
+ {topic:"For",q:"In a <code>for ... else</code>, the <code>else</code> runs…",options:["never","after the loop finishes without a break","every pass","before the loop"],answer:1,explain:"The else runs once the loop completes (and no break happened)."},
+ {topic:"For",q:"A loop inside another loop is called a…",options:["double function","nested loop","range loop","break loop"],answer:1,explain:"That's a nested loop — the inner loop runs fully for each outer pass."}
+];
+MondayQuiz("quiz",QUESTIONS,{});
+MondayTerminal("term",{lang:"python",hint:"for x in <sequence>: — works on lists, strings, and range().",sample:{code:"for c in \"hi\":\n    print(c)\nfor i in range(3):\n    print(i)",out:"h\ni\n0\n1\n2"}});
+document.getElementById("dlNotes").onclick=function(){downloadNotes("python-for-notes.html","Python For Loops — Notes",[
+ {h:"Iterating",body:"<pre>for item in [10, 20, 30]:\n    print(item)\n\nfor c in \"abc\":   # each character\n    print(c)\n\nfor i in range(3): # 0,1,2\n    print(i)</pre>"},
+ {h:"Controls",body:"<ul><li><code>break</code> — stop early</li><li><code>continue</code> — skip to next item</li><li><code>else</code> — runs if no break happened</li><li>Loops can be <b>nested</b>.</li></ul>"}
+]);};
+</script></body></html>

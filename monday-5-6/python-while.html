@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>Python While Loops — Monday 5–6 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css"></head>
+<body><div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / <a href="python.html">Python</a> / While Loops</div></div>
+  <h1>🐍 Python — While Loops</h1>
+  <p class="lede">Looping while a condition holds, <code>break</code>, <code>continue</code>, and the loop <code>else</code>. 3 tries + hints. Notes at the end.</p>
+  <div id="quiz"></div>
+  <div class="term-wrap"><h2>Playground terminal <span class="tag">just for fun</span></h2><p class="muted">Type <code>help</code>, <code>run</code>, <code>code</code>.</p><div id="term"></div></div>
+  <div class="notes-cta"><h2>📥 Today's notes</h2><p>While-loop quick summary.</p><button class="btn" id="dlNotes">Download notes (.html)</button></div>
+  <footer>Monday Club · Python · While Loops</footer>
+</div>
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS=[
+ {topic:"While",q:"A <code>while</code> loop keeps running as long as its condition is…",options:["False","True","zero","empty"],answer:1,explain:"It repeats while the condition is True."},
+ {topic:"While",q:"What must happen inside the loop to avoid an INFINITE loop?",options:["nothing","the condition variable must change toward False","add a comment","import a module"],answer:1,explain:"Something must eventually make the condition False (e.g. <code>i += 1</code>)."},
+ {topic:"While",q:"What does <code>break</code> do?",options:["skips one iteration","stops the loop entirely","restarts the loop","does nothing"],answer:1,explain:"<code>break</code> exits the loop immediately."},
+ {topic:"While",q:"What does <code>continue</code> do?",options:["stops the loop","skips the rest of this iteration and goes to the next","breaks the program","prints the index"],answer:1,explain:"<code>continue</code> jumps to the next iteration."},
+ {topic:"While",q:"What prints?",code:"i = 1\nwhile i < 4:\n    print(i)\n    i += 1",options:["1 2 3","1 2 3 4","0 1 2 3","infinite"],answer:0,explain:"Prints 1, 2, 3; at i=4 the condition i<4 is False."},
+ {topic:"While",q:"<code>i += 1</code> is the same as…",options:["i = 1","i = i + 1","i++","i = i * 1"],answer:1,explain:"<code>+=</code> adds and reassigns: i = i + 1. (Python has no i++.)"},
+ {topic:"While",q:"In a <code>while ... else</code>, the <code>else</code> block runs…",options:["never","once the condition becomes False (loop ended without break)","every iteration","only if break is used"],answer:1,explain:"The else runs when the loop finishes normally (no break)."},
+ {topic:"While",q:"<code>while True:</code> will…",options:["never run","loop forever unless a break is reached","run exactly once","cause an error"],answer:1,explain:"The condition is always True, so you need a <code>break</code> to stop."}
+];
+MondayQuiz("quiz",QUESTIONS,{});
+MondayTerminal("term",{lang:"python",hint:"Change the loop variable each pass or it never ends.",sample:{code:"i = 1\nwhile i < 4:\n    print(i)\n    i += 1",out:"1\n2\n3"}});
+document.getElementById("dlNotes").onclick=function(){downloadNotes("python-while-notes.html","Python While Loops — Notes",[
+ {h:"Basic loop",body:"<pre>i = 1\nwhile i < 4:\n    print(i)\n    i += 1   # change the variable!</pre><div class='tip'>Forget to change the variable → infinite loop.</div>"},
+ {h:"Controls",body:"<ul><li><code>break</code> — stop the loop now</li><li><code>continue</code> — skip to the next pass</li><li><code>else</code> — runs if the loop ended without a break</li></ul>"}
+]);};
+</script></body></html>

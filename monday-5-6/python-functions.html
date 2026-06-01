@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>Python Functions — Monday 5–6 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css"></head>
+<body><div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / <a href="python.html">Python</a> / Functions</div></div>
+  <h1>🐍 Python — Functions</h1>
+  <p class="lede">Defining and calling functions, parameters &amp; arguments, defaults, <code>return</code>, and *args/**kwargs. 3 tries + hints. Notes at the end.</p>
+  <div id="quiz"></div>
+  <div class="term-wrap"><h2>Playground terminal <span class="tag">just for fun</span></h2><p class="muted">Type <code>help</code>, <code>run</code>, <code>code</code>.</p><div id="term"></div></div>
+  <div class="notes-cta"><h2>📥 Today's notes</h2><p>Functions quick summary.</p><button class="btn" id="dlNotes">Download notes (.html)</button></div>
+  <footer>Monday Club · Python · Functions</footer>
+</div>
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS=[
+ {topic:"Functions",q:"Which keyword defines a function?",options:["function","def","func","define"],answer:1,explain:"Python uses <code>def</code>."},
+ {topic:"Functions",q:"How do you run (call) a function named <code>greet</code>?",options:["call greet","greet()","run greet","def greet()"],answer:1,explain:"Add parentheses: <code>greet()</code>."},
+ {topic:"Functions",q:"What does <code>return</code> do?",options:["prints a value","sends a value back to the caller","ends the program","loops"],answer:1,explain:"<code>return</code> hands a value back to whoever called the function."},
+ {topic:"Functions",q:"What prints?",code:"def add(a, b):\n    return a + b\nprint(add(2, 3))",options:["23","5","add","None"],answer:1,explain:"add(2,3) returns 5."},
+ {topic:"Functions",q:"A function with no <code>return</code> statement returns…",options:["0","\"\"","None","an error"],answer:2,explain:"With no return, Python returns <code>None</code>."},
+ {topic:"Functions",q:"In <code>def f(x=5):</code>, the <code>5</code> is…",options:["a return value","a default parameter value","a type","a loop count"],answer:1,explain:"It's a default used when no argument is passed."},
+ {topic:"Functions",q:"<code>*args</code> in a definition collects extra positional arguments into a…",options:["list","tuple","dict","string"],answer:1,explain:"<code>*args</code> gathers extra positional args into a tuple."},
+ {topic:"Functions",q:"<code>**kwargs</code> collects extra keyword arguments into a…",options:["tuple","dictionary","set","list"],answer:1,explain:"<code>**kwargs</code> gathers named args into a dictionary."}
+];
+MondayQuiz("quiz",QUESTIONS,{});
+MondayTerminal("term",{lang:"python",hint:"def name(params): ... return value. Call with name(args).",sample:{code:"def greet(name=\"world\"):\n    return \"hi \" + name\nprint(greet())\nprint(greet(\"Donald\"))",out:"hi world\nhi Donald"}});
+document.getElementById("dlNotes").onclick=function(){downloadNotes("python-functions-notes.html","Python Functions — Notes",[
+ {h:"Define & call",body:"<pre>def add(a, b):\n    return a + b\n\nadd(2, 3)   # 5</pre><ul><li>No <code>return</code> → returns <code>None</code>.</li></ul>"},
+ {h:"Parameters",body:"<ul><li>Default: <code>def f(x=5):</code></li><li><code>*args</code> → extra positional args as a <b>tuple</b></li><li><code>**kwargs</code> → extra keyword args as a <b>dict</b></li></ul>"}
+]);};
+</script></body></html>

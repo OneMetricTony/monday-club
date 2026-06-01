@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>Python If...Else — Monday 5–6 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css"></head>
+<body><div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / <a href="python.html">Python</a> / If...Else</div></div>
+  <h1>🐍 Python — If...Else</h1>
+  <p class="lede">Conditions, comparison &amp; logical operators, elif, and the short-hand ternary. 3 tries + hints. Notes at the end.</p>
+  <div id="quiz"></div>
+  <div class="term-wrap"><h2>Playground terminal <span class="tag">just for fun</span></h2><p class="muted">Type <code>help</code>, <code>run</code>, <code>code</code>.</p><div id="term"></div></div>
+  <div class="notes-cta"><h2>📥 Today's notes</h2><p>If...Else quick summary.</p><button class="btn" id="dlNotes">Download notes (.html)</button></div>
+  <footer>Monday Club · Python · If...Else</footer>
+</div>
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS=[
+ {topic:"If...Else",q:"Which keyword starts a condition in Python?",options:["when","if","cond","switch"],answer:1,explain:"Python uses <code>if</code>."},
+ {topic:"If...Else",q:"What goes at the end of the <code>if</code> line, before the indented block?",options:["a semicolon ;","a colon :","braces { }","the word then"],answer:1,explain:"A colon, then an indented block."},
+ {topic:"If...Else",q:"How do you write \"else if\" in Python?",options:["elseif","else if","elif","elsif"],answer:2,explain:"Python uses <code>elif</code>."},
+ {topic:"If...Else",q:"Which operator checks if two values are EQUAL?",options:["=","==","=>","is="],answer:1,explain:"<code>==</code> compares; a single <code>=</code> assigns."},
+ {topic:"If...Else",q:"What prints?",code:"x = 10\nif x > 5:\n    print(\"big\")\nelif x > 0:\n    print(\"small\")\nelse:\n    print(\"neg\")",options:["big","small","neg","nothing"],answer:0,explain:"x>5 is True first, so \"big\" — the rest are skipped."},
+ {topic:"If...Else",q:"<code>if x:</code> when <code>x = 0</code> — does the block run?",options:["Yes","No (0 is falsy)","Error","Only once"],answer:1,explain:"0 is falsy, so the block is skipped."},
+ {topic:"If...Else",q:"<code>and</code>, <code>or</code>, <code>not</code> are…",options:["loops","logical operators","functions","types"],answer:1,explain:"They combine/negate boolean conditions."},
+ {topic:"If...Else",q:"Which is a valid one-line (ternary) if?",options:["print(\"A\") if a>b else print(\"B\")","if a>b then A else B","a>b ? A : B","print A if a>b"],answer:0,explain:"Python's conditional expression: <value> if <cond> else <value>."}
+];
+MondayQuiz("quiz",QUESTIONS,{});
+MondayTerminal("term",{lang:"python",hint:"Indent the block under the colon. == compares, = assigns.",sample:{code:"x = 7\nif x % 2 == 0:\n    print(\"even\")\nelse:\n    print(\"odd\")",out:"odd"}});
+document.getElementById("dlNotes").onclick=function(){downloadNotes("python-ifelse-notes.html","Python If...Else — Notes",[
+ {h:"Structure",body:"<pre>if cond:\n    ...\nelif other:\n    ...\nelse:\n    ...</pre><div class='tip'>Colon + indentation makes the block. Use <code>elif</code> for else-if.</div>"},
+ {h:"Operators",body:"<ul><li>Compare: <code>==  !=  &lt;  &gt;  &lt;=  &gt;=</code></li><li>Combine: <code>and</code>, <code>or</code>, <code>not</code></li><li>Ternary: <code>A if cond else B</code></li></ul>"}
+]);};
+</script></body></html>

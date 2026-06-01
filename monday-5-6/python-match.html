@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>Python Match — Monday 5–6 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css"></head>
+<body><div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / <a href="python.html">Python</a> / Match</div></div>
+  <h1>🐍 Python — Match</h1>
+  <p class="lede">The <code>match</code> statement: cases, the <code>_</code> wildcard, and combining values. 3 tries + hints. Notes at the end.</p>
+  <div id="quiz"></div>
+  <div class="term-wrap"><h2>Playground terminal <span class="tag">just for fun</span></h2><p class="muted">Type <code>help</code>, <code>run</code>, <code>code</code>.</p><div id="term"></div></div>
+  <div class="notes-cta"><h2>📥 Today's notes</h2><p>Match quick summary.</p><button class="btn" id="dlNotes">Download notes (.html)</button></div>
+  <footer>Monday Club · Python · Match</footer>
+</div>
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS=[
+ {topic:"Match",q:"The <code>match</code> statement is a cleaner replacement for…",options:["a long if...elif...else chain","a for loop","a function","a list"],answer:0,explain:"It selects one of many code blocks based on a value, like a switch."},
+ {topic:"Match",q:"What keyword introduces each option inside a match?",options:["option","case","when","if"],answer:1,explain:"Each block starts with <code>case</code>."},
+ {topic:"Match",q:"Which case acts like a default (\"anything else\")?",options:["case default:","case else:","case _:","case *:"],answer:2,explain:"<code>case _:</code> matches anything not caught above."},
+ {topic:"Match",q:"Does Python's match \"fall through\" to later cases like a C switch?",options:["Yes","No — only the first matching case runs","Only with break","Always runs all cases"],answer:1,explain:"Just the first matching case runs; no break needed."},
+ {topic:"Match",q:"How do you make ONE case match several values, e.g. Saturday or Sunday?",options:["case \"Sat\", \"Sun\":","case \"Sat\" | \"Sun\":","case \"Sat\" or \"Sun\":","case [\"Sat\",\"Sun\"]"],answer:1,explain:"Combine values with <code>|</code> (the or-pattern)."},
+ {topic:"Match",q:"What prints?",code:"day = 4\nmatch day:\n    case 6 | 7:\n        print(\"weekend\")\n    case _:\n        print(\"weekday\")",options:["weekend","weekday","4","error"],answer:1,explain:"4 isn't 6 or 7, so the wildcard <code>case _</code> runs → weekday."},
+ {topic:"Match",q:"You can add an extra condition to a case with…",options:["a guard: case x if x>0:","case x where x>0:","case x and x>0:","you can't"],answer:0,explain:"A <code>case ... if condition:</code> guard adds a test."},
+ {topic:"Match",q:"The <code>match</code> statement is available from which Python version?",options:["2.7","3.6","3.10","all versions"],answer:2,explain:"match-case was added in Python 3.10."}
+];
+MondayQuiz("quiz",QUESTIONS,{});
+MondayTerminal("term",{lang:"python",hint:"case _ is the catch-all. Combine values with |.",sample:{code:"day = 6\nmatch day:\n    case 6 | 7:\n        print(\"weekend\")\n    case _:\n        print(\"weekday\")",out:"weekend"}});
+document.getElementById("dlNotes").onclick=function(){downloadNotes("python-match-notes.html","Python Match — Notes",[
+ {h:"Structure (Python 3.10+)",body:"<pre>match value:\n    case 1:\n        ...\n    case 2 | 3:      # several values\n        ...\n    case x if x>9:   # guard\n        ...\n    case _:          # default\n        ...</pre>"},
+ {h:"Key points",body:"<ul><li>Only the first matching case runs (no fall-through).</li><li><code>_</code> is the wildcard/default.</li><li><code>|</code> combines values in one case.</li></ul>"}
+]);};
+</script></body></html>

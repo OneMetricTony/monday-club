@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>Python Range — Monday 5–6 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css"></head>
+<body><div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / <a href="python.html">Python</a> / Range</div></div>
+  <h1>🐍 Python — Range</h1>
+  <p class="lede">The <code>range()</code> function: start, stop (exclusive), and step. 3 tries + hints. Notes at the end.</p>
+  <div id="quiz"></div>
+  <div class="term-wrap"><h2>Playground terminal <span class="tag">just for fun</span></h2><p class="muted">Type <code>help</code>, <code>run</code>, <code>code</code>.</p><div id="term"></div></div>
+  <div class="notes-cta"><h2>📥 Today's notes</h2><p>Range quick summary.</p><button class="btn" id="dlNotes">Download notes (.html)</button></div>
+  <footer>Monday Club · Python · Range</footer>
+</div>
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS=[
+ {topic:"Range",q:"What numbers does <code>range(6)</code> produce?",options:["1,2,3,4,5,6","0,1,2,3,4,5","0,1,2,3,4,5,6","6"],answer:1,explain:"Starts at 0, stops BEFORE 6 → 0,1,2,3,4,5."},
+ {topic:"Range",q:"Does <code>range(6)</code> include the number 6?",options:["Yes","No — stop is exclusive","Only with step","Sometimes"],answer:1,explain:"The stop value is not included."},
+ {topic:"Range",q:"What is the default starting value of range?",options:["0","1","-1","depends"],answer:0,explain:"range(n) starts at 0 by default."},
+ {topic:"Range",q:"What does <code>range(2, 6)</code> give?",options:["2,3,4,5,6","2,3,4,5","0,1,2,3,4,5","2,6"],answer:1,explain:"From 2 up to (not including) 6 → 2,3,4,5."},
+ {topic:"Range",q:"In <code>range(2, 30, 3)</code>, what does the 3 mean?",options:["stop at 3","start at 3","step (increment) of 3","repeat 3 times"],answer:2,explain:"The third value is the step: 2,5,8,11,…"},
+ {topic:"Range",q:"What is <code>list(range(3))</code>?",options:["[1,2,3]","[0,1,2]","[0,1,2,3]","[3]"],answer:1,explain:"range(3) → 0,1,2, so the list is [0, 1, 2]."},
+ {topic:"Range",q:"<code>range()</code> is most commonly used with…",options:["if statements","for loops","functions","imports"],answer:1,explain:"It's the usual way to repeat a for loop a set number of times."},
+ {topic:"Range",q:"How many numbers are in <code>range(0, 10, 2)</code>?",options:["4","5","6","10"],answer:1,explain:"0,2,4,6,8 → 5 numbers."}
+];
+MondayQuiz("quiz",QUESTIONS,{});
+MondayTerminal("term",{lang:"python",hint:"range(start, stop, step) — stop is NOT included.",sample:{code:"for i in range(2, 10, 2):\n    print(i)",out:"2\n4\n6\n8"}});
+document.getElementById("dlNotes").onclick=function(){downloadNotes("python-range-notes.html","Python Range — Notes",[
+ {h:"Forms",body:"<ul><li><code>range(stop)</code> → 0 … stop−1</li><li><code>range(start, stop)</code></li><li><code>range(start, stop, step)</code></li></ul><div class='tip'>Stop is always <b>exclusive</b> (not included).</div>"},
+ {h:"Examples",body:"<pre>list(range(3))        # [0, 1, 2]\nlist(range(2, 6))     # [2, 3, 4, 5]\nlist(range(0, 10, 2)) # [0, 2, 4, 6, 8]</pre>"}
+]);};
+</script></body></html>

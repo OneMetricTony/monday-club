@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f1226">
+<title>2025 Gauss Grade 7 — Monday 4–5 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .timer{position:sticky;top:8px;z-index:20;display:inline-flex;align-items:center;gap:8px;float:right;
+    background:#0e1330;border:1.5px solid var(--line);border-radius:999px;padding:8px 16px;
+    font-weight:800;font-variant-numeric:tabular-nums;font-size:1.05rem}
+  .timer.warn{border-color:var(--warn);color:var(--warn)}
+  .timer.up{border-color:var(--bad);color:var(--bad);animation:tpulse 1s infinite}
+  @keyframes tpulse{0%,100%{opacity:1}50%{opacity:.5}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 4–5</a> / 2025 Gauss 7</div>
+    <span class="timer" id="timer">⏱ 30:00</span></div>
+  <h1>📐 2025 Gauss · Grade 7</h1>
+  <p class="lede">All 25 contest questions (Parts A, B, C). Pick the best letter — you'll see the answer and why right away. Diagrams are described in words.</p>
+
+  <div id="quiz"></div>
+
+  <div class="notes-cta" id="notes">
+    <h2>📥 Answer key</h2>
+    <p>One-page summary of all 25 answers with quick reasons.</p>
+    <button class="btn" id="dlNotes">Download answer key (.html)</button>
+  </div>
+  <footer>Monday Club · Math · 2025 Gauss Grade 7 (CEMC, University of Waterloo)</footer>
+</div>
+
+<script src="../quiz.js"></script>
+<script>
+/* 30-minute countdown timer (resumes within the session on refresh) */
+(function(){
+  var el = document.getElementById("timer");
+  var TOTAL = 30 * 60;
+  var KEY = "gauss7_2025_deadline";
+  var deadline = parseInt(sessionStorage.getItem(KEY) || "0", 10);
+  if (!deadline || deadline < Date.now()) { deadline = Date.now() + TOTAL * 1000; sessionStorage.setItem(KEY, String(deadline)); }
+  function tick(){
+    var left = Math.max(0, Math.round((deadline - Date.now()) / 1000));
+    var m = Math.floor(left / 60), s = left % 60;
+    el.textContent = "⏱ " + m + ":" + (s < 10 ? "0" + s : s);
+    el.classList.toggle("warn", left <= 300 && left > 0);
+    if (left <= 0) { el.textContent = "⏱ Time's up!"; el.classList.remove("warn"); el.classList.add("up"); return; }
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+
+var QUESTIONS = [
+  {topic:"Part A · #1", q:"In a group of 12 friends, each friend gives $5 to a charity. How much money does the group give in total?",
+    options:["$50","$55","$60","$65","$70"], answer:2, explain:"12 × $5 = $60."},
+  {topic:"Part A · #2", q:"What fraction of the area of the regular hexagon is shaded? <span class='muted'>(Diagram: the hexagon is split from its centre into 6 equal triangles; exactly one is shaded.)</span>",
+    options:["1/3","1/4","1/7","1/2","1/6"], answer:4, explain:"6 equal triangles, 1 shaded → 1/6."},
+  {topic:"Part A · #3", q:"Which student ate the greatest number of apples? <span class='muted'>(Bar graph: Dae 6, Joe 3, Etta 5, Susie 4, Vinh 1.)</span>",
+    options:["Dae","Joe","Etta","Susie","Vinh"], answer:0, explain:"Dae ate 6 — the most."},
+  {topic:"Part A · #4", q:"An equal-arm scale is balanced: 2 squares on the left balance 4 circles on the right. One square has the same mass as:",
+    options:["1 circle","2 circles","3 circles","4 circles","6 circles"], answer:1, explain:"2 squares = 4 circles, so 1 square = 2 circles."},
+  {topic:"Part A · #5", q:"Which of the following is equal to the area of a square with side length 8?",
+    options:["8×2","2×(8+8)","8×8","4×8","8×8×8×8"], answer:2, explain:"Area of a square = side × side = 8 × 8."},
+  {topic:"Part A · #6", q:"∠PQR is a straight angle. A 130° angle and x° sit on the line at Q. The value of x is:",
+    options:["60","40","50","70","65"], answer:2, explain:"A straight angle is 180°, so x = 180 − 130 = 50."},
+  {topic:"Part A · #7", q:"The list 3, 15, 8, 8, 9, 9, n has exactly one mode, which is 8. What is n?",
+    options:["15","9","3","8","10"], answer:3, explain:"8 and 9 each appear twice. For 8 to be the only mode it must appear most, so n = 8 (8 appears three times)."},
+  {topic:"Part A · #8", q:"Sam's only container holds 1/2 cup. A recipe needs 2 1/2 cups of flour. How many times does he fill the 1/2-cup container?",
+    options:["3","2 1/2","10","4 1/2","5"], answer:4, explain:"2½ ÷ ½ = 5/2 ÷ 1/2 = 5 fills."},
+  {topic:"Part A · #9", q:"June has 30 days. If June 1 is a Tuesday, what day is June 30?",
+    options:["Monday","Tuesday","Wednesday","Thursday","Friday"], answer:2, explain:"June 1, 8, 15, 22, 29 are Tuesdays; June 30 is the next day → Wednesday."},
+  {topic:"Part A · #10", q:"The letters P U G F O R S A L E are on a store window. How many look the same when viewed from the other side of the glass (mirrored left–right)?",
+    options:["3","4","5","6","7"], answer:0, explain:"Only letters with a vertical line of symmetry: A, O, U → 3."},
+
+  {topic:"Part B · #11", q:"R is at (2, 6). Which translation moves R to (7, 0)?",
+    options:["right 9, down 6","left 5, up 6","right 6, down 5","left 6, down 5","right 5, down 6"], answer:4, explain:"x: 2→7 is right 5; y: 6→0 is down 6."},
+  {topic:"Part B · #12", q:"A train stops every 3 minutes, a bus every 5 minutes. Both stop at 6:25 a.m. When do they next stop together?",
+    options:["6:28 a.m.","6:30 a.m.","6:33 a.m.","6:40 a.m.","6:55 a.m."], answer:3, explain:"LCM(3,5) = 15 minutes → 6:25 + 15 = 6:40."},
+  {topic:"Part B · #13", q:"The pattern 2, 0, 2, 5 repeats. In the first 50 numbers, how many times does 5 appear?",
+    options:["10","11","12","13","25"], answer:2, explain:"One 5 per block of 4. 50 = 12 blocks (48) + '2,0'. So 12 fives."},
+  {topic:"Part B · #14", q:"What number goes in the box so that 28/32 + 1/□ = 1?",
+    options:["24","−3","7","16","8"], answer:4, explain:"28/32 = 7/8, so 1/□ = 1/8 → □ = 8."},
+  {topic:"Part B · #15", q:"Two standard dice are rolled and the top faces added. Which sum is LEAST likely?",
+    options:["7","8","9","10","11"], answer:4, explain:"Ways: 7→6, 8→5, 9→4, 10→3, 11→2. 11 is least likely."},
+  {topic:"Part B · #16", q:"Place 7, 1, 3, 6, 8, 2 into three 2-digit numbers as (■■ + ■■ − ■■). The greatest possible result is:",
+    options:["139","145","147","149","138"], answer:2, explain:"Maximize the two added (big tens 8,7; big units 6,3) and minimize the subtracted (12): 86 + 73 − 12 = 147."},
+  {topic:"Part B · #17", q:"Savanah tossed a coin some times with 50% tails. One more toss was tails, making 60% of all tosses tails. How many tosses in total?",
+    options:["3","9","8","5","10"], answer:3, explain:"First n tosses: n/2 tails. (n/2 + 1)/(n + 1) = 0.6 → n = 4, total = 5."},
+  {topic:"Part B · #18", q:"Four of 62°, 85°, 99°, 108°, 114° are the angles of one quadrilateral. Which is NOT one of them?",
+    options:["62°","85°","99°","108°","114°"], answer:3, explain:"A quadrilateral's angles sum to 360°. All five sum to 468°; 468 − 360 = 108°, so 108° is left out."},
+  {topic:"Part B · #19", q:"Ten students hold the integers 10–19 and check boxes: Odd, Even, Prime, Composite, Perfect Square. How many check exactly two boxes?",
+    options:["10","9","8","7","6"], answer:1, explain:"Every number checks Odd/Even + (Prime or Composite) = 2 boxes, EXCEPT 16 (Even, Composite, AND Perfect Square = 3). So 9 students check exactly two."},
+  {topic:"Part B · #20", q:"In figure PQRST, ∠PQR = ∠QRS = ∠TPQ = 60°, PT∥SR, TS∥QR, PQ = 10 cm, TS = 6 cm. The perimeter of PQRST is:",
+    options:["42 cm","36 cm","40 cm","38 cm","44 cm"], answer:0, explain:"Working it out, QR = 16 and PT + RS = 10, so perimeter = 10 + 16 + 6 + (PT+RS) = 10 + 16 + 6 + 10 = 42 cm."},
+
+  {topic:"Part C · #21", q:"Three circles have radii 1 cm, 5 cm, and x cm. If their mean area is 30π cm², then x is:",
+    options:["64","5","24","8","2"], answer:3, explain:"(π + 25π + πx²)/3 = 30π → 26 + x² = 90 → x² = 64 → x = 8."},
+  {topic:"Part C · #22", q:"Each of 3 doors is painted black, white, or gold (each equally likely). What is the probability that at least one colour is NOT used?",
+    options:["7/9","5/9","20/27","2/9","2/3"], answer:0, explain:"All 3 colours used = 3! / 3³ = 6/27 = 2/9. So at least one unused = 1 − 2/9 = 7/9."},
+  {topic:"Part C · #23", q:"a, b, c are the last three digits of N = 111abc (a six-digit number). If N is divisible by 18, how many values of N are there?",
+    options:["50","55","56","110","112"], answer:2, explain:"Need abc with 111000 + abc ≡ 0 (mod 18). 111000 ≡ 12, so abc ≡ 6 (mod 18): 6, 24, …, 996 → 56 values."},
+  {topic:"Part C · #24", q:"5×5 grid: each row, column, and thick-lined region holds A,B,C,D,E. Given the placed letters, what must go in the shaded square? <span class='muted'>⚠ This one depends on the exact thick-line regions in the diagram — best answer below; double-check against the contest diagram.</span>",
+    options:["A","B","C","D","E"], answer:1, explain:"Diagram-dependent (the thick-lined regions). Official answer: B. Confirm with the printed grid."},
+  {topic:"Part C · #25", q:"An 8×8 'arithmetic grid' increases by a>0 left→right and b>0 top→bottom, with 1 in the top-left and a value under 75 in the bottom-right. How many such grids have a 45 somewhere in column 5?",
+    options:["6","3","7","5","4"], answer:0, explain:"Entry = 1 + 4a + b(i−1) in column 5; need 4a + b·k = 44 for some k = 0..7, with a,b ≥ 1 and a+b ≤ 10. Valid (a,b): (1,8),(2,6),(4,4),(5,4),(6,4),(8,2) → 6 grids."}
+];
+MondayQuiz("quiz", QUESTIONS, {});
+
+document.getElementById("dlNotes").onclick = function(){
+  downloadNotes("gauss7-2025-answers.html", "2025 Gauss Grade 7 — Answer Key", [
+    {h:"Part A (5 pts each)", body:"<ol><li>C — 12×$5 = $60</li><li>E — 1/6 (one of 6 triangles)</li><li>A — Dae (6)</li><li>B — 2 circles</li><li>C — 8×8</li><li>C — 180−130 = 50</li><li>D — n = 8</li><li>E — 2½ ÷ ½ = 5</li><li>C — Wednesday</li><li>A — A, O, U (3)</li></ol>"},
+    {h:"Part B (6 pts each)", body:"<ol start='11'><li>E — right 5, down 6</li><li>D — 6:40 (LCM 15)</li><li>C — 12 fives</li><li>E — □ = 8</li><li>E — sum 11 (least)</li><li>C — 86+73−12 = 147</li><li>D — 5 tosses</li><li>D — 108° left out</li><li>B — 9 students</li><li>A — 42 cm</li></ol>"},
+    {h:"Part C (8 pts each)", body:"<ol start='21'><li>D — x = 8</li><li>A — 7/9</li><li>C — 56</li><li>B — diagram-dependent (verify)</li><li>A — 6 grids</li></ol>" +
+      "<div class='tip'>#24 is a thick-line region puzzle — check the printed diagram to confirm.</div>"}
+  ]);
+};
+</script>
+</body>
+</html>

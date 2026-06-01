@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f1226">
+<title>Monday 4–5 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  details.prob{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 14px}
+  details.prob>summary{cursor:pointer;font-weight:700;list-style:none}
+  details.prob>summary::-webkit-details-marker{display:none}
+  details.prob .reveal-tag{color:var(--accent2);font-size:13px;font-weight:700;margin-left:8px}
+  details.prob .sol{margin-top:12px;border-left:3px solid var(--accent2);padding:10px 14px;background:#0e1330;border-radius:0 10px 10px 0;color:#cdd6ff}
+  .pnum{display:inline-block;width:26px;height:26px;border-radius:8px;background:#1a2150;border:1px solid var(--line);text-align:center;line-height:26px;font-size:13px;margin-right:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / Monday 4–5</div></div>
+  <h1>📐 Welcome back!</h1>
+  <p class="lede">Let's get set up for today.</p>
+
+  <section class="section show" id="step-date">
+    <h2>When's your class?</h2>
+    <div class="pill-row" id="dates"></div>
+  </section>
+
+  <section class="section" id="step-set">
+    <h2>This week's problem set <span class="tag">grade 7–8</span></h2>
+    <p class="muted">Work each one, then tap to check your solution. When you finish the set, you've earned next week's questions.</p>
+
+    <details class="prob"><summary><span class="pnum">1</span>A shirt costs $40. It is first discounted 25%, then 10% tax is added to the discounted price. What is the final price?<span class="reveal-tag">▸ solution</span></summary>
+      <div class="sol">Discount: 40 × 0.75 = $30. Tax: 30 × 1.10 = <b>$33</b>.</div></details>
+
+    <details class="prob"><summary><span class="pnum">2</span>The average (mean) of five numbers is 18. Four of the numbers are 12, 20, 15, and 25. What is the fifth number?<span class="reveal-tag">▸ solution</span></summary>
+      <div class="sol">Total = 5 × 18 = 90. Known four sum to 72. Fifth = 90 − 72 = <b>18</b>.</div></details>
+
+    <details class="prob"><summary><span class="pnum">3</span>A rectangle has perimeter 36 and its length is twice its width. What is its area?<span class="reveal-tag">▸ solution</span></summary>
+      <div class="sol">l + w = 18 and l = 2w ⟹ 3w = 18 ⟹ w = 6, l = 12. Area = 12 × 6 = <b>72</b>.</div></details>
+
+    <details class="prob"><summary><span class="pnum">4</span>How many whole numbers from 1 to 100 are divisible by 3 or by 5?<span class="reveal-tag">▸ solution</span></summary>
+      <div class="sol">Div by 3: 33. Div by 5: 20. Div by 15 (both): 6. By inclusion–exclusion: 33 + 20 − 6 = <b>47</b>.</div></details>
+
+    <div class="notes-cta">
+      <h2>🎉 Finished the set?</h2>
+      <p>Awesome work! Your next set unlocks for next Monday — see you then. 🌟</p>
+    </div>
+    <p class="muted" style="margin-top:14px">These four are warm-ups — a fresh set gets added for you each week.</p>
+  </section>
+
+  <footer>Monday Club · 4–5 PM</footer>
+</div>
+<script>
+(function(){
+  var row = document.getElementById("dates");
+  var today = new Date();
+  function fmt(d){ return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"}); }
+  var opts = [{label:"Today — " + fmt(today), d:today}];
+  var d = new Date(today);
+  for (var added=0; opts.length<4;){ d.setDate(d.getDate()+1); if (d.getDay()===1){ opts.push({label:"Mon " + fmt(d)}); added++; } }
+  opts.forEach(function(o){
+    var b=document.createElement("button"); b.className="pill"; b.textContent=o.label;
+    b.onclick=function(){
+      row.querySelectorAll(".pill").forEach(function(x){x.classList.remove("active");});
+      b.classList.add("active");
+      document.getElementById("step-set").classList.add("show");
+      document.getElementById("step-set").scrollIntoView({behavior:"smooth"});
+    };
+    row.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>

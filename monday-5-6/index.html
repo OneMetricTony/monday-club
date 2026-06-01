@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f1226">
+<title>Monday 5–6 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / Monday 5–6</div></div>
+  <h1>👋 Welcome back!</h1>
+  <p class="lede">Let's get set up for today.</p>
+
+  <section class="section show" id="step-date">
+    <h2>1 · When's your class?</h2>
+    <div class="pill-row" id="dates"></div>
+  </section>
+
+  <section class="section" id="step-lang">
+    <h2>2 · Are you doing Java or Python today?</h2>
+    <div class="choices">
+      <a class="choice" href="java.html">
+        <span class="emoji">☕</span>
+        <span><span class="t">Java</span><span class="s">OOP drills — constructors, inheritance, polymorphism + playground</span></span>
+        <span class="go">→</span>
+      </a>
+      <a class="choice" href="python.html">
+        <span class="emoji">🐍</span>
+        <span><span class="t">Python</span><span class="s">Core basics drills + playground</span></span>
+        <span class="go">→</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>Monday Club · 5–6 PM</footer>
+</div>
+<script>
+// Build buttons for the next few Mondays (+ Today), purely to set the vibe / track the week.
+(function(){
+  var row = document.getElementById("dates");
+  var today = new Date();
+  function fmt(d){ return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"}); }
+  var opts = [];
+  opts.push({label:"Today — " + fmt(today), d:today});
+  // next 3 Mondays
+  var d = new Date(today);
+  for (var added=0; opts.length<4;){
+    d.setDate(d.getDate()+1);
+    if (d.getDay()===1){ opts.push({label:"Mon " + fmt(d), d:new Date(d)}); added++; }
+  }
+  opts.forEach(function(o){
+    var b = document.createElement("button");
+    b.className="pill"; b.textContent=o.label;
+    b.onclick=function(){
+      row.querySelectorAll(".pill").forEach(function(x){x.classList.remove("active");});
+      b.classList.add("active");
+      document.getElementById("step-lang").classList.add("show");
+      document.getElementById("step-lang").scrollIntoView({behavior:"smooth"});
+    };
+    row.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>

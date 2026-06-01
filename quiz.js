@@ -206,6 +206,116 @@
     root.querySelector(".term").addEventListener("click", function(){ input.focus(); });
   };
 
+  /* ---------------- challenge problems (answer + tiered hints) ----------------
+     Up to 10 attempts per problem; each wrong try (or a tap of "Need a hint?")
+     reveals the next, MORE detailed hint. After 10 misses (or hints run out) the
+     full worked solution + answer is shown. */
+  window.MondayChallenge = function (root, problems, opts) {
+    opts = opts || {};
+    root = typeof root === "string" ? document.getElementById(root) : root;
+    function norm(s){ return String(s).trim().toLowerCase().replace(/[\s,]/g, ""); }
+    function tex(el){ if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([el]).catch(function(){}); }
+
+    root.innerHTML = problems.map(function (p, idx) {
+      return '<div class="chal" data-i="' + idx + '">' +
+        '<div class="qtopic">' + (p.topic || "") + '</div>' +
+        '<h3 class="title">' + (p.title || ("Problem " + (idx + 1))) + '</h3>' +
+        '<div class="stem">' + p.statement + '</div>' +
+        '<div class="chal-row">' +
+          '<input class="chal-in" inputmode="text" placeholder="your answer">' +
+          '<button class="btn chal-check">Check</button>' +
+          '<button class="btn ghost chal-hint">Need a hint?</button>' +
+        '</div>' +
+        '<div class="chal-msg"></div>' +
+        '<div class="hints"></div>' +
+        '<div class="chal-sol"></div>' +
+      '</div>';
+    }).join("");
+    tex(root);
+
+    root.querySelectorAll(".chal").forEach(function (card) {
+      var p = problems[+card.dataset.i];
+      var hints = p.hints || [];
+      var hintLevel = 0, mistakes = 0, done = false;
+      var hintsEl = card.querySelector(".hints");
+      var msg = card.querySelector(".chal-msg");
+      var solEl = card.querySelector(".chal-sol");
+      var input = card.querySelector(".chal-in");
+      var checkBtn = card.querySelector(".chal-check");
+      var hintBtn = card.querySelector(".chal-hint");
+
+      function showHint(){
+        if (hintLevel >= hints.length) return false;
+        var h = document.createElement("div");
+        h.className = "hint-item";
+        h.innerHTML = "<b>Hint " + (hintLevel + 1) + ":</b> " + hints[hintLevel];
+        hintsEl.appendChild(h); hintLevel++; tex(h);
+        return true;
+      }
+      function revealSolution(){
+        done = true;
+        solEl.className = "chal-sol show";
+        solEl.innerHTML = '<div class="lbl">Worked solution</div>' + (p.solution || "") +
+          '<div class="ans">Answer: <b>' + p.answer + '</b></div>';
+        tex(solEl);
+        checkBtn.disabled = true; hintBtn.disabled = true; input.disabled = true;
+      }
+      checkBtn.onclick = function () {
+        if (done) return;
+        if (norm(input.value) === norm(p.answer)) {
+          msg.className = "chal-msg ok"; msg.textContent = "✅ Correct! Nice."; card.classList.add("solved"); revealSolution();
+        } else {
+          mistakes++;
+          msg.className = "chal-msg no";
+          msg.textContent = "❌ Not yet (" + mistakes + "/10) — here's a more detailed hint.";
+          var more = showHint();
+          if (!more || mistakes >= 10) revealSolution();
+        }
+      };
+      hintBtn.onclick = function () { if (done) return; if (!showHint()) revealSolution(); };
+      input.addEventListener("keydown", function (e) { if (e.key === "Enter") checkBtn.click(); });
+    });
+  };
+
+  /* ---------------- light guidance chat ----------------
+     In-page tutor gives escalating nudges (never the full answer). The two
+     buttons open ChatGPT / Claude pre-filled with the typed question — no API
+     key needed (a public static site can't safely hold one). */
+  window.MondayChat = function (root, cfg) {
+    cfg = cfg || {};
+    root = typeof root === "string" ? document.getElementById(root) : root;
+    root.innerHTML =
+      '<div class="chat">' +
+        '<div class="chat-log" id="chatLog"></div>' +
+        '<div class="chat-row"><input class="chat-in" id="chatIn" placeholder="Where are you stuck?"><button class="btn chat-send">Send</button></div>' +
+        '<div class="chat-ext"><button class="btn ghost chat-gpt">Ask ChatGPT ↗</button><button class="btn ghost chat-claude">Ask Claude ↗</button></div>' +
+      '</div>';
+    var log = root.querySelector("#chatLog");
+    var input = root.querySelector("#chatIn");
+    function add(who, txt, cls){ var d = document.createElement("div"); d.className = "chat-msg " + (cls || ""); d.innerHTML = "<b>" + who + ":</b> " + txt; log.appendChild(d); log.scrollTop = log.scrollHeight; }
+    var tips = [
+      "First name what you're counting: arrangements (order matters) or selections (order doesn't)?",
+      "Order matters → permutations. Order doesn't → combinations C(n, k).",
+      "Seeing 'at least one'? Count the total, then subtract the 'none' case.",
+      "Repeated identical items? Divide by the factorial of each repeated group.",
+      "Distributing identical items into groups? Stars & bars: C(n + k − 1, k − 1).",
+      "Overlapping conditions (divisible by… or…)? Inclusion–exclusion: + singles − pairs + triples.",
+      "Counting paths on a grid? It's just arranging the R and U moves.",
+      "Try a tiny version of the problem first, then look for the pattern."
+    ];
+    var ti = 0;
+    add("Tutor", "Hi " + (cfg.name || "there") + "! Tell me where you're stuck and I'll nudge you — I won't just hand over the answer.");
+    function reply(q){ add("You", q, "me"); add("Tutor", tips[ti % tips.length]); ti++; }
+    root.querySelector(".chat-send").onclick = function () { var v = input.value.trim(); if (!v) return; reply(v); input.value = ""; };
+    input.addEventListener("keydown", function (e) { if (e.key === "Enter") root.querySelector(".chat-send").click(); });
+    function ext(base){
+      var q = input.value.trim() || "Give me a light hint (not the full solution) for an intermediate combinatorics problem.";
+      window.open(base + encodeURIComponent("Light hint only, please don't give the full answer: " + q), "_blank", "noopener");
+    }
+    root.querySelector(".chat-gpt").onclick = function () { ext("https://chatgpt.com/?q="); };
+    root.querySelector(".chat-claude").onclick = function () { ext("https://claude.ai/new?q="); };
+  };
+
   /* ---------------- notes download ---------------- */
   window.downloadNotes = function (filename, title, sections) {
     var body = sections.map(function (s) {

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f1226">
+<title>Monday 6–7 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / Monday 6–7</div></div>
+  <h1>🧮 Welcome back, Chloe!</h1>
+  <p class="lede">Intermediate combinatorics challenges. Type your answer and Check — you get up to <b>10 tries</b>, and each one unlocks a more detailed hint. Stuck? Use the tutor chat at the bottom.</p>
+
+  <section class="section show" id="step-date">
+    <h2>When's your class?</h2>
+    <div class="pill-row" id="dates"></div>
+  </section>
+
+  <section class="section" id="step-set">
+    <h2>This week's challenges <span class="tag">intermediate combinatorics</span></h2>
+    <div id="problems"></div>
+
+    <h2 style="margin-top:30px">💬 Tutor chat <span class="tag">light hints only</span></h2>
+    <p class="muted">Nudges only — it won't hand you the answer. The ↗ buttons open ChatGPT or Claude with your question.</p>
+    <div id="chat"></div>
+  </section>
+
+  <footer>Monday Club · 6–7 PM · for Chloe</footer>
+</div>
+
+<script src="../quiz.js"></script>
+<script>
+var PROBLEMS = [
+  {topic:"Selections", title:"Committee with a must-have", answer:"55",
+    statement:"A club has 8 members, including Ada and Ben. How many 4-person committees include <b>at least one</b> of Ada or Ben?",
+    hints:[
+      "It's a selection (order doesn't matter) → think combinations C(n, k).",
+      "'At least one' is usually easier as: (all committees) − (committees with <i>neither</i> Ada nor Ben).",
+      "Total 4-person committees from 8 people: C(8, 4).",
+      "Committees containing neither Ada nor Ben: choose all 4 from the other 6 → C(6, 4).",
+      "C(8,4) = 70 and C(6,4) = 15. Now subtract."
+    ],
+    solution:"Total committees C(8,4)=70. Those avoiding both Ada and Ben: C(6,4)=15. At least one = 70 − 15 = <b>55</b>."},
+
+  {topic:"Arrangements", title:"BALLOON", answer:"1260",
+    statement:"How many distinct ways can the letters of the word <b>BALLOON</b> be arranged?",
+    hints:[
+      "Order matters → permutations. But watch for repeated letters.",
+      "List the letters: B, A, L, L, O, O, N — that's 7 letters.",
+      "Repeats: L appears twice, O appears twice.",
+      "Formula: 7! ÷ (2! for the L's × 2! for the O's).",
+      "7! = 5040 and 2!·2! = 4."
+    ],
+    solution:"7! / (2!·2!) = 5040 / 4 = <b>1260</b>."},
+
+  {topic:"Stars & Bars", title:"Sharing candy", answer:"286",
+    statement:"In how many ways can <b>10 identical</b> candies be given to <b>4 children</b>, if a child may get none?",
+    hints:[
+      "Identical items into distinct groups → stars and bars.",
+      "n identical items into k groups (each ≥ 0): C(n + k − 1, k − 1).",
+      "Here n = 10 candies and k = 4 children.",
+      "So C(10 + 4 − 1, 4 − 1) = C(13, 3).",
+      "C(13,3) = 13·12·11 / 6."
+    ],
+    solution:"C(13, 3) = (13·12·11)/6 = <b>286</b>."},
+
+  {topic:"Inclusion–Exclusion", title:"Divisible by none", answer:"26",
+    statement:"How many integers from <b>1 to 100</b> are divisible by <b>none</b> of 2, 3, or 5?",
+    hints:[
+      "Easier to count how many ARE divisible by 2, 3, or 5, then subtract from 100.",
+      "Use inclusion–exclusion: add the singles, subtract the pairs, add back the triple.",
+      "Singles: ⌊100/2⌋=50, ⌊100/3⌋=33, ⌊100/5⌋=20.",
+      "Pairs: ⌊100/6⌋=16, ⌊100/10⌋=10, ⌊100/15⌋=6. Triple: ⌊100/30⌋=3.",
+      "Divisible by 2, 3, or 5 = 50+33+20 − 16−10−6 + 3 = 74."
+    ],
+    solution:"By inclusion–exclusion, 50+33+20−16−10−6+3 = 74 are divisible by 2, 3, or 5. So 100 − 74 = <b>26</b> are divisible by none."},
+
+  {topic:"Lattice Paths", title:"Shortest grid paths", answer:"56",
+    statement:"How many shortest paths go from (0, 0) to (5, 3) on a grid, moving only <b>right</b> or <b>up</b>?",
+    hints:[
+      "Every shortest path is a sequence of single steps: some R's and some U's.",
+      "To reach (5,3) you need exactly 5 R's and 3 U's.",
+      "Count the orderings of 5 R's and 3 U's among the 8 total moves.",
+      "Choose which of the 8 moves are 'up': C(8, 3) (same as C(8,5)).",
+      "C(8,3) = 8·7·6 / 6."
+    ],
+    solution:"A path is an arrangement of 5 R's and 3 U's: C(8, 3) = <b>56</b>."},
+
+  {topic:"Grouping", title:"Three pairs", answer:"15",
+    statement:"In how many ways can <b>6 students</b> be split into <b>3 unordered pairs</b>?",
+    hints:[
+      "Both the pairs are unordered AND the 3 pairs themselves have no order — so you'll overcount and divide.",
+      "Start from 6! ways to line everyone up.",
+      "Each pair's internal order double-counts: divide by 2! for each of the 3 pairs → 2³.",
+      "The 3 pairs can be listed in any order: divide by 3!.",
+      "6! / (2³ · 3!) = 720 / (8·6)."
+    ],
+    solution:"6! / (2³ · 3!) = 720 / 48 = <b>15</b>."}
+];
+</script>
+<script>
+(function(){
+  var row = document.getElementById("dates");
+  var today = new Date();
+  function fmt(d){ return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"}); }
+  var opts = [{label:"Today — " + fmt(today)}];
+  var d = new Date(today);
+  for (var added=0; opts.length<4;){ d.setDate(d.getDate()+1); if (d.getDay()===1){ opts.push({label:"Mon " + fmt(d)}); added++; } }
+  var built = false;
+  opts.forEach(function(o){
+    var b=document.createElement("button"); b.className="pill"; b.textContent=o.label;
+    b.onclick=function(){
+      row.querySelectorAll(".pill").forEach(function(x){x.classList.remove("active");});
+      b.classList.add("active");
+      var s=document.getElementById("step-set"); s.classList.add("show");
+      if(!built){ MondayChallenge("problems", PROBLEMS, {}); MondayChat("chat", {name:"Chloe"}); built=true; }
+      s.scrollIntoView({behavior:"smooth"});
+    };
+    row.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f1226">
+<title>Java · the "this" keyword — Monday 5–6 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / <a href="java.html">Java</a> / the <code>this</code> keyword</div></div>
+  <h1>☕ Java — the <code>this</code> keyword</h1>
+  <p class="lede">Current object, disambiguating fields from parameters, and calling one constructor from another with <code>this()</code>. 3 tries per question with hints. Notes at the bottom.</p>
+
+  <div id="quiz"></div>
+
+  <div class="term-wrap">
+    <h2>Playground terminal <span class="tag">just for fun</span></h2>
+    <p class="muted">Type <code>help</code>. Try <code>run</code>, <code>code</code>, <code>joke</code>.</p>
+    <div id="term"></div>
+  </div>
+
+  <div class="notes-cta" id="notes">
+    <h2>📥 Today's notes</h2>
+    <p>One-page summary of the <code>this</code> keyword — keep it for review.</p>
+    <button class="btn" id="dlNotes">Download "this" notes (.html)</button>
+  </div>
+  <footer>Monday Club · Java · trained on w3schools "Java this Keyword"</footer>
+</div>
+
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS = [
+  {topic:"this", q:"What does the <code>this</code> keyword refer to?",
+    options:["The class file","The current object","The superclass","A static variable"],
+    answer:1, explain:"<code>this</code> refers to the current object — the one whose method or constructor is running."},
+  {topic:"this", q:"Why write <code>this.x = x;</code> in a constructor whose parameter is also named <code>x</code>?",
+    options:["To make x static","So the parameter doesn't hide the class field — this.x is the field","To create a new variable","It's just style, no effect"],
+    answer:1, explain:"When the parameter and field share a name, <code>this.x</code> means the field, while <code>x</code> means the parameter."},
+  {topic:"this", q:"In <code>this.x = x;</code>, which one is the <b>class field</b>?",
+    options:["<code>x</code>","<code>this.x</code>","both","neither"],
+    answer:1, explain:"<code>this.x</code> is the object's field; the bare <code>x</code> is the parameter."},
+  {topic:"this", q:"If you write just <code>x = x;</code> (no this) when the parameter and field are both <code>x</code>, what happens?",
+    options:["The field gets the parameter's value","The parameter is assigned to itself; the field stays 0/uninitialized","Compile error","The field becomes null"],
+    answer:1, explain:"Both <code>x</code> refer to the parameter, so it assigns the parameter to itself and the field is never set (stays 0)."},
+  {topic:"this", q:"What does <code>this()</code> (with parentheses) do?",
+    options:["Returns the current object","Calls another constructor in the same class","Creates a new object","Ends the constructor"],
+    answer:1, explain:"<code>this(...)</code> calls another constructor in the same class, to reuse its setup code."},
+  {topic:"this", q:"Where must a <code>this()</code> constructor call appear?",
+    options:["Anywhere in the constructor","As the very first statement in the constructor","Only at the end","Outside the constructor"],
+    answer:1, explain:"<code>this()</code> must be the first statement in the constructor."},
+  {topic:"this", q:"What does this print?",
+    code:"public class Main {\n  int x;\n  public Main(int x) { this.x = x; }\n  public static void main(String[] a){\n    Main o = new Main(7);\n    System.out.println(o.x);\n  }\n}",
+    options:["0","7","null","Compile error"],
+    answer:1, explain:"<code>this.x = x</code> stores the parameter (7) into the field, so it prints 7."},
+  {topic:"this", q:"A constructor <code>Main(String name){ this(2020, name); }</code> — what is it doing?",
+    options:["Calling the (int, String) constructor with a default year 2020","Creating two objects","Returning 2020","Nothing — it's invalid"],
+    answer:0, explain:"It reuses the two-parameter constructor, supplying 2020 as the default year."},
+  {topic:"this", q:"If the parameter and the field have <b>different</b> names, is <code>this</code> required?",
+    options:["Yes, always","No — it's only needed when the names clash","Only in static methods","Only for ints"],
+    answer:1, explain:"<code>this</code> is only necessary to disambiguate when a parameter hides a field of the same name."},
+  {topic:"this", q:"Which is the main purpose of <code>this</code>?",
+    options:["To loop over arrays","To refer to the current object and its members","To import packages","To make a class final"],
+    answer:1, explain:"It's a reference to the current object, used to reach that object's fields/methods (and other constructors via this())."}
+];
+MondayQuiz("quiz", QUESTIONS, {});
+
+MondayTerminal("term", {
+  lang:"java",
+  who:"a future software engineer 😎",
+  hint:"this.x = field, plain x = parameter. They only clash when they share a name.",
+  sample:{
+    code:"public class Main {\n  int year; String name;\n  public Main(String name){ this(2020, name); }\n  public Main(int year, String name){ this.year = year; this.name = name; }\n  public static void main(String[] a){\n    Main c = new Main(\"Mustang\");\n    System.out.println(c.year + \" \" + c.name);\n  }\n}",
+    out:"2020 Mustang"
+  }
+});
+
+document.getElementById("dlNotes").onclick = function(){
+  downloadNotes("java-this-notes.html", "Java — the \"this\" keyword", [
+    {h:"What this is", body:"<ul><li><code>this</code> = the <b>current object</b> (the one running the method/constructor).</li></ul>"},
+    {h:"Disambiguating fields & parameters", body:
+      "<div class='tip'>When a parameter has the same name as a field, <code>this.field</code> = the field, plain name = the parameter.</div>" +
+      "<pre>public class Main {\n  int x;\n  public Main(int x){ this.x = x; }  // field = parameter\n}</pre>" +
+      "<p>Writing <code>x = x;</code> would just assign the parameter to itself — the field stays 0.</p>"},
+    {h:"Calling another constructor: this()", body:
+      "<ul><li><code>this(...)</code> calls another constructor in the same class to reuse setup.</li><li>It must be the <b>first statement</b> in the constructor.</li></ul>" +
+      "<pre>public Main(String name){ this(2020, name); }\npublic Main(int year, String name){\n  this.year = year; this.name = name;\n}</pre>"}
+  ]);
+};
+</script>
+</body>
+</html>

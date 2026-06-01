@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f1226">
+<title>Python — Monday 5–6 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / <a href="python.html">Python</a> / Basics</div></div>
+  <h1>🐍 Python — core basics</h1>
+  <p class="lede">A starter set on Python fundamentals. (Tell Tony which topics to focus on next and this grows.) Notes to download at the bottom.</p>
+
+  <div id="quiz"></div>
+
+  <div class="term-wrap">
+    <h2>Playground terminal <span class="tag">just for fun</span></h2>
+    <p class="muted">Type <code>help</code>. Try <code>run</code>, <code>code</code>, <code>joke</code>.</p>
+    <div id="term"></div>
+  </div>
+
+  <div class="notes-cta" id="notes">
+    <h2>📥 Today's notes</h2>
+    <p>One-page Python basics summary — keep it for review.</p>
+    <button class="btn" id="dlNotes">Download Python notes (.html)</button>
+  </div>
+
+  <footer>Monday Club · Python</footer>
+</div>
+
+<script src="../quiz.js"></script>
+<script>
+var QUESTIONS = [
+  {topic:"Output", q:"How do you print text in Python 3?",
+    options:["<code>echo(\"hi\")</code>","<code>print(\"hi\")</code>","<code>System.out.println(\"hi\")</code>","<code>console.log(\"hi\")</code>"],
+    answer:1, explain:"Python uses <code>print()</code>."},
+  {topic:"Variables", q:"Which is a valid Python variable assignment?",
+    options:["<code>int x = 5</code>","<code>x := 5</code>","<code>x = 5</code>","<code>let x = 5</code>"],
+    answer:2, explain:"Python has no type keyword — just <code>x = 5</code>."},
+  {topic:"Types", q:"What is the type of <code>3.0</code> in Python?",
+    options:["int","float","str","bool"],
+    answer:1, explain:"A number with a decimal point is a <code>float</code>."},
+  {topic:"Strings", q:"What does <code>\"ab\" + \"cd\"</code> produce?",
+    options:["\"abcd\"","\"ab cd\"","an error","\"cdab\""],
+    answer:0, explain:"<code>+</code> concatenates strings → \"abcd\"."},
+  {topic:"Lists", q:"For <code>nums = [10, 20, 30]</code>, what is <code>nums[0]</code>?",
+    options:["10","20","30","error"],
+    answer:0, explain:"Indexing starts at 0, so <code>nums[0]</code> is 10."},
+  {topic:"Lists", q:"How do you add 40 to the end of <code>nums</code>?",
+    options:["<code>nums.add(40)</code>","<code>nums.push(40)</code>","<code>nums.append(40)</code>","<code>nums + 40</code>"],
+    answer:2, explain:"Lists use <code>.append()</code>."},
+  {topic:"Built-ins", q:"<code>len([1,2,3,4])</code> returns…",
+    options:["3","4","5","error"],
+    answer:1, explain:"<code>len()</code> gives the number of items: 4."},
+  {topic:"Loops", q:"How many times does this loop run? <code>for i in range(3):</code>",
+    options:["2","3","4","infinite"],
+    answer:1, explain:"<code>range(3)</code> → 0,1,2 → 3 iterations."},
+  {topic:"Conditionals", q:"Which keyword starts a conditional in Python?",
+    options:["<code>when</code>","<code>if</code>","<code>case</code>","<code>cond</code>"],
+    answer:1, explain:"Python uses <code>if</code> (then <code>elif</code>/<code>else</code>)."},
+  {topic:"Syntax", q:"What ends a Python <code>if</code> / <code>for</code> header line and starts its block?",
+    options:["a semicolon <code>;</code>","curly braces <code>{ }</code>","a colon <code>:</code> + indentation","the word <code>then</code>"],
+    answer:2, explain:"Python uses a colon and indentation — no braces."},
+  {topic:"Dicts", q:"For <code>p = {\"name\":\"Sam\"}</code>, how do you get the name?",
+    options:["<code>p.name</code>","<code>p[\"name\"]</code>","<code>p->name</code>","<code>p(0)</code>"],
+    answer:1, explain:"Dictionary values are accessed by key: <code>p[\"name\"]</code>."},
+  {topic:"Functions", q:"How do you define a function in Python?",
+    options:["<code>function f():</code>","<code>def f():</code>","<code>func f():</code>","<code>void f():</code>"],
+    answer:1, explain:"Functions are defined with <code>def</code>."},
+  {topic:"Comments", q:"How do you write a single-line comment?",
+    options:["<code>// comment</code>","<code>&lt;!-- comment --&gt;</code>","<code># comment</code>","<code>/* comment */</code>"],
+    answer:2, explain:"Python comments start with <code>#</code>."},
+  {topic:"Output", q:"What does this print?",
+    code:"x = 7\ny = 3\nprint(x // y)",
+    options:["2.33","2","3","error"],
+    answer:1, explain:"<code>//</code> is integer (floor) division: 7 // 3 = 2."}
+];
+MondayQuiz("quiz", QUESTIONS, {});
+
+MondayTerminal("term", {
+  lang:"python",
+  who:"a future software engineer 🐍",
+  hint:"Indentation matters in Python — the colon + indent IS the block.",
+  sample:{
+    code:"nums = [10, 20, 30]\nnums.append(40)\nfor n in nums:\n    print(n)",
+    out:"10\n20\n30\n40"
+  }
+});
+
+document.getElementById("dlNotes").onclick = function(){
+  downloadNotes("python-basics-notes.html", "Python Basics — Quick Notes", [
+    {h:"Printing & variables", body:"<ul><li><code>print(\"hi\")</code> shows output.</li><li>No type keyword: <code>x = 5</code>, <code>name = \"Sam\"</code>.</li><li>Comments start with <code>#</code>.</li></ul>"},
+    {h:"Types", body:"<ul><li><code>int</code> (5), <code>float</code> (5.0), <code>str</code> (\"hi\"), <code>bool</code> (True/False).</li><li><code>+</code> joins strings; <code>//</code> is integer division.</li></ul>"},
+    {h:"Lists", body:"<div class='tip'>Indexing starts at <b>0</b>.</div><pre>nums = [10, 20, 30]\nnums[0]        # 10\nnums.append(40)\nlen(nums)      # 4</pre>"},
+    {h:"Loops & conditionals", body:"<pre>for i in range(3):   # 0,1,2\n    print(i)\n\nif x &gt; 0:\n    print(\"positive\")</pre><p>Colon + indentation = the block (no braces).</p>"},
+    {h:"Functions & dicts", body:"<pre>def greet(name):\n    return \"hi \" + name\n\np = {\"name\": \"Sam\"}\np[\"name\"]      # \"Sam\"</pre>"}
+  ]);
+};
+</script>
+</body>
+</html>

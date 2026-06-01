@@ -4,201 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0f1226">
-<title>Java — Monday 5–6 · Monday Club</title>
+<title>Java sections — Monday 5–6 · Monday Club</title>
 <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 <div class="wrap">
-  <div class="topbar">
-    <div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / Java</div>
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 5–6</a> / Java</div></div>
+  <h1>☕ Java — pick a section</h1>
+  <p class="lede">Each section is its own set: 3 tries per question with hints, a playground terminal, and notes to download at the end.</p>
+  <div class="choices">
+    <a class="choice" href="java-oop.html">
+      <span class="emoji">🧱</span>
+      <span><span class="t">OOP Core</span><span class="s">Constructors → modifiers → encapsulation → inheritance → polymorphism · 36 questions</span></span>
+      <span class="go">→</span>
+    </a>
+    <a class="choice" href="java-this.html">
+      <span class="emoji">👉</span>
+      <span><span class="t">The <code>this</code> keyword</span><span class="s">Current object, field vs parameter, this() constructor calls · 10 questions</span></span>
+      <span class="go">→</span>
+    </a>
   </div>
-  <h1>☕ Java — OOP drills</h1>
-  <p class="lede">Constructors → modifiers → encapsulation → inheritance → polymorphism. Pick the best answer; you'll see why right away. Grab your notes at the bottom when you're done.</p>
-
-  <div id="quiz"></div>
-
-  <div class="term-wrap">
-    <h2>Playground terminal <span class="tag">just for fun</span></h2>
-    <p class="muted">Type <code>help</code> to mess around. Try <code>run</code>, <code>code</code>, <code>joke</code>.</p>
-    <div id="term"></div>
-  </div>
-
-  <div class="notes-cta" id="notes">
-    <h2>📥 Today's notes</h2>
-    <p>One-page summary of everything in today's set — keep it for review.</p>
-    <button class="btn" id="dlNotes">Download Java OOP notes (.html)</button>
-  </div>
-
-  <footer>Monday Club · Java · trained on w3schools constructors → polymorphism</footer>
+  <footer>Monday Club · Java · more sections added each week</footer>
 </div>
-
-<script src="../quiz.js"></script>
-<script>
-/* ---------------- Java OOP question bank ---------------- */
-var QUESTIONS = [
-  // --- Constructors ---
-  {topic:"Constructors", q:"What is a constructor in Java?",
-    options:["A special method used to initialize objects","A loop that builds arrays","A keyword that imports classes","A variable that stores the class name"],
-    answer:0, explain:"A constructor is a special method that runs when an object is created, used to set up (initialize) the object."},
-  {topic:"Constructors", q:"A constructor's name must…",
-    options:["start with a lowercase letter","match the class name exactly","always be <code>main</code>","be different from the class name"],
-    answer:1, explain:"The constructor name must match the class name exactly."},
-  {topic:"Constructors", q:"What return type does a constructor have?",
-    options:["<code>void</code>","<code>int</code>","No return type at all","The same type as the class"],
-    answer:2, explain:"Constructors have no return type — not even void. That's part of what makes them constructors."},
-  {topic:"Constructors", q:"When does a constructor run?",
-    options:["When the program ends","Every time a method is called","When an object is created with <code>new</code>","Only if you call it like a normal method"],
-    answer:2, explain:"It runs automatically when you create the object, e.g. <code>new Main()</code>."},
-  {topic:"Constructors", q:"If you don't write any constructor, Java…",
-    options:["throws a compile error","provides a default (empty) constructor","refuses to create objects","makes the class abstract"],
-    answer:1, explain:"Java gives every class a default constructor if you don't define one — but it can't set custom initial values."},
-  {topic:"Constructors", q:"Can a constructor take parameters?",
-    options:["No, never","Yes, to initialize attributes with specific values","Only one parameter, always an int","Only if the class is public"],
-    answer:1, explain:"Constructors can take parameters so you can pass in starting values."},
-  {topic:"Constructors", q:"What does this print?",
-    code:"public class Main {\n  int x;\n  public Main() { x = 5; }\n  public static void main(String[] a){\n    Main o = new Main();\n    System.out.println(o.x);\n  }\n}",
-    options:["0","5","null","Compile error"],
-    answer:1, explain:"The constructor sets <code>x = 5</code> when the object is created, so it prints 5."},
-  {topic:"Constructors", q:"For class <code>Car</code>, which is a valid constructor signature?",
-    options:["<code>void Car() {}</code>","<code>public Car() {}</code>","<code>public car() {}</code>","<code>int Car() { return 0; }</code>"],
-    answer:1, explain:"No return type and the name matches the class (capital C). <code>void</code> or a return type makes it a method, not a constructor."},
-
-  // --- Modifiers ---
-  {topic:"Modifiers", q:"<code>public</code> means the member is…",
-    options:["accessible from all classes","accessible only in the same class","accessible only to subclasses","hidden from everything"],
-    answer:0, explain:"public = accessible everywhere."},
-  {topic:"Modifiers", q:"<code>private</code> means the member is…",
-    options:["accessible everywhere","accessible only within its own class","accessible to the same package","read-only"],
-    answer:1, explain:"private = only inside the class that declares it."},
-  {topic:"Modifiers", q:"<code>protected</code> members are accessible…",
-    options:["nowhere","only in the same class","in the same package AND in subclasses","only on the internet"],
-    answer:2, explain:"protected = same package plus subclasses."},
-  {topic:"Modifiers", q:"If you write no access modifier (default), the member is accessible…",
-    options:["everywhere","only within the same package","only to subclasses","only inside one method"],
-    answer:1, explain:"Default (package-private) = same package only."},
-  {topic:"Modifiers", q:"Which keyword stops a class from being inherited?",
-    options:["<code>static</code>","<code>final</code>","<code>private</code>","<code>sealed</code>"],
-    answer:1, explain:"A <code>final</code> class cannot be extended."},
-  {topic:"Modifiers", q:"A <code>static</code> member belongs to…",
-    options:["each individual object","the class itself (shared)","the main method only","the constructor"],
-    answer:1, explain:"static members belong to the class, shared across all instances."},
-  {topic:"Modifiers", q:"An <code>abstract</code> method…",
-    options:["has a full body","has no body and must be overridden in a subclass","can never be called","is the same as a constructor"],
-    answer:1, explain:"An abstract method declares a signature with no body; subclasses must implement it."},
-  {topic:"Modifiers", q:"<code>age</code> is <code>private</code> in class Person. From another class, <code>p.age</code> is…",
-    code:"class Person { private int age = 30; }\n// elsewhere:\nSystem.out.println(p.age);",
-    options:["prints 30","a compile error","prints null","prints 0"],
-    answer:1, explain:"Private fields can't be accessed from outside the class — compile error. Use a getter."},
-
-  // --- Encapsulation ---
-  {topic:"Encapsulation", q:"Encapsulation is mainly about…",
-    options:["making code run faster","hiding sensitive data behind controlled access","deleting unused classes","drawing UML diagrams"],
-    answer:1, explain:"Encapsulation hides internal data and exposes it only through controlled methods."},
-  {topic:"Encapsulation", q:"To encapsulate a field, you declare it…",
-    options:["<code>public</code>","<code>private</code>","<code>static</code>","<code>final</code>"],
-    answer:1, explain:"Make fields private, then provide getters/setters."},
-  {topic:"Encapsulation", q:"A getter method…",
-    options:["sets a new value","returns the value of a private field","deletes the field","prints the field"],
-    answer:1, explain:"A getter returns the private value."},
-  {topic:"Encapsulation", q:"A typical setter method…",
-    options:["returns an int","takes a parameter and assigns it to the field (returns void)","is always private","runs when the object is destroyed"],
-    answer:1, explain:"A setter takes a value and stores it; it usually returns void."},
-  {topic:"Encapsulation", q:"In <code>public void setName(String n){ this.name = n; }</code>, what does <code>this</code> refer to?",
-    options:["the class file","the current object","the parameter","the superclass"],
-    answer:1, explain:"<code>this</code> refers to the current object, distinguishing the field from the parameter."},
-  {topic:"Encapsulation", q:"To make an attribute read-only, you provide…",
-    options:["a setter only","a getter only","both getter and setter","neither"],
-    answer:1, explain:"Getter only = read-only. Setter only = write-only."},
-
-  // --- Inheritance ---
-  {topic:"Inheritance", q:"Which keyword sets up inheritance?",
-    options:["<code>implements</code>","<code>inherits</code>","<code>extends</code>","<code>super</code>"],
-    answer:2, explain:"<code>class Car extends Vehicle</code> — extends creates inheritance."},
-  {topic:"Inheritance", q:"The class being inherited from is called the…",
-    options:["subclass / child","superclass / parent","interface","constructor"],
-    answer:1, explain:"Superclass (parent) is inherited from; subclass (child) inherits."},
-  {topic:"Inheritance", q:"In <code>class Car extends Vehicle</code>, <code>Car</code> is the…",
-    options:["superclass","subclass","interface","package"],
-    answer:1, explain:"Car inherits, so it's the subclass (child)."},
-  {topic:"Inheritance", q:"Can a subclass directly access a <code>private</code> member of its parent?",
-    options:["Yes, always","No","Only if it's static","Only on Mondays"],
-    answer:1, explain:"private members are not accessible to subclasses. Use protected (or a getter)."},
-  {topic:"Inheritance", q:"Which modifier lets a subclass access a parent's member?",
-    options:["<code>private</code>","<code>protected</code>","<code>final</code>","<code>abstract</code>"],
-    answer:1, explain:"protected exposes members to subclasses (and the same package)."},
-  {topic:"Inheritance", q:"The main benefit of inheritance is…",
-    options:["faster typing","code reusability","smaller file sizes only","preventing all bugs"],
-    answer:1, explain:"You reuse the parent's attributes/methods instead of rewriting them."},
-  {topic:"Inheritance", q:"What does this print?",
-    code:"class Vehicle { protected String brand = \"Ford\"; }\nclass Car extends Vehicle {\n  public static void main(String[] a){\n    Car c = new Car();\n    System.out.println(c.brand);\n  }\n}",
-    options:["null","Ford","Car","Compile error"],
-    answer:1, explain:"Car inherits the protected <code>brand</code> from Vehicle, so it prints Ford."},
-
-  // --- Polymorphism ---
-  {topic:"Polymorphism", q:"\"Polymorphism\" literally means…",
-    options:["one form","many forms","no form","fixed form"],
-    answer:1, explain:"Poly = many, morph = form. Same action, different behavior per subclass."},
-  {topic:"Polymorphism", q:"Polymorphism in Java depends on…",
-    options:["inheritance","arrays","the main method","the import statement"],
-    answer:0, explain:"It builds on inheritance — subclasses override inherited methods."},
-  {topic:"Polymorphism", q:"Method overriding is when…",
-    options:["two methods have the same name in one class","a subclass redefines a method it inherited","you call a method twice","you delete a method"],
-    answer:1, explain:"Overriding = a subclass provides its own version of an inherited method."},
-  {topic:"Polymorphism", q:"What does <code>d.animalSound()</code> print?",
-    code:"class Animal { public void animalSound(){ System.out.println(\"...sound\"); } }\nclass Dog extends Animal {\n  public void animalSound(){ System.out.println(\"bow wow\"); }\n}\n// Dog d = new Dog(); d.animalSound();",
-    options:["...sound","bow wow","wee wee","Compile error"],
-    answer:1, explain:"Dog overrides animalSound, so the Dog version runs: bow wow."},
-  {topic:"Polymorphism", q:"A superclass reference can point to…",
-    options:["only its own type","any of its subclass objects","only interfaces","nothing"],
-    answer:1, explain:"e.g. <code>Animal a = new Dog();</code> — a parent reference can hold any subclass object."},
-  {topic:"Polymorphism", q:"Which lets the SAME method call behave differently on different objects?",
-    options:["encapsulation","overriding (polymorphism)","a constructor","the private keyword"],
-    answer:1, explain:"Overriding gives each subclass its own behavior for the same method name."},
-  {topic:"Polymorphism", q:"Why is polymorphism useful?",
-    options:["it hides data","one interface can work with many related types, reducing repeated code","it makes classes final","it removes inheritance"],
-    answer:1, explain:"You write code against the parent type and it works for every subclass — less duplication."}
-];
-
-MondayQuiz("quiz", QUESTIONS, {});
-
-/* ---------------- terminal ---------------- */
-MondayTerminal("term", {
-  lang: "java",
-  who: "a future software engineer 😎",
-  hint: "Constructor name = class name, and it has NO return type. That trips everyone up.",
-  sample: {
-    code: "public class Main {\n  int modelYear; String modelName;\n  public Main(int year, String name){ modelYear=year; modelName=name; }\n  public static void main(String[] a){\n    Main car = new Main(1969, \"Mustang\");\n    System.out.println(car.modelYear + \" \" + car.modelName);\n  }\n}",
-    out: "1969 Mustang"
-  }
-});
-
-/* ---------------- downloadable notes ---------------- */
-document.getElementById("dlNotes").onclick = function () {
-  downloadNotes("java-oop-notes.html", "Java OOP — Quick Notes", [
-    {h:"Constructors", body:
-      "<ul><li>Special method that <b>initializes an object</b>; runs when you use <code>new</code>.</li>" +
-      "<li>Name <b>must match the class name</b>.</li><li><b>No return type</b> (not even void).</li>" +
-      "<li>No constructor written → Java adds a <b>default</b> one.</li><li>Can take parameters to set starting values.</li></ul>" +
-      "<pre>public class Main {\n  int modelYear; String modelName;\n  public Main(int y, String n){ modelYear=y; modelName=n; }\n}</pre>"},
-    {h:"Modifiers", body:
-      "<ul><li><code>public</code> — everywhere &nbsp; <code>private</code> — same class only</li>" +
-      "<li><code>protected</code> — same package + subclasses &nbsp; (none) — same package</li>" +
-      "<li><code>final</code> class → can't be inherited; <code>static</code> → belongs to the class; <code>abstract</code> method → no body, must override.</li></ul>"},
-    {h:"Encapsulation", body:
-      "<div class='tip'>Make fields <b>private</b>, expose them through <b>getters/setters</b>.</div>" +
-      "<ul><li>Getter returns the value; setter assigns it.</li><li><code>this.x</code> = the current object's field.</li>" +
-      "<li>Getter only = read-only; setter only = write-only.</li></ul>" +
-      "<pre>private String name;\npublic String getName(){ return name; }\npublic void setName(String n){ this.name = n; }</pre>"},
-    {h:"Inheritance", body:
-      "<ul><li><code>class Car extends Vehicle</code> — Car (subclass) inherits from Vehicle (superclass).</li>" +
-      "<li>Subclasses <b>can't</b> see <code>private</code> parent members; use <code>protected</code>.</li>" +
-      "<li><code>final</code> class can't be extended. Big win: <b>code reuse</b>.</li></ul>"},
-    {h:"Polymorphism", body:
-      "<div class='tip'>\"Many forms\": a parent reference can point to any subclass, and <b>overridden</b> methods run the subclass version.</div>" +
-      "<pre>Animal a = new Dog();\na.animalSound();   // \"bow wow\"</pre>" +
-      "<ul><li>Depends on inheritance + method overriding.</li><li>Same call, different behavior per subclass → less repeated code.</li></ul>"}
-  ]);
-};
-</script>
 </body>
 </html>

@@ -1,0 +1,13 @@
+/* Monday 5–6 · Donald — "terminal green" coding theme.
+   Overrides the shared styles.css :root variables. Loaded AFTER ../styles.css. */
+:root{
+  --bg:#0b1016; --bg2:#121a22; --card:#161e27; --ink:#e8f3ea; --soft:#8fb39a;
+  --accent:#22c55e; --accent2:#a3e635; --good:#34d399; --bad:#fb7185; --warn:#fbbf24;
+  --line:#274233;
+}
+body{ background:radial-gradient(1200px 600px at 50% -10%, #143024 0%, var(--bg) 60%); }
+/* dark text reads better on the green accent than the default navy */
+.pill.active{ color:#052310; }
+.btn{ color:#052310; }
+.opt.correct .key{ color:#052310; }
+.choice .emoji{ background:#0d1a12; }

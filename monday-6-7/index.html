@@ -9,16 +9,11 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / Monday 6–7</div></div>
+  <div class="topbar"><div class="crumb">Monday 6–7</div></div>
   <h1>🧮 Welcome back, Chloe!</h1>
   <p class="lede">Intermediate combinatorics challenges. Type your answer and Check — you get up to <b>10 tries</b>, and each one unlocks a more detailed hint. Stuck? Use the tutor chat at the bottom.</p>
 
-  <section class="section show" id="step-date">
-    <h2>When's your class?</h2>
-    <div class="pill-row" id="dates"></div>
-  </section>
-
-  <section class="section" id="step-set">
+  <section class="section show" id="step-set">
     <h2>This week's challenges <span class="tag">intermediate combinatorics</span></h2>
     <div id="problems"></div>
 
@@ -384,26 +379,8 @@ var TRIG = [
 ];
 </script>
 <script>
-(function(){
-  var row = document.getElementById("dates");
-  var today = new Date();
-  function fmt(d){ return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"}); }
-  var opts = [{label:"Today — " + fmt(today)}];
-  var d = new Date(today);
-  for (var added=0; opts.length<4;){ d.setDate(d.getDate()+1); if (d.getDay()===1){ opts.push({label:"Mon " + fmt(d)}); added++; } }
-  var built = false;
-  opts.forEach(function(o){
-    var b=document.createElement("button"); b.className="pill"; b.textContent=o.label;
-    b.onclick=function(){
-      row.querySelectorAll(".pill").forEach(function(x){x.classList.remove("active");});
-      b.classList.add("active");
-      var s=document.getElementById("step-set"); s.classList.add("show");
-      if(!built){ MondayChallenge("problems", PROBLEMS, {}); MondayChat("chat", {name:"Chloe"}); built=true; }
-      s.scrollIntoView({behavior:"smooth"});
-    };
-    row.appendChild(b);
-  });
-})();
+MondayChallenge("problems", PROBLEMS, {});
+MondayChat("chat", {name:"Chloe"});
 </script>
 </body>
 </html>

@@ -1,0 +1,13 @@
+/* Monday 6–8 · Physics (waves) — "deep ocean" cyan theme.
+   Overrides the shared styles.css :root variables. Loaded AFTER ../styles.css. */
+:root{
+  --bg:#06141a; --bg2:#0a2029; --card:#0d2530; --ink:#e3f6fb; --soft:#84b6c4;
+  --accent:#22d3ee; --accent2:#38bdf8; --good:#34d399; --bad:#fb7185; --warn:#fbbf24;
+  --line:#16404e;
+}
+body{ background:radial-gradient(1200px 600px at 50% -10%, #0c3a47 0%, var(--bg) 60%); }
+/* dark text on the bright cyan accent */
+.pill.active{ color:#04222b; }
+.btn{ color:#04222b; }
+.opt.correct .key{ color:#04222b; }
+.choice .emoji{ background:#08222b; }

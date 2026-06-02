@@ -292,7 +292,6 @@
       '<div class="chat">' +
         '<div class="chat-log" id="chatLog"></div>' +
         '<div class="chat-row"><input class="chat-in" id="chatIn" placeholder="Where are you stuck?"><button class="btn chat-send">Send</button></div>' +
-        '<div class="chat-ext"><button class="btn ghost chat-gpt">Ask ChatGPT ↗</button><button class="btn ghost chat-claude">Ask Claude ↗</button></div>' +
       '</div>';
     var log = root.querySelector("#chatLog");
     var input = root.querySelector("#chatIn");
@@ -312,12 +311,6 @@
     function reply(q){ add("You", q, "me"); add("Tutor", tips[ti % tips.length]); ti++; }
     root.querySelector(".chat-send").onclick = function () { var v = input.value.trim(); if (!v) return; reply(v); input.value = ""; };
     input.addEventListener("keydown", function (e) { if (e.key === "Enter") root.querySelector(".chat-send").click(); });
-    function ext(base){
-      var q = input.value.trim() || "Give me a light hint (not the full solution) for an intermediate combinatorics problem.";
-      window.open(base + encodeURIComponent("Light hint only, please don't give the full answer: " + q), "_blank", "noopener");
-    }
-    root.querySelector(".chat-gpt").onclick = function () { ext("https://chatgpt.com/?q="); };
-    root.querySelector(".chat-claude").onclick = function () { ext("https://claude.ai/new?q="); };
   };
 
   /* ---------------- notes download ---------------- */

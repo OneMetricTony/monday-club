@@ -6,381 +6,51 @@
 <meta name="theme-color" content="#0f1226">
 <title>Monday 6–7 · Monday Club</title>
 <link rel="stylesheet" href="../styles.css">
+<script src="../gate.js"></script>
+<style>
+  /* dominant / featured option */
+  .choice-feature{
+    background:linear-gradient(180deg, rgba(108,140,255,.22), rgba(55,224,200,.10));
+    border-color:var(--accent);
+    padding:26px 24px;
+    box-shadow:0 12px 44px rgba(108,140,255,.22);
+  }
+  .choice-feature .emoji{width:64px;height:64px;font-size:38px;background:rgba(108,140,255,.18);border-color:var(--accent)}
+  .choice-feature .t{font-size:1.55rem}
+  .choice-feature .s{font-size:1rem}
+  .choice-feature .go{font-size:30px;color:var(--accent)}
+  .disc-note{margin:18px 0 0;background:#0e1330;border:1px solid var(--line);border-left:4px solid var(--accent2);
+    border-radius:0 12px 12px 0;padding:12px 16px;color:var(--ink);font-size:.98rem}
+</style>
 </head>
 <body>
 <div class="wrap">
   <div class="topbar"><div class="crumb">Monday 6–7</div></div>
   <h1>🧮 Welcome back, Chloe!</h1>
-  <p class="lede">Intermediate combinatorics challenges. Type your answer and Check — you get up to <b>10 tries</b>, and each one unlocks a more detailed hint. Stuck? Use the tutor chat at the bottom.</p>
+  <p class="lede">Pick what you're working on today.</p>
 
-  <section class="section show" id="step-set">
-    <h2>This week's challenges <span class="tag">intermediate combinatorics</span></h2>
-    <div id="problems"></div>
+  <div class="choices">
+    <a class="choice choice-feature" href="combinatorics.html">
+      <span class="emoji">🧮</span>
+      <span><span class="t">Combinatorics</span><span class="s">This week's challenge set — 26 problems with up to 10 tries and tiered hints</span></span>
+      <span class="go">→</span>
+    </a>
+    <a class="choice" href="trig-sheet-4.html">
+      <span class="emoji">📐</span>
+      <span><span class="t">Trig Sheet 4</span><span class="s">7 step-by-step trigonometry problems</span></span>
+      <span class="go">→</span>
+    </a>
+  </div>
 
-    <div class="choices" style="margin-top:26px">
-      <a class="choice" href="trig-sheet-4.html"><span class="emoji">📐</span><span><span class="t">Trig Sheet 4 →</span><span class="s">7 step-by-step trigonometry problems — on their own page</span></span><span class="go">→</span></a>
-    </div>
+  <p class="disc-note">📌 Remember to use the Discord whiteboard activity.</p>
 
-    <h2 style="margin-top:30px">💬 Tutor chat <span class="tag">light hints only</span></h2>
-    <p class="muted">Nudges only — it won't hand you the answer. The ↗ buttons open ChatGPT or Claude with your question.</p>
-    <div id="chat"></div>
-  </section>
+  <h2 style="margin-top:34px">🖊️ Whiteboard <span class="tag">auto-saved</span></h2>
+  <p class="muted">Scratch space for working through problems — it saves automatically and will still be here next session.</p>
+  <div id="board"></div>
 
   <footer>Monday Club · 6–7 PM · for Chloe</footer>
 </div>
-
-<script src="../quiz.js"></script>
-<script>
-var PROBLEMS = [
-  {topic:"Selections", title:"Committee with a must-have", answer:"55",
-    statement:"A club has 8 members, including Ada and Ben. How many 4-person committees include <b>at least one</b> of Ada or Ben?",
-    hints:[
-      "It's a selection (order doesn't matter) → think combinations C(n, k).",
-      "'At least one' is usually easier as: (all committees) − (committees with <i>neither</i> Ada nor Ben).",
-      "Total 4-person committees from 8 people: C(8, 4).",
-      "Committees containing neither Ada nor Ben: choose all 4 from the other 6 → C(6, 4).",
-      "C(8,4) = 70 and C(6,4) = 15. Now subtract."
-    ],
-    solution:"Total committees C(8,4)=70. Those avoiding both Ada and Ben: C(6,4)=15. At least one = 70 − 15 = <b>55</b>."},
-
-  {topic:"Arrangements", title:"BALLOON", answer:"1260",
-    statement:"How many distinct ways can the letters of the word <b>BALLOON</b> be arranged?",
-    hints:[
-      "Order matters → permutations. But watch for repeated letters.",
-      "List the letters: B, A, L, L, O, O, N — that's 7 letters.",
-      "Repeats: L appears twice, O appears twice.",
-      "Formula: 7! ÷ (2! for the L's × 2! for the O's).",
-      "7! = 5040 and 2!·2! = 4."
-    ],
-    solution:"7! / (2!·2!) = 5040 / 4 = <b>1260</b>."},
-
-  {topic:"Stars & Bars", title:"Sharing candy", answer:"286",
-    statement:"In how many ways can <b>10 identical</b> candies be given to <b>4 children</b>, if a child may get none?",
-    hints:[
-      "Identical items into distinct groups → stars and bars.",
-      "n identical items into k groups (each ≥ 0): C(n + k − 1, k − 1).",
-      "Here n = 10 candies and k = 4 children.",
-      "So C(10 + 4 − 1, 4 − 1) = C(13, 3).",
-      "C(13,3) = 13·12·11 / 6."
-    ],
-    solution:"C(13, 3) = (13·12·11)/6 = <b>286</b>."},
-
-  {topic:"Inclusion–Exclusion", title:"Divisible by none", answer:"26",
-    statement:"How many integers from <b>1 to 100</b> are divisible by <b>none</b> of 2, 3, or 5?",
-    hints:[
-      "Easier to count how many ARE divisible by 2, 3, or 5, then subtract from 100.",
-      "Use inclusion–exclusion: add the singles, subtract the pairs, add back the triple.",
-      "Singles: ⌊100/2⌋=50, ⌊100/3⌋=33, ⌊100/5⌋=20.",
-      "Pairs: ⌊100/6⌋=16, ⌊100/10⌋=10, ⌊100/15⌋=6. Triple: ⌊100/30⌋=3.",
-      "Divisible by 2, 3, or 5 = 50+33+20 − 16−10−6 + 3 = 74."
-    ],
-    solution:"By inclusion–exclusion, 50+33+20−16−10−6+3 = 74 are divisible by 2, 3, or 5. So 100 − 74 = <b>26</b> are divisible by none."},
-
-  {topic:"Lattice Paths", title:"Shortest grid paths", answer:"56",
-    statement:"How many shortest paths go from (0, 0) to (5, 3) on a grid, moving only <b>right</b> or <b>up</b>?",
-    hints:[
-      "Every shortest path is a sequence of single steps: some R's and some U's.",
-      "To reach (5,3) you need exactly 5 R's and 3 U's.",
-      "Count the orderings of 5 R's and 3 U's among the 8 total moves.",
-      "Choose which of the 8 moves are 'up': C(8, 3) (same as C(8,5)).",
-      "C(8,3) = 8·7·6 / 6."
-    ],
-    solution:"A path is an arrangement of 5 R's and 3 U's: C(8, 3) = <b>56</b>."},
-
-  {topic:"Grouping", title:"Three pairs", answer:"15",
-    statement:"In how many ways can <b>6 students</b> be split into <b>3 unordered pairs</b>?",
-    hints:[
-      "Both the pairs are unordered AND the 3 pairs themselves have no order — so you'll overcount and divide.",
-      "Start from 6! ways to line everyone up.",
-      "Each pair's internal order double-counts: divide by 2! for each of the 3 pairs → 2³.",
-      "The 3 pairs can be listed in any order: divide by 3!.",
-      "6! / (2³ · 3!) = 720 / (8·6)."
-    ],
-    solution:"6! / (2³ · 3!) = 720 / 48 = <b>15</b>."},
-
-  {topic:"Circular", title:"Around a round table", answer:"120",
-    statement:"In how many ways can 6 people be seated around a round table, if rotations of the same arrangement count as identical?",
-    hints:[
-      "Around a circle, rotating everyone doesn't create a new arrangement — so 6! over-counts.",
-      "Fix one person's seat to remove the rotational symmetry.",
-      "Then arrange the remaining 5 people in the other seats.",
-      "That gives (6 − 1)! = 5!.",
-      "5! = 120."],
-    solution:"Fix one person, arrange the other 5: (6−1)! = 5! = <b>120</b>."},
-
-  {topic:"Derangements", title:"Wrong envelopes", answer:"9",
-    statement:"4 letters are placed at random into 4 addressed envelopes. In how many ways does <b>no</b> letter land in its correct envelope?",
-    hints:[
-      "This is a derangement — a permutation with no element in its own place.",
-      "Use inclusion–exclusion on the 'at least one correct' cases.",
-      "D(n) = n!·(1 − 1/1! + 1/2! − 1/3! + … ).",
-      "For n = 4: 24·(1 − 1 + 1/2 − 1/6 + 1/24).",
-      "24 · (9/24) = 9."],
-    solution:"D(4) = 24(1 − 1 + 1/2 − 1/6 + 1/24) = <b>9</b>."},
-
-  {topic:"Binomial Theorem", title:"Find the coefficient", answer:"35",
-    statement:"What is the coefficient of x³ in the expansion of (1 + x)⁷?",
-    hints:[
-      "Binomial theorem: (1 + x)ⁿ = Σ C(n, k)·xᵏ.",
-      "The xᵏ term has coefficient C(n, k).",
-      "Here n = 7 and you want k = 3.",
-      "So the coefficient is C(7, 3).",
-      "C(7,3) = 35."],
-    solution:"By the binomial theorem, the x³ coefficient is C(7, 3) = <b>35</b>."},
-
-  {topic:"Bijection", title:"Strictly increasing digits", answer:"84",
-    statement:"How many 3-digit numbers have <b>strictly increasing</b> digits (for example 158 or 369)?",
-    hints:[
-      "Could the digit 0 ever appear? It would have to be first, which isn't allowed — so use digits 1–9.",
-      "Any set of 3 distinct digits from 1–9 can be written in increasing order in exactly ONE way.",
-      "So you just need to choose which 3 digits to use.",
-      "That's C(9, 3).",
-      "C(9,3) = 84."],
-    solution:"Each choice of 3 distinct digits from 1–9 gives exactly one increasing number: C(9, 3) = <b>84</b>."},
-
-  {topic:"Arrangements", title:"MISSISSIPPI", answer:"34650",
-    statement:"How many distinct arrangements are there of the letters in <b>MISSISSIPPI</b>?",
-    hints:[
-      "Count the letters and their repeats — there are 11 letters in total.",
-      "M:1, I:4, S:4, P:2.",
-      "Arrangements with repeats = 11! ÷ (factorial of each repeat count).",
-      "11! / (4! · 4! · 2!).",
-      "11! = 39 916 800 and 4!·4!·2! = 1152."],
-    solution:"11! / (4!·4!·2!) = 39 916 800 / 1152 = <b>34 650</b>."},
-
-  {topic:"Complementary", title:"At least one ace", answer:"886656",
-    statement:"From a standard 52-card deck, how many 5-card hands contain <b>at least one ace</b>?",
-    hints:[
-      "'At least one' → complementary counting: total hands − hands with NO ace.",
-      "Total 5-card hands: C(52, 5).",
-      "No-ace hands: choose all 5 from the 48 non-aces → C(48, 5).",
-      "C(52,5) = 2 598 960 and C(48,5) = 1 712 304.",
-      "Subtract them."],
-    solution:"C(52,5) − C(48,5) = 2 598 960 − 1 712 304 = <b>886 656</b>."},
-
-  {topic:"Subsets", title:"At least two elements", answer:"247",
-    statement:"How many subsets of {1, 2, 3, 4, 5, 6, 7, 8} contain <b>at least 2</b> elements?",
-    hints:[
-      "The total number of subsets of an 8-element set is 2⁸.",
-      "Subtract the subsets that are too small: the empty set and the singletons.",
-      "Empty set: 1. Single-element subsets: C(8,1) = 8.",
-      "2⁸ − 1 − 8.",
-      "256 − 9."],
-    solution:"2⁸ − C(8,0) − C(8,1) = 256 − 1 − 8 = <b>247</b>."},
-
-  {topic:"Stars & Bars", title:"Solutions to a+b+c=12", answer:"91",
-    statement:"How many <b>nonnegative integer</b> solutions are there to a + b + c = 12?",
-    hints:[
-      "This is the same as distributing 12 identical units among 3 variables.",
-      "Stars and bars: C(n + k − 1, k − 1), with n = 12 and k = 3.",
-      "C(12 + 3 − 1, 3 − 1) = C(14, 2).",
-      "C(14,2) = 14·13 / 2.",
-      "= 91."],
-    solution:"C(14, 2) = (14·13)/2 = <b>91</b>."},
-
-  {topic:"Bijection", title:"No two consecutive", answer:"56",
-    statement:"In how many ways can you choose 3 numbers from {1, 2, …, 10} so that <b>no two are consecutive</b>?",
-    hints:[
-      "There's a clean formula: choosing k from n with no two consecutive = C(n − k + 1, k).",
-      "Here n = 10 and k = 3.",
-      "So C(10 − 3 + 1, 3) = C(8, 3).",
-      "(Idea: subtract 0, 1, 2 from your sorted picks to squeeze out the forced gaps — a bijection with ordinary choices.)",
-      "C(8,3) = 56."],
-    solution:"No-two-consecutive choices = C(n − k + 1, k) = C(8, 3) = <b>56</b>."},
-
-  {topic:"Binomial", title:"Mostly heads", answer:"37",
-    statement:"A fair coin is flipped 8 times. How many of the possible head/tail sequences have <b>at least 6 heads</b>?",
-    hints:[
-      "Count exactly 6, exactly 7, and exactly 8 heads, then add.",
-      "Exactly k heads in 8 flips: C(8, k).",
-      "C(8,6) + C(8,7) + C(8,8).",
-      "28 + 8 + 1.",
-      "= 37."],
-    solution:"C(8,6) + C(8,7) + C(8,8) = 28 + 8 + 1 = <b>37</b>."},
-
-  {topic:"Arrangements", title:"Must stand together", answer:"48",
-    statement:"In how many ways can 5 people line up in a row if Amy and Bob insist on standing <b>next to each other</b>?",
-    hints:[
-      "Glue Amy and Bob into a single 'block', so you're really arranging 4 items.",
-      "Arrange those 4 items (the block + the other 3 people): 4!.",
-      "Inside the block, Amy and Bob can be in 2 orders (AB or BA).",
-      "Multiply: 4! × 2.",
-      "24 × 2 = 48."],
-    solution:"Treat Amy+Bob as one block: 4! × 2 = 24 × 2 = <b>48</b>."},
-
-  {topic:"Binomial", title:"Sum of a Pascal row", answer:"128",
-    statement:"What is the sum of all the coefficients in (1 + x)⁷ (the sum of row 7 of Pascal's triangle)?",
-    hints:[
-      "The coefficients are C(7,0), C(7,1), …, C(7,7).",
-      "You want Σ C(7, k).",
-      "Trick: substitute x = 1 into (1 + x)⁷.",
-      "(1 + 1)⁷ = 2⁷.",
-      "2⁷ = 128."],
-    solution:"Setting x = 1 gives Σ C(7,k) = 2⁷ = <b>128</b>."},
-
-  {topic:"Counting Functions", title:"How many functions?", answer:"64",
-    statement:"How many functions are there from a 3-element set to a 4-element set?",
-    hints:[
-      "A function gives each input exactly one output.",
-      "Each of the 3 inputs independently chooses one of the 4 outputs.",
-      "Multiply the choices: 4 × 4 × 4.",
-      "That's 4³.",
-      "= 64."],
-    solution:"Each of 3 inputs has 4 choices: 4³ = <b>64</b>."},
-
-  {topic:"Counting Functions", title:"One-to-one functions", answer:"60",
-    statement:"How many <b>one-to-one</b> (injective) functions are there from a 3-element set to a 5-element set?",
-    hints:[
-      "Injective means outputs can't repeat.",
-      "First input: 5 possible outputs.",
-      "Second input: 4 left; third input: 3 left.",
-      "Multiply: 5 × 4 × 3.",
-      "= 60."],
-    solution:"5 × 4 × 3 = <b>60</b> (outputs can't repeat, so it's a falling product)."},
-
-  {topic:"Selections", title:"Handshakes", answer:"45",
-    statement:"At a party of 10 people, everyone shakes hands exactly once with everyone else. How many handshakes occur?",
-    hints:[
-      "A handshake is an unordered pair of people.",
-      "So count the number of 2-person pairs from 10.",
-      "That's C(10, 2).",
-      "C(10,2) = 10·9 / 2.",
-      "= 45."],
-    solution:"C(10, 2) = (10·9)/2 = <b>45</b>."},
-
-  {topic:"Multinomial", title:"Three labeled teams", answer:"27720",
-    statement:"In how many ways can 12 students be split into three <b>labeled</b> teams of sizes 5, 4, and 3?",
-    hints:[
-      "Labeled (distinguishable) teams → a multinomial count.",
-      "Choose 5 for team 1, then 4 of the remaining 7, then the last 3.",
-      "C(12,5)·C(7,4)·C(3,3) = 12! / (5!·4!·3!).",
-      "12! = 479 001 600 and 5!·4!·3! = 120·24·6 = 17 280.",
-      "479 001 600 / 17 280."],
-    solution:"12! / (5!·4!·3!) = 479 001 600 / 17 280 = <b>27 720</b>."},
-
-  {topic:"Arrangements", title:"Vowels together", answer:"240",
-    statement:"How many arrangements of the letters in <b>NUMBER</b> have the two vowels (U and E) next to each other?",
-    hints:[
-      "NUMBER has 6 distinct letters; the vowels are U and E.",
-      "Glue U and E into one block → you're arranging 5 items.",
-      "Arrange those 5 items: 5!.",
-      "Inside the block the vowels can be UE or EU: × 2.",
-      "120 × 2 = 240."],
-    solution:"Glue the vowels into a block: 5! × 2 = 120 × 2 = <b>240</b>."},
-
-  {topic:"Counting", title:"Distinct digits", answer:"4536",
-    statement:"How many 4-digit numbers (1000 to 9999) have <b>all four digits different</b>?",
-    hints:[
-      "Build the number one digit at a time.",
-      "First digit can't be 0 → 9 choices (1–9).",
-      "Second digit: any digit except the first → 9 choices (0 is allowed now).",
-      "Third: 8 remaining; fourth: 7 remaining.",
-      "9 × 9 × 8 × 7."],
-    solution:"9 · 9 · 8 · 7 = <b>4536</b>."},
-
-  {topic:"Casework", title:"At least 2 women", answer:"81",
-    statement:"From 5 men and 4 women, how many 4-person committees contain <b>at least 2 women</b>?",
-    hints:[
-      "Split by number of women: exactly 2, exactly 3, exactly 4.",
-      "Exactly 2 women: C(4,2)·C(5,2).",
-      "Exactly 3: C(4,3)·C(5,1). Exactly 4: C(4,4).",
-      "= 6·10 + 4·5 + 1.",
-      "60 + 20 + 1."],
-    solution:"C(4,2)C(5,2) + C(4,3)C(5,1) + C(4,4) = 60 + 20 + 1 = <b>81</b>."},
-
-  {topic:"Coloring", title:"No two adjacent the same", answer:"48",
-    statement:"A row of 5 houses is each painted one of 3 colors so that <b>no two adjacent houses</b> share a color. How many colorings are there?",
-    hints:[
-      "Color the houses left to right.",
-      "First house: 3 color choices.",
-      "Each later house just needs to differ from the one before it: 2 choices each.",
-      "So 3 × 2 × 2 × 2 × 2.",
-      "3 · 2⁴ = 3 · 16."],
-    solution:"3 · 2⁴ = 3 · 16 = <b>48</b>."}
-];
-
-var TRIG = [
-  {topic:"Pendulum arc", title:"Grandfather clock", answer:"49",
-    statement:"A grandfather-clock pendulum is 1 m long. At the top of its swing the tip is 9 cm higher than at the lowest point. Find the <b>total</b> angle (both sides) through which it swings. <i>(nearest degree)</i>",
-    hints:[
-      "Draw the pendulum vertical (lowest) and at one extreme, angle θ from vertical. It pivots at the top.",
-      "The tip's rise is h = L − L cos θ = L(1 − cos θ).",
-      "Use L = 100 cm, h = 9 cm.",
-      "1 − cos θ = 9/100 = 0.09 → cos θ = 0.91.",
-      "θ = cos⁻¹(0.91) ≈ 24.5° — but that's only ONE side.",
-      "Total swing = 2θ."],
-    solution:"<b>1.</b> Let θ = angle from vertical at the extreme. <b>2.</b> Tip rise: h = L(1 − cos θ). <b>3.</b> L = 100 cm, h = 9 cm. <b>4.</b> 1 − cos θ = 0.09. <b>5.</b> cos θ = 0.91. <b>6.</b> θ = cos⁻¹0.91 ≈ 24.49°. <b>7.</b> Total = 2θ ≈ <b>49°</b>."},
-
-  {topic:"Tipping bowl", title:"Hemispherical bowl — find the angle", answer:"43",
-    statement:"A hemispherical bowl of radius 38 cm holds water to a depth of 12 cm. Find the largest angle it can be tipped through without spilling. <i>(nearest degree)</i>",
-    hints:[
-      "The water VOLUME stays constant; it spills when the (horizontal) surface just reaches the rim.",
-      "At rest the water is a spherical cap of height d: V = (π/3)d²(3R − d).",
-      "At the spill point the surface plane is a distance R sin θ from the centre, so the water is a cap of height R(1 − sin θ).",
-      "Equal volumes ⇒ d²(3R − d) = R³(1 − sin θ)²(2 + sin θ).",
-      "R = 38, d = 12: left = 144·102 = 14688; R³ = 54872 → (1 − sinθ)²(2 + sinθ) = 0.2677.",
-      "Solve: sin θ ≈ 0.684 → θ ≈ 43°."],
-    solution:"<b>1.</b> Volume is conserved; spill = surface reaches rim. <b>2.</b> Rest volume = (π/3)d²(3R−d). <b>3.</b> At spill the plane is R sinθ from centre → cap height h = R(1−sinθ), volume (π/3)h²(3R−h). <b>4.</b> Equate: d²(3R−d) = R³(1−sinθ)²(2+sinθ). <b>5.</b> R=38, d=12 → 14688 = 54872·(1−sinθ)²(2+sinθ) → 0.2677. <b>6.</b> Solve numerically: sinθ ≈ 0.684. <b>7.</b> θ = sin⁻¹0.684 ≈ <b>43°</b>."},
-
-  {topic:"Dihedral angle", title:"Square pyramid, all edges 10", answer:"55",
-    statement:"A square-based pyramid PQRST has all eight edges equal to 10. Find the dihedral angle between triangular face △PQR and the base QRST. <i>(nearest degree — note: it is NOT ∠PQS)</i>",
-    hints:[
-      "All lateral edges equal ⇒ apex P sits directly above the centre O of the square base.",
-      "Measure the dihedral at M, the midpoint of edge QR, using lines ⟂ QR in each plane.",
-      "In the base, MO = half the side = 5 (the apothem).",
-      "Apex height: OQ = 5√2 ≈ 7.07, so H = √(10² − 50) = √50 ≈ 7.07.",
-      "tan(angle) = H / MO = 7.07 / 5 = 1.414.",
-      "angle = tan⁻¹(1.414)."],
-    solution:"<b>1.</b> Equal lateral edges ⇒ apex above centre O. <b>2.</b> At M (midpoint of QR), dihedral is between MO (base) and MP (face), both ⟂ QR. <b>3.</b> Apothem MO = 5. <b>4.</b> OQ = 5√2 ≈ 7.07 → H = √(100−50) = √50 ≈ 7.07. <b>5.</b> Run = MO = 5, rise = H = 7.07. <b>6.</b> tan(angle) = 7.07/5 = 1.414. <b>7.</b> angle = tan⁻¹1.414 ≈ 54.7° ≈ <b>55°</b>."},
-
-  {topic:"Dihedral angle", title:"Regular tetrahedron", answer:"71",
-    statement:"Find the dihedral angle between any two faces of a regular tetrahedron. <i>(nearest degree)</i>",
-    hints:[
-      "Pick edge length 2 — the answer is the same for any regular tetrahedron.",
-      "Each face is equilateral; its median (height) is √3.",
-      "On a shared edge, the perpendiculars from each face meet at opposite vertices.",
-      "Setting up the geometry of those two medians gives a clean cosine.",
-      "cos(dihedral) = 1/3.",
-      "angle = cos⁻¹(1/3)."],
-    solution:"<b>1.</b> Use edge 2 (scale-independent). <b>2.</b> Face median = √3. <b>3.</b> At a shared edge's midpoint, the two face-medians (each √3) run to the opposite vertices. <b>4.</b> Using coordinates, the angle between the faces satisfies cos θ = 1/3. <b>5.</b> (The medians' components reduce to a 1 : 3 ratio.) <b>6.</b> θ = cos⁻¹(1/3). <b>7.</b> θ ≈ 70.5° ≈ <b>71°</b>."},
-
-  {topic:"Pendulum arc", title:"Swing in a vertical plane", answer:"48",
-    statement:"A pendulum 0.7 m long swings in a vertical plane so its tip's highest position is 6 cm above the lowest. Find the total angle through which it swings. <i>(nearest degree)</i>",
-    hints:[
-      "Same model as the clock: one-side rise h = L(1 − cos θ).",
-      "Use L = 70 cm, h = 6 cm.",
-      "1 − cos θ = 6/70 ≈ 0.0857.",
-      "cos θ ≈ 0.9143.",
-      "θ ≈ 23.9° (one side).",
-      "Total = 2θ."],
-    solution:"<b>1.</b> θ = angle from vertical at the extreme. <b>2.</b> Rise: h = L(1 − cos θ). <b>3.</b> L = 70 cm, h = 6 cm. <b>4.</b> 1 − cos θ = 6/70 = 0.0857. <b>5.</b> cos θ = 0.9143. <b>6.</b> θ = cos⁻¹0.9143 ≈ 23.93°. <b>7.</b> Total = 2θ ≈ <b>48°</b>."},
-
-  {topic:"Tipping bowl", title:"Hemispherical bowl — find the depth", answer:"30",
-    statement:"A hemispherical bowl of radius 45 cm holds milk; the most it can be tilted without spilling is 20°. Find the depth of the milk. <i>(nearest cm)</i>",
-    hints:[
-      "Use the same volume relation: d²(3R − d) = R³(1 − sin θ)²(2 + sin θ).",
-      "Now θ = 20° is given; solve for d.",
-      "sin 20° = 0.342 → (1 − 0.342)²(2 + 0.342) = 0.658²·2.342 ≈ 1.014.",
-      "R³ = 45³ = 91125, so the right side ≈ 92 400.",
-      "Solve d²(135 − d) = 92 400.",
-      "d ≈ 29.6 cm."],
-    solution:"<b>1.</b> d²(3R − d) = R³(1 − sinθ)²(2 + sinθ). <b>2.</b> θ = 20°, R = 45. <b>3.</b> sin20° = 0.342. <b>4.</b> (1 − 0.342)²(2 + 0.342) ≈ 1.014. <b>5.</b> Right side = 91125·1.014 ≈ 92 400. <b>6.</b> Solve d²(135 − d) = 92 400. <b>7.</b> d ≈ 29.6 → depth ≈ <b>30 cm</b>."},
-
-  {topic:"Elevation (3-D)", title:"TV tower", answer:"40",
-    statement:"Points A, B, C are on level ground; C is the tower's base. A is due south of C, B due east of C, and AB = 100 m. The top's angle of elevation is 26° from A and 34° from B. Find the tower's height. <i>(nearest metre)</i>",
-    hints:[
-      "Let height = h. From A: tan26° = h/AC → AC = h/tan26°. From B: BC = h/tan34°.",
-      "South ⟂ East, so angle ACB = 90°.",
-      "Right triangle: AB² = AC² + BC².",
-      "100² = (h/tan26°)² + (h/tan34°)².",
-      "1/tan26° ≈ 2.050, 1/tan34° ≈ 1.483 → 10000 = h²(4.204 + 2.198) = 6.402h².",
-      "h² = 10000/6.402 ≈ 1562 → h ≈ 39.5 m."],
-    solution:"<b>1.</b> AC = h/tan26°, BC = h/tan34°. <b>2.</b> South ⟂ East ⇒ ∠ACB = 90°. <b>3.</b> Pythagoras: AB² = AC² + BC². <b>4.</b> 100² = (h/tan26°)² + (h/tan34°)². <b>5.</b> = h²(2.050² + 1.483²) = 6.402h². <b>6.</b> h² = 10000/6.402 ≈ 1562. <b>7.</b> h = √1562 ≈ 39.5 ≈ <b>40 m</b>."}
-];
-</script>
-<script>
-MondayChallenge("problems", PROBLEMS, {});
-MondayChat("chat", {name:"Chloe"});
-</script>
+<script src="../whiteboard.js"></script>
+<script>MondayWhiteboard("board", {key:"chloe-6-7"});</script>
 </body>
 </html>

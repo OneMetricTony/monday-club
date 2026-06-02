@@ -6,20 +6,15 @@
 <meta name="theme-color" content="#0f1226">
 <title>Monday 5–6 · Monday Club</title>
 <link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="theme.css">
-</head>
+<script src="../gate.js"></script></head>
 <body>
 <div class="wrap">
   <div class="topbar"><div class="crumb">Monday 5–6</div></div>
   <h1>👋 Welcome back, Donald!</h1>
   <p class="lede">Let's get set up for today.</p>
 
-  <section class="section show" id="step-date">
-    <h2>1 · When's your class?</h2>
-    <div class="pill-row" id="dates"></div>
-  </section>
-
-  <section class="section" id="step-lang">
-    <h2>2 · Are you doing Java or Python today?</h2>
+  <section class="section show" id="step-lang">
+    <h2>Are you doing Java or Python today?</h2>
     <div class="choices">
       <a class="choice" href="java.html">
         <span class="emoji">☕</span>
@@ -36,32 +31,5 @@
 
   <footer>Monday Club · 5–6 PM</footer>
 </div>
-<script>
-// Build buttons for the next few Mondays (+ Today), purely to set the vibe / track the week.
-(function(){
-  var row = document.getElementById("dates");
-  var today = new Date();
-  function fmt(d){ return d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"}); }
-  var opts = [];
-  opts.push({label:"Today — " + fmt(today), d:today});
-  // next 3 Mondays
-  var d = new Date(today);
-  for (var added=0; opts.length<4;){
-    d.setDate(d.getDate()+1);
-    if (d.getDay()===1){ opts.push({label:"Mon " + fmt(d), d:new Date(d)}); added++; }
-  }
-  opts.forEach(function(o){
-    var b = document.createElement("button");
-    b.className="pill"; b.textContent=o.label;
-    b.onclick=function(){
-      row.querySelectorAll(".pill").forEach(function(x){x.classList.remove("active");});
-      b.classList.add("active");
-      document.getElementById("step-lang").classList.add("show");
-      document.getElementById("step-lang").scrollIntoView({behavior:"smooth"});
-    };
-    row.appendChild(b);
-  });
-})();
-</script>
 </body>
 </html>

@@ -15,7 +15,7 @@ window.MondayNotes = function (root, opts) {
   opts = opts || {};
   root = typeof root === "string" ? document.getElementById(root) : root;
   if (!root) return;
-  var KEY = "mc_notes_" + (opts.key || location.pathname);
+  var KEY = "mc_notes_" + (opts.key || location.pathname) + "_v2";
 
   if (!document.getElementById("mc-notes-style")) {
     var st = document.createElement("style");
@@ -42,20 +42,16 @@ window.MondayNotes = function (root, opts) {
   var status = root.querySelector(".mc-status");
   try { mf.smartMode = true; } catch (e) { mf.setAttribute("smart-mode", "true"); }
 
-  // load existing value (handles both the old per-line JSON-array format and a plain string)
+  // Multi-line math needs an environment in MathLive — \displaylines stacks the
+  // lines in ONE editable box (Enter adds a line, Backspace at line start removes).
+  function wrap(lines) { return "\\displaylines{" + lines.join(" \\\\ ") + "}"; }
   var initial = "";
   try {
     var raw = localStorage.getItem(KEY);
-    if (raw != null && raw !== "") {
-      if (raw.charAt(0) === "[") {
-        try { var arr = JSON.parse(raw); initial = (Array.isArray(arr) ? arr : []).filter(Boolean).join(" \\\\ "); }
-        catch (e) { initial = raw; }
-      } else { initial = raw; }
-    } else if (opts.preload && opts.preload.length) {
-      initial = opts.preload.join(" \\\\ ");
-    }
+    if (raw != null && raw !== "") initial = raw;                     // already-saved LaTeX
+    else if (opts.preload && opts.preload.length) initial = wrap(opts.preload);
   } catch (e) {
-    if (opts.preload && opts.preload.length) initial = opts.preload.join(" \\\\ ");
+    if (opts.preload && opts.preload.length) initial = wrap(opts.preload);
   }
   if (initial) { try { mf.value = initial; } catch (e) { mf.setAttribute("value", initial); } }
 

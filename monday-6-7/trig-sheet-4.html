@@ -140,7 +140,7 @@ MondayChallenge("trig-problems", TRIG, {});
     var title = titleEl ? titleEl.textContent : ("Question " + (i + 1));
     d.innerHTML =
       '<summary><span class="chev">▶</span> Q' + (i + 1) + ' · ' + title +
-        '<span class="when">🕗 Saved yesterday · ' + (TIMES[i] || "8:30 PM") + '</span></summary>' +
+        (i === 0 ? '<span class="when">🕗 Saved yesterday · ' + TIMES[0] + '</span>' : '') + '</summary>' +
       '<div class="wb-row">' +
         '<div class="wb-cell" id="wb-trig-' + i + '"></div>' +
         '<div class="notes-cell" id="nt-trig-' + i + '"></div>' +

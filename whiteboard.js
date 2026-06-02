@@ -6,7 +6,7 @@ window.MondayWhiteboard = function (root, opts) {
   root = typeof root === "string" ? document.getElementById(root) : root;
   if (!root) return;
   var KEY = "mc_wb_" + (opts.key || location.pathname);
-  var W = 1200, H = 700; // fixed backing-store resolution (display scales to fit)
+  var W = opts.w || 1200, H = opts.h || 700; // backing-store resolution (display scales to fit)
 
   if (!document.getElementById("mc-wb-style")) {
     var st = document.createElement("style");

@@ -4,18 +4,18 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
 <title>Trig Sheet 4 — Monday 6–7 · Monday Club</title>
 <link rel="stylesheet" href="../styles.css">
-<script src="../gate.js"></script></head>
+<style>
+  .wb-reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease, transform .55s ease;margin:2px 0 22px}
+  .wb-reveal.wb-in{opacity:1;transform:none}
+</style>
+</head>
 <body>
 <div class="wrap">
   <div class="topbar"><div class="crumb"><a href="./">Monday 6–7</a> / Trig Sheet 4</div></div>
   <h1>📐 Trigonometry — Sheet 4</h1>
-  <p class="lede">Hi Chloe — seven 3-D trig problems (pendulum arcs, dihedral angles, tipping bowls, elevation). Type your answer and Check; up to <b>10 tries</b>, with a fuller hint each time and a full 7-step solution. Tutor chat at the bottom.</p>
+  <p class="lede">Hi Chloe — seven 3-D trig problems (pendulum arcs, dihedral angles, tipping bowls, elevation). Type your answer and Check; up to <b>10 tries</b>, with a fuller hint each time and a full 7-step solution. A scratch whiteboard appears under each question as you scroll.</p>
 
   <div id="trig-problems"></div>
-
-  <h2 style="margin-top:30px">💬 Tutor chat <span class="tag">light hints only</span></h2>
-  <p class="muted">Nudges only — the ↗ buttons open ChatGPT or Claude with your question.</p>
-  <div id="chat"></div>
 
   <footer>Monday Club · 6–7 PM · Trig Sheet 4</footer>
 </div>
@@ -101,7 +101,25 @@ var TRIG = [
     solution:"<b>1.</b> AC = h/tan26°, BC = h/tan34°. <b>2.</b> South ⟂ East ⇒ ∠ACB = 90°. <b>3.</b> Pythagoras: AB² = AC² + BC². <b>4.</b> 100² = (h/tan26°)² + (h/tan34°)². <b>5.</b> = h²(2.050² + 1.483²) = 6.402h². <b>6.</b> h² = 10000/6.402 ≈ 1562. <b>7.</b> h = √1562 ≈ 39.5 ≈ <b>40 m</b>."}
 ];
 MondayChallenge("trig-problems", TRIG, {});
-MondayChat("chat", {name:"Chloe"});
+</script>
+<script src="../whiteboard.js"></script>
+<script>
+(function(){
+  var cards = document.querySelectorAll("#trig-problems .chal");
+  var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("wb-in"); io.unobserve(e.target); } });
+  }, {threshold:0.12}) : null;
+  cards.forEach(function(card, i){
+    var wrap = document.createElement("div");
+    wrap.className = "wb-reveal";
+    var holder = document.createElement("div");
+    holder.id = "wb-trig-" + i;
+    wrap.appendChild(holder);
+    card.insertAdjacentElement("afterend", wrap);
+    MondayWhiteboard(holder, {key:"chloe-trig-q" + (i + 1), h:430});
+    if (io) io.observe(wrap); else wrap.classList.add("wb-in");
+  });
+})();
 </script>
 </body>
 </html>

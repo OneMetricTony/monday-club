@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f1226">
+<title>Monday Club</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap" style="max-width:380px;margin-top:11vh">
+  <div style="text-align:center">
+    <div style="font-size:46px">🔒</div>
+    <h1 style="margin:.2em 0 .1em">Monday Club</h1>
+    <p class="lede">Enter the password to continue.</p>
+    <form id="f">
+      <input id="pw" type="password" autocomplete="off" autofocus placeholder="Password"
+        style="width:100%;background:#0e1330;border:1.5px solid var(--line);color:var(--ink);border-radius:12px;padding:13px 15px;font:inherit;font-size:1rem;outline:none">
+      <div id="msg" style="color:var(--bad);font-size:.9rem;min-height:1.2em;margin:10px 0 4px"></div>
+      <button class="btn" type="submit" style="width:100%">Enter →</button>
+    </form>
+  </div>
+</div>
+<script>
+(function(){
+  var PASS = "apples", DEST = "monday-6-7/", KEY = "mc_gate_ok_v1";
+  try { if (localStorage.getItem(KEY) === "1") { location.replace(DEST); return; } } catch(e){}
+  document.getElementById("f").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    if (document.getElementById("pw").value === PASS){
+      try { localStorage.setItem(KEY, "1"); } catch(e){}
+      location.replace(DEST);
+    } else {
+      document.getElementById("msg").textContent = "Wrong password — try again.";
+      document.getElementById("pw").value = "";
+      document.getElementById("pw").focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -124,7 +124,8 @@ MondayChallenge("trig-problems", TRIG, {});
     '</div>';
     card.insertAdjacentElement("afterend", wrap);
     MondayWhiteboard("wb-trig-" + i, {key:"chloe-trig-q" + (i + 1), h:430});
-    MondayNotes("nt-trig-" + i, {key:"chloe-trig-q" + (i + 1)});
+    MondayNotes("nt-trig-" + i, {key:"chloe-trig-q" + (i + 1),
+      preload:["\\text{Given: }", "\\text{Find: }", "\\text{Working: }"]});
     if (io) io.observe(wrap); else wrap.classList.add("wb-in");
   });
 })();

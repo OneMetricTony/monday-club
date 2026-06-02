@@ -82,7 +82,9 @@ window.MondayNotes = function (root, opts) {
 
   var saved = [];
   try { saved = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { saved = []; }
-  if (!Array.isArray(saved) || !saved.length) saved = [""];
+  if (!Array.isArray(saved) || !saved.length) {
+    saved = (opts.preload && opts.preload.length) ? opts.preload.slice() : [""];
+  }
   saved.forEach(addLine);
 
   addBtn.onclick = function () { var mf = addLine(""); save(); if (mf && mf.focus) mf.focus(); };

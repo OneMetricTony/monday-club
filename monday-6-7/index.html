@@ -22,9 +22,9 @@
     <h2>This week's challenges <span class="tag">intermediate combinatorics</span></h2>
     <div id="problems"></div>
 
-    <h2 style="margin-top:30px">📐 Trigonometry Sheet 4 <span class="tag">7 problems · step-by-step</span></h2>
-    <p class="muted">3-D trig: pendulum arcs, dihedral angles, tipping bowls and elevation. Up to 10 tries, with a fuller hint each time.</p>
-    <div id="trig-problems"></div>
+    <div class="choices" style="margin-top:26px">
+      <a class="choice" href="trig-sheet-4.html"><span class="emoji">📐</span><span><span class="t">Trig Sheet 4 →</span><span class="s">7 step-by-step trigonometry problems — on their own page</span></span><span class="go">→</span></a>
+    </div>
 
     <h2 style="margin-top:30px">💬 Tutor chat <span class="tag">light hints only</span></h2>
     <p class="muted">Nudges only — it won't hand you the answer. The ↗ buttons open ChatGPT or Claude with your question.</p>
@@ -398,7 +398,7 @@ var TRIG = [
       row.querySelectorAll(".pill").forEach(function(x){x.classList.remove("active");});
       b.classList.add("active");
       var s=document.getElementById("step-set"); s.classList.add("show");
-      if(!built){ MondayChallenge("problems", PROBLEMS, {}); MondayChallenge("trig-problems", TRIG, {}); MondayChat("chat", {name:"Chloe"}); built=true; }
+      if(!built){ MondayChallenge("problems", PROBLEMS, {}); MondayChat("chat", {name:"Chloe"}); built=true; }
       s.scrollIntoView({behavior:"smooth"});
     };
     row.appendChild(b);

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
+<title>Trig Sheet 4 — Monday 6–7 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="../">Monday Club</a> / <a href="./">Monday 6–7</a> / Trig Sheet 4</div></div>
+  <h1>📐 Trigonometry — Sheet 4</h1>
+  <p class="lede">Hi Chloe — seven 3-D trig problems (pendulum arcs, dihedral angles, tipping bowls, elevation). Type your answer and Check; up to <b>10 tries</b>, with a fuller hint each time and a full 7-step solution. Tutor chat at the bottom.</p>
+
+  <div id="trig-problems"></div>
+
+  <h2 style="margin-top:30px">💬 Tutor chat <span class="tag">light hints only</span></h2>
+  <p class="muted">Nudges only — the ↗ buttons open ChatGPT or Claude with your question.</p>
+  <div id="chat"></div>
+
+  <footer>Monday Club · 6–7 PM · Trig Sheet 4</footer>
+</div>
+
+<script src="../quiz.js"></script>
+<script>
+var TRIG = [
+  {topic:"Pendulum arc", title:"Grandfather clock", answer:"49",
+    statement:"A grandfather-clock pendulum is 1 m long. At the top of its swing the tip is 9 cm higher than at the lowest point. Find the <b>total</b> angle (both sides) through which it swings. <i>(nearest degree)</i>",
+    hints:[
+      "Draw the pendulum vertical (lowest) and at one extreme, angle θ from vertical. It pivots at the top.",
+      "The tip's rise is h = L − L cos θ = L(1 − cos θ).",
+      "Use L = 100 cm, h = 9 cm.",
+      "1 − cos θ = 9/100 = 0.09 → cos θ = 0.91.",
+      "θ = cos⁻¹(0.91) ≈ 24.5° — but that's only ONE side.",
+      "Total swing = 2θ."],
+    solution:"<b>1.</b> Let θ = angle from vertical at the extreme. <b>2.</b> Tip rise: h = L(1 − cos θ). <b>3.</b> L = 100 cm, h = 9 cm. <b>4.</b> 1 − cos θ = 0.09. <b>5.</b> cos θ = 0.91. <b>6.</b> θ = cos⁻¹0.91 ≈ 24.49°. <b>7.</b> Total = 2θ ≈ <b>49°</b>."},
+
+  {topic:"Tipping bowl", title:"Hemispherical bowl — find the angle", answer:"43",
+    statement:"A hemispherical bowl of radius 38 cm holds water to a depth of 12 cm. Find the largest angle it can be tipped through without spilling. <i>(nearest degree)</i>",
+    hints:[
+      "The water VOLUME stays constant; it spills when the (horizontal) surface just reaches the rim.",
+      "At rest the water is a spherical cap of height d: V = (π/3)d²(3R − d).",
+      "At the spill point the surface plane is a distance R sin θ from the centre, so the water is a cap of height R(1 − sin θ).",
+      "Equal volumes ⇒ d²(3R − d) = R³(1 − sin θ)²(2 + sin θ).",
+      "R = 38, d = 12: left = 144·102 = 14688; R³ = 54872 → (1 − sinθ)²(2 + sinθ) = 0.2677.",
+      "Solve: sin θ ≈ 0.684 → θ ≈ 43°."],
+    solution:"<b>1.</b> Volume is conserved; spill = surface reaches rim. <b>2.</b> Rest volume = (π/3)d²(3R−d). <b>3.</b> At spill the plane is R sinθ from centre → cap height h = R(1−sinθ), volume (π/3)h²(3R−h). <b>4.</b> Equate: d²(3R−d) = R³(1−sinθ)²(2+sinθ). <b>5.</b> R=38, d=12 → 14688 = 54872·(1−sinθ)²(2+sinθ) → 0.2677. <b>6.</b> Solve numerically: sinθ ≈ 0.684. <b>7.</b> θ = sin⁻¹0.684 ≈ <b>43°</b>."},
+
+  {topic:"Dihedral angle", title:"Square pyramid, all edges 10", answer:"55",
+    statement:"A square-based pyramid PQRST has all eight edges equal to 10. Find the dihedral angle between triangular face △PQR and the base QRST. <i>(nearest degree — note: it is NOT ∠PQS)</i>",
+    hints:[
+      "All lateral edges equal ⇒ apex P sits directly above the centre O of the square base.",
+      "Measure the dihedral at M, the midpoint of edge QR, using lines ⟂ QR in each plane.",
+      "In the base, MO = half the side = 5 (the apothem).",
+      "Apex height: OQ = 5√2 ≈ 7.07, so H = √(10² − 50) = √50 ≈ 7.07.",
+      "tan(angle) = H / MO = 7.07 / 5 = 1.414.",
+      "angle = tan⁻¹(1.414)."],
+    solution:"<b>1.</b> Equal lateral edges ⇒ apex above centre O. <b>2.</b> At M (midpoint of QR), dihedral is between MO (base) and MP (face), both ⟂ QR. <b>3.</b> Apothem MO = 5. <b>4.</b> OQ = 5√2 ≈ 7.07 → H = √(100−50) = √50 ≈ 7.07. <b>5.</b> Run = MO = 5, rise = H = 7.07. <b>6.</b> tan(angle) = 7.07/5 = 1.414. <b>7.</b> angle = tan⁻¹1.414 ≈ 54.7° ≈ <b>55°</b>."},
+
+  {topic:"Dihedral angle", title:"Regular tetrahedron", answer:"71",
+    statement:"Find the dihedral angle between any two faces of a regular tetrahedron. <i>(nearest degree)</i>",
+    hints:[
+      "Pick edge length 2 — the answer is the same for any regular tetrahedron.",
+      "Each face is equilateral; its median (height) is √3.",
+      "On a shared edge, the perpendiculars from each face meet at opposite vertices.",
+      "Setting up the geometry of those two medians gives a clean cosine.",
+      "cos(dihedral) = 1/3.",
+      "angle = cos⁻¹(1/3)."],
+    solution:"<b>1.</b> Use edge 2 (scale-independent). <b>2.</b> Face median = √3. <b>3.</b> At a shared edge's midpoint, the two face-medians (each √3) run to the opposite vertices. <b>4.</b> Using coordinates, the angle between the faces satisfies cos θ = 1/3. <b>5.</b> (The medians' components reduce to a 1 : 3 ratio.) <b>6.</b> θ = cos⁻¹(1/3). <b>7.</b> θ ≈ 70.5° ≈ <b>71°</b>."},
+
+  {topic:"Pendulum arc", title:"Swing in a vertical plane", answer:"48",
+    statement:"A pendulum 0.7 m long swings in a vertical plane so its tip's highest position is 6 cm above the lowest. Find the total angle through which it swings. <i>(nearest degree)</i>",
+    hints:[
+      "Same model as the clock: one-side rise h = L(1 − cos θ).",
+      "Use L = 70 cm, h = 6 cm.",
+      "1 − cos θ = 6/70 ≈ 0.0857.",
+      "cos θ ≈ 0.9143.",
+      "θ ≈ 23.9° (one side).",
+      "Total = 2θ."],
+    solution:"<b>1.</b> θ = angle from vertical at the extreme. <b>2.</b> Rise: h = L(1 − cos θ). <b>3.</b> L = 70 cm, h = 6 cm. <b>4.</b> 1 − cos θ = 6/70 = 0.0857. <b>5.</b> cos θ = 0.9143. <b>6.</b> θ = cos⁻¹0.9143 ≈ 23.93°. <b>7.</b> Total = 2θ ≈ <b>48°</b>."},
+
+  {topic:"Tipping bowl", title:"Hemispherical bowl — find the depth", answer:"30",
+    statement:"A hemispherical bowl of radius 45 cm holds milk; the most it can be tilted without spilling is 20°. Find the depth of the milk. <i>(nearest cm)</i>",
+    hints:[
+      "Use the same volume relation: d²(3R − d) = R³(1 − sin θ)²(2 + sin θ).",
+      "Now θ = 20° is given; solve for d.",
+      "sin 20° = 0.342 → (1 − 0.342)²(2 + 0.342) = 0.658²·2.342 ≈ 1.014.",
+      "R³ = 45³ = 91125, so the right side ≈ 92 400.",
+      "Solve d²(135 − d) = 92 400.",
+      "d ≈ 29.6 cm."],
+    solution:"<b>1.</b> d²(3R − d) = R³(1 − sinθ)²(2 + sinθ). <b>2.</b> θ = 20°, R = 45. <b>3.</b> sin20° = 0.342. <b>4.</b> (1 − 0.342)²(2 + 0.342) ≈ 1.014. <b>5.</b> Right side = 91125·1.014 ≈ 92 400. <b>6.</b> Solve d²(135 − d) = 92 400. <b>7.</b> d ≈ 29.6 → depth ≈ <b>30 cm</b>."},
+
+  {topic:"Elevation (3-D)", title:"TV tower", answer:"40",
+    statement:"Points A, B, C are on level ground; C is the tower's base. A is due south of C, B due east of C, and AB = 100 m. The top's angle of elevation is 26° from A and 34° from B. Find the tower's height. <i>(nearest metre)</i>",
+    hints:[
+      "Let height = h. From A: tan26° = h/AC → AC = h/tan26°. From B: BC = h/tan34°.",
+      "South ⟂ East, so angle ACB = 90°.",
+      "Right triangle: AB² = AC² + BC².",
+      "100² = (h/tan26°)² + (h/tan34°)².",
+      "1/tan26° ≈ 2.050, 1/tan34° ≈ 1.483 → 10000 = h²(4.204 + 2.198) = 6.402h².",
+      "h² = 10000/6.402 ≈ 1562 → h ≈ 39.5 m."],
+    solution:"<b>1.</b> AC = h/tan26°, BC = h/tan34°. <b>2.</b> South ⟂ East ⇒ ∠ACB = 90°. <b>3.</b> Pythagoras: AB² = AC² + BC². <b>4.</b> 100² = (h/tan26°)² + (h/tan34°)². <b>5.</b> = h²(2.050² + 1.483²) = 6.402h². <b>6.</b> h² = 10000/6.402 ≈ 1562. <b>7.</b> h = √1562 ≈ 39.5 ≈ <b>40 m</b>."}
+];
+MondayChallenge("trig-problems", TRIG, {});
+MondayChat("chat", {name:"Chloe"});
+</script>
+</body>
+</html>

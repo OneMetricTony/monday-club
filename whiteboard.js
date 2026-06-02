@@ -21,7 +21,8 @@ window.MondayWhiteboard = function (root, opts) {
       ".mc-wb-btn.on{background:var(--accent);color:#0b0f24;border-color:var(--accent)}" +
       ".mc-wb-canvas{width:100%;height:auto;display:block;background:#fff;border-radius:10px;" +
         "border:1px solid var(--line);touch-action:none;cursor:crosshair}" +
-      ".mc-wb-note{margin-left:auto;color:var(--soft);font-size:12px}";
+      ".mc-wb-note{margin-left:auto;color:var(--soft);font-size:12px}" +
+      ".mc-wb.mc-wb-big{position:fixed;inset:3vh 3vw;z-index:99990;margin:0;overflow:auto;box-shadow:0 0 0 100vmax rgba(5,7,20,.72)}";
     document.head.appendChild(st);
   }
 
@@ -35,6 +36,7 @@ window.MondayWhiteboard = function (root, opts) {
         }).join("") +
         '<button class="mc-wb-btn" data-tool="erase">Eraser</button>' +
         '<button class="mc-wb-btn" data-tool="clear">Clear</button>' +
+        '<button class="mc-wb-btn" data-tool="expand">⤢ Expand</button>' +
         '<span class="mc-wb-note" id="mc-wb-note">saved automatically</span>' +
       '</div>' +
       '<canvas class="mc-wb-canvas" width="' + W + '" height="' + H + '"></canvas>' +
@@ -113,5 +115,12 @@ window.MondayWhiteboard = function (root, opts) {
     try { localStorage.removeItem(KEY); } catch (e) {}
     note.textContent = "cleared";
     setTimeout(function () { note.textContent = "saved automatically"; }, 1200);
+  };
+
+  var wbEl = root.querySelector(".mc-wb");
+  var expandBtn = root.querySelector('[data-tool="expand"]');
+  expandBtn.onclick = function () {
+    var big = wbEl.classList.toggle("mc-wb-big");
+    expandBtn.textContent = big ? "✕ Close" : "⤢ Expand";
   };
 };

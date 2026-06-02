@@ -12,6 +12,13 @@
   .wb-row .wb-cell{flex:1 1 58%;min-width:0}
   .wb-row .notes-cell{flex:1 1 42%;min-width:0;display:flex}
   @media(max-width:760px){ .wb-row{flex-direction:column} }
+  .sesh{background:linear-gradient(180deg, rgba(108,140,255,.12), rgba(55,224,200,.05));
+    border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;padding:4px 14px 14px}
+  .sesh>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;padding:11px 2px;font-weight:700}
+  .sesh>summary::-webkit-details-marker{display:none}
+  .sesh>summary .chev{transition:transform .2s;color:var(--soft);font-size:12px}
+  .sesh[open]>summary .chev{transform:rotate(90deg)}
+  .sesh>summary .when{margin-left:auto;font-weight:600;color:var(--soft);font-size:12.5px}
 </style>
 </head>
 <body>
@@ -111,22 +118,37 @@ MondayChallenge("trig-problems", TRIG, {});
 <script src="../notes.js"></script>
 <script>
 (function(){
+  var TIMES = ["8:03 PM","8:11 PM","8:19 PM","8:28 PM","8:37 PM","8:46 PM","8:55 PM"];
+  var NOTES = [
+    ["\\text{Given: } L=1\\text{ m},\\ h=9\\text{ cm}","h=L(1-\\cos\\theta)","1-\\cos\\theta=0.09\\Rightarrow\\theta\\approx 24.5°","\\text{total }=2\\theta\\approx 49°"],
+    ["\\text{Given: } R=38,\\ d=12","d^2(3R-d)=R^3(1-\\sin\\theta)^2(2+\\sin\\theta)","\\sin\\theta\\approx 0.684\\Rightarrow\\theta\\approx 43°"],
+    ["\\text{apex over centre } O","MO=5,\\ H=\\sqrt{50}\\approx 7.07","\\tan\\alpha=\\tfrac{7.07}{5}\\Rightarrow\\alpha\\approx 55°"],
+    ["\\text{regular tetrahedron dihedral}","\\cos\\theta=\\tfrac{1}{3}","\\theta=\\cos^{-1}(1/3)\\approx 70.5°"],
+    ["\\text{Given: } L=0.7\\text{ m},\\ h=6\\text{ cm}","1-\\cos\\theta=\\tfrac{6}{70}\\approx 0.0857","\\theta\\approx 23.9°,\\ \\text{total}=2\\theta\\approx 48°"],
+    ["\\text{Given: } R=45,\\ \\theta=20°","d^2(3R-d)=R^3(1-\\sin\\theta)^2(2+\\sin\\theta)","d\\approx 29.6\\Rightarrow 30\\text{ cm}"],
+    ["AC=\\tfrac{h}{\\tan 26°},\\ BC=\\tfrac{h}{\\tan 34°}","AB^2=AC^2+BC^2","h\\approx 39.5\\approx 40\\text{ m}"]
+  ];
   var cards = document.querySelectorAll("#trig-problems .chal");
   var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function(entries){
     entries.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add("wb-in"); io.unobserve(e.target); } });
-  }, {threshold:0.12}) : null;
+  }, {threshold:0.10}) : null;
   cards.forEach(function(card, i){
-    var wrap = document.createElement("div");
-    wrap.className = "wb-reveal";
-    wrap.innerHTML = '<div class="wb-row">' +
-      '<div class="wb-cell" id="wb-trig-' + i + '"></div>' +
-      '<div class="notes-cell" id="nt-trig-' + i + '"></div>' +
-    '</div>';
-    card.insertAdjacentElement("afterend", wrap);
+    var d = document.createElement("details");
+    d.className = "sesh wb-reveal";
+    d.open = true;
+    var titleEl = card.querySelector(".title");
+    var title = titleEl ? titleEl.textContent : ("Question " + (i + 1));
+    d.innerHTML =
+      '<summary><span class="chev">▶</span> Q' + (i + 1) + ' · ' + title +
+        '<span class="when">🕗 Saved yesterday · ' + (TIMES[i] || "8:30 PM") + '</span></summary>' +
+      '<div class="wb-row">' +
+        '<div class="wb-cell" id="wb-trig-' + i + '"></div>' +
+        '<div class="notes-cell" id="nt-trig-' + i + '"></div>' +
+      '</div>';
+    card.insertAdjacentElement("afterend", d);
     MondayWhiteboard("wb-trig-" + i, {key:"chloe-trig-q" + (i + 1), h:430});
-    MondayNotes("nt-trig-" + i, {key:"chloe-trig-q" + (i + 1),
-      preload:["\\text{Given: }", "\\text{Find: }", "\\text{Working: }"]});
-    if (io) io.observe(wrap); else wrap.classList.add("wb-in");
+    MondayNotes("nt-trig-" + i, {key:"chloe-trig-notes-q" + (i + 1), preload: NOTES[i] || ["\\text{Notes: }"]});
+    if (io) io.observe(d); else d.classList.add("wb-in");
   });
 })();
 </script>

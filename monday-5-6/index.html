@@ -29,7 +29,35 @@
     </div>
   </section>
 
+  <h2 style="margin-top:34px">🗓️ Last session <span class="tag">Mon · 5–6 PM</span></h2>
+  <p class="muted">The loops we coded together — open a card for the code, its output, and a whiteboard.</p>
+  <div id="sessions"></div>
+
   <footer>Monday Club · 5–6 PM</footer>
 </div>
+<script src="../whiteboard.js"></script>
+<script src="../sessions.js"></script>
+<script>
+MondaySessions("sessions", [
+  {title:"Warm-up · print 1–10", q:"<b>Code this loop:</b> print the numbers 1 to 10, one per line.",
+    code:{ttl:"python3 — Donald + Tony", src:"for i in range(1, 11):\n    print(i)",
+      out:"1\n2\n3\n4\n5\n6\n7\n8\n9\n10"}},
+  {title:"Sum of the evens", q:"<b>Code this loop:</b> add up every even number from 1 to 20 and print the total.",
+    code:{ttl:"python3 — Donald + Tony", src:"total = 0\nfor n in range(1, 21):\n    if n % 2 == 0:\n        total += n\nprint(total)",
+      out:"110"}},
+  {title:"Countdown (while loop)", q:"<b>Code this loop:</b> use a <code>while</code> loop to count down from 5, then print \"Liftoff!\".",
+    code:{ttl:"python3 — Donald + Tony", src:"n = 5\nwhile n > 0:\n    print(n)\n    n -= 1\nprint(\"Liftoff!\")",
+      out:"5\n4\n3\n2\n1\nLiftoff!"}},
+  {title:"Greet a list of names", q:"<b>Code this loop:</b> loop over a list of names and greet each one.",
+    code:{ttl:"python3 — Donald + Tony", src:"names = [\"Donald\", \"Tony\", \"Ada\"]\nfor name in names:\n    print(\"Hi \" + name + \"!\")",
+      out:"Hi Donald!\nHi Tony!\nHi Ada!"}},
+  {title:"Nested loops · times table", q:"<b>Code this loop:</b> use nested loops to print a 3×3 multiplication grid.",
+    code:{ttl:"python3 — Donald + Tony", src:"for i in range(1, 4):\n    row = \"\"\n    for j in range(1, 4):\n        row += str(i * j) + \" \"\n    print(row)",
+      out:"1 2 3\n2 4 6\n3 6 9"}},
+  {title:"FizzBuzz (1–15)", q:"<b>Code this loop:</b> print 1 to 15, but \"Fizz\" for multiples of 3, \"Buzz\" for 5, \"FizzBuzz\" for both.",
+    code:{ttl:"python3 — Donald + Tony", src:"for i in range(1, 16):\n    if i % 15 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)",
+      out:"1\n2\nFizz\n4\nBuzz\nFizz\n7\n8\nFizz\nBuzz\n11\nFizz\n13\n14\nFizzBuzz"}}
+], {keyPrefix:"donald-5-6-", firstTime:"5:04 PM"});
+</script>
 </body>
 </html>

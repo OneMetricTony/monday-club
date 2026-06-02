@@ -4,6 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
 <title>Monday 6–8 · Physics — Monday Club</title>
 <link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="theme.css">
+<script src="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -16,7 +17,26 @@
     <a class="choice" href="c4-standing-waves.html"><span class="emoji">🎻</span><span><span class="t">C4 · Standing Waves</span><span class="s">nodes, antinodes, harmonics · 17 questions</span></span><span class="go">→</span></a>
     <a class="choice" href="c5-doppler.html"><span class="emoji">🚓</span><span><span class="t">C5 · Doppler Effect</span><span class="s">pitch shifts, red/blue shift · 16 questions</span></span><span class="go">→</span></a>
   </div>
+  <h2 style="margin-top:34px">🗓️ Last session <span class="tag">Mon · 6–8 PM</span></h2>
+  <p class="muted">Wave problems we worked through — open a card for the notes and a whiteboard.</p>
+  <div id="sessions"></div>
+
   <footer>Monday Club · Physics · 6–8 PM</footer>
 </div>
+<script src="../whiteboard.js"></script>
+<script src="../notes.js"></script>
+<script src="../sessions.js"></script>
+<script>
+MondaySessions("sessions", [
+  {title:"Wave speed", q:"<b>A wave has frequency 50 Hz and wavelength 3 m. Find its speed.</b>",
+    notes:["v = f\\lambda", "v = 50 \\times 3", "v = 150\\ \\text{m/s}"]},
+  {title:"Wavelength", q:"<b>Sound travels at 340 m/s. Find the wavelength of a 170 Hz tone.</b>",
+    notes:["\\lambda = \\frac{v}{f}", "\\lambda = \\frac{340}{170}", "\\lambda = 2\\ \\text{m}"]},
+  {title:"Standing wave", q:"<b>A 1.2 m string vibrates at its fundamental. Find the wavelength.</b>",
+    notes:["\\lambda = 2L", "\\lambda = 2 \\times 1.2", "\\lambda = 2.4\\ \\text{m}"]},
+  {title:"Doppler", q:"<b>A 200 Hz source moves toward you. Higher or lower pitch?</b>",
+    notes:["\\text{approaching} \\Rightarrow f' > f", "\\text{higher pitch}"]}
+], {keyPrefix:"phys-6-8-", firstTime:"6:06 PM"});
+</script>
 </body>
 </html>

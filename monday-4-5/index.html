@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#0f1226">
 <title>Monday 4–5 · Monday Club</title>
 <link rel="stylesheet" href="../styles.css">
+<script src="https://cdn.jsdelivr.net/npm/mathlive/dist/mathlive.min.js"></script>
 <style>
   details.prob{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 14px}
   details.prob>summary{cursor:pointer;font-weight:700;list-style:none}
@@ -34,7 +35,26 @@
     <p class="muted" style="margin-top:14px">When you finish, your next set gets added for next Monday. 🌟</p>
   </section>
 
+  <h2 style="margin-top:34px">🗓️ Last session <span class="tag">Mon · 4–5 PM</span></h2>
+  <p class="muted">Problems we worked through — open a card for the notes and a whiteboard.</p>
+  <div id="sessions"></div>
+
   <footer>Monday Club · 4–5 PM</footer>
 </div>
+<script src="../whiteboard.js"></script>
+<script src="../notes.js"></script>
+<script src="../sessions.js"></script>
+<script>
+MondaySessions("sessions", [
+  {title:"Percent", q:"<b>A number increased by 20% is 96. Find the number.</b>",
+    notes:["\\text{let the number} = x", "1.2x = 96", "x = 80"]},
+  {title:"Average", q:"<b>The average of five numbers is 12. Four of them are 10, 11, 13, 14. Find the fifth.</b>",
+    notes:["\\text{sum} = 5 \\times 12 = 60", "10+11+13+14 = 48", "\\text{fifth} = 60 - 48 = 12"]},
+  {title:"Counting", q:"<b>How many ways can the letters of MATH be arranged?</b>",
+    notes:["\\text{4 different letters}", "4! = 4\\cdot 3\\cdot 2\\cdot 1", "= 24"]},
+  {title:"Fractions", q:"<b>Compute 2/3 + 1/4.</b>",
+    notes:["\\frac{2}{3}+\\frac{1}{4} = \\frac{8}{12}+\\frac{3}{12}", "= \\frac{11}{12}"]}
+], {keyPrefix:"math-4-5-", firstTime:"4:05 PM"});
+</script>
 </body>
 </html>

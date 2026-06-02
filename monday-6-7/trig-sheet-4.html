@@ -135,7 +135,7 @@ MondayChallenge("trig-problems", TRIG, {});
   cards.forEach(function(card, i){
     var d = document.createElement("details");
     d.className = "sesh wb-reveal";
-    d.open = true;
+    d.open = (i === 0);
     var titleEl = card.querySelector(".title");
     var title = titleEl ? titleEl.textContent : ("Question " + (i + 1));
     d.innerHTML =

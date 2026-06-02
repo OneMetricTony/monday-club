@@ -7,6 +7,9 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Homework · Monday 6–7</title>
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
   .hw-prob{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 22px}
   .hw-prob h2{margin:.1em 0 .5em}
@@ -52,10 +55,35 @@
     <img class="hw-img" src="hw/sequence-question.png" alt="Complement of a sequence problem">
     <details class="sol"><summary>✅ Show solution</summary>
       <div class="sol-body">
-        <p><b>Auto-generated — needs the exact definition first.</b> The rule that <i>defines</i> the complement
-        (the formula on the line directly under the problem statement) is too low-resolution in the scan to read
-        reliably, and parts (a)–(c) all hinge on it. Send me that formula — or a sharper photo — and I'll drop in
-        full worked solutions for all three parts. Use the whiteboard below to work it in the meantime.</p>
+        <p><b>Definition.</b> $c_1=1$ and $c_n=\sum_{k=1}^{n-1} b_k\,c_{n-k}$ for $n\ge 2$. With the generating functions
+        $B(x)=\sum_{k\ge1}b_kx^k$ and $C(x)=\sum_{n\ge1}c_nx^n$, the rule is exactly $C=x+B\,C$, so
+        $C=\dfrac{x}{1-B}$.</p>
+
+        <p><b>(a) $b_n=2^{\,n-1}$.</b> Then $B=\dfrac{x}{1-2x}$, so
+        $C=\dfrac{x}{1-B}=\dfrac{x(1-2x)}{1-3x}$, which expands to $c_n=3^{\,n-2}$ for $n\ge2$. Hence
+        $$c_2=1,\qquad c_3=3,\qquad c_4=9.$$
+        (Check by hand: $c_2=b_1c_1=1$; $c_3=b_1c_2+b_2c_1=1+2=3$; $c_4=b_1c_3+b_2c_2+b_3c_1=3+2+4=9$.)</p>
+
+        <p><b>(b) $S$ geometric.</b> Let $b_k=b_1r^{\,k-1}$, so $B=\dfrac{b_1x}{1-rx}$ and
+        $$C=\frac{x(1-rx)}{1-(b_1+r)x}.$$
+        Writing $t=b_1+r$ and expanding gives $c_n=b_1\,t^{\,n-2}$ for $n\ge2$. Therefore for every $n\ge3$,
+        $\dfrac{c_n}{c_{n-1}}=t$, i.e. $c_n=t\,c_{n-1}$ with the constant $t=b_1+r$ (first term $+$ common ratio).
+        $\blacksquare$</p>
+
+        <p><b>(c) $S$ arithmetic.</b> Let $b_k=b_1+(k-1)d$. Then
+        $B=\dfrac{b_1x-(b_1-d)x^2}{(1-x)^2}$, so
+        $$C=\frac{x(1-x)^2}{\,1-(2+b_1)x+(1+b_1-d)x^2\,}.$$
+        The denominator is quadratic, so for every $n\ge4$ the complement satisfies
+        $$c_n=(2+b_1)\,c_{n-1}-(1+b_1-d)\,c_{n-2}.$$
+        Substituting the given consecutive values:</p>
+        <ul>
+          <li>$n=2027:\ \ -3=(2+b_1)(0)-(1+b_1-d)(3)\ \Rightarrow\ 1+b_1-d=1.$</li>
+          <li>$n=2028:\ \ \ \ 3=(2+b_1)(-3)-(1+b_1-d)(0)\ \Rightarrow\ 2+b_1=-1\ \Rightarrow\ b_1=-3.$</li>
+        </ul>
+        <p>Then $1+b_1-d=1\Rightarrow d=b_1=-3$, so $b_k=-3k$ and
+        $$\boxed{\,b_{2025}=-3(2025)=-6075.\,}$$
+        (Sanity check: the recurrence becomes $c_n=-c_{n-1}-c_{n-2}$, producing the period-3 pattern
+        $\dots,0,-3,3,0,-3,3,\dots$, which matches $c_{2025},c_{2026},c_{2027},c_{2028}=3,0,-3,3$.)</p>
       </div>
     </details>
     <div class="wb-label">🖊️ Whiteboard</div>
@@ -75,6 +103,14 @@
 <script>
 MondayWhiteboard("hw-wb-1", {key:"chloe-hw-1", h:430});
 MondayWhiteboard("hw-wb-2", {key:"chloe-hw-2", h:430});
+</script>
+<script>
+window.addEventListener("load", function () {
+  if (window.renderMathInElement) renderMathInElement(document.body, {
+    delimiters: [{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],
+    throwOnError: false
+  });
+});
 </script>
 </body>
 </html>

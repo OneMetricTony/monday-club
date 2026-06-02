@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f1226">
+<meta name="robots" content="noindex,nofollow">
+<title>Homework · Monday 6–7</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .hw-prob{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 22px}
+  .hw-prob h2{margin:.1em 0 .5em}
+  .hw-img{display:block;max-width:100%;border-radius:10px;border:1px solid var(--line);background:#fff;margin:8px 0}
+  details.sol{margin:12px 0;border:1px solid var(--line);border-left:4px solid var(--good);border-radius:0 12px 12px 0;background:#0e1330;padding:4px 14px}
+  details.sol>summary{cursor:pointer;font-weight:700;padding:9px 2px;list-style:none}
+  details.sol>summary::-webkit-details-marker{display:none}
+  .sol-body{padding:6px 2px 12px;color:#cdd6ff}
+  .sol-body code{background:#1a2150;padding:1px 5px;border-radius:5px}
+  .wb-label{font-size:13px;color:var(--soft);font-weight:700;margin:14px 0 6px}
+  .snips{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:680px){.snips{grid-template-columns:1fr}}
+  .snip img{width:100%;border-radius:10px;border:1px solid var(--line);background:#fff}
+  .snip figcaption{color:var(--soft);font-size:12.5px;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb">Monday 6–7 · Homework</div></div>
+  <h1>📚 Homework</h1>
+  <p class="lede">This week's problems, with solutions and a whiteboard for each. Your scratch work saves automatically.</p>
+
+  <div class="hw-prob">
+    <h2>1 · Arithmetic grid</h2>
+    <img class="hw-img" src="hw/grid-question.png" alt="Arithmetic grid problem">
+    <details class="sol"><summary>✅ Show solution</summary>
+      <div class="sol-body">
+        <img class="hw-img" src="hw/grid-solution.png" alt="Arithmetic grid worked solution">
+        <p>Take the top-left entry as 1, the horizontal step as <i>a</i> and the vertical step as <i>b</i>.
+        The entry in row <i>i</i>, column <i>j</i> (counting from 0) is <code>1 + j·a + i·b</code>.
+        The bottom-right entry <code>1 + 7a + 7b &lt; 75</code> forces <code>a + b ≤ 10</code>.
+        Column 5 is <code>j = 4</code>, so its entries are <code>1 + 4a + i·b</code>; setting one equal to 45 gives
+        <code>4a + i·b = 44</code> with <code>0 ≤ i ≤ 7</code>. Checking each <i>a</i> leaves the grids
+        <code>(a,b) = (1,8), (2,6), (4,4), (5,4), (6,4), (8,2)</code> — that's <b>6 grids</b>, so the answer is <b>(A) 6</b>.</p>
+      </div>
+    </details>
+    <div class="wb-label">🖊️ Whiteboard</div>
+    <div id="hw-wb-1"></div>
+  </div>
+
+  <div class="hw-prob">
+    <h2>2 · Complement of a sequence</h2>
+    <img class="hw-img" src="hw/sequence-question.png" alt="Complement of a sequence problem">
+    <details class="sol"><summary>✅ Show solution</summary>
+      <div class="sol-body">
+        <p><b>Auto-generated — needs the exact definition first.</b> The rule that <i>defines</i> the complement
+        (the formula on the line directly under the problem statement) is too low-resolution in the scan to read
+        reliably, and parts (a)–(c) all hinge on it. Send me that formula — or a sharper photo — and I'll drop in
+        full worked solutions for all three parts. Use the whiteboard below to work it in the meantime.</p>
+      </div>
+    </details>
+    <div class="wb-label">🖊️ Whiteboard</div>
+    <div id="hw-wb-2"></div>
+  </div>
+
+  <h2 style="margin-top:30px">🖊️ Whiteboard snips</h2>
+  <p class="muted">Work photos from the session.</p>
+  <div class="snips">
+    <figure class="snip"><img src="hw/work-snip-1.jpg" alt="Whiteboard work 1"><figcaption>Letter-sequence working (1)</figcaption></figure>
+    <figure class="snip"><img src="hw/work-snip-2.jpg" alt="Whiteboard work 2"><figcaption>Letter-sequence working (2)</figcaption></figure>
+  </div>
+
+  <footer>Monday Club · 6–7 PM · Homework</footer>
+</div>
+<script src="../whiteboard.js"></script>
+<script>
+MondayWhiteboard("hw-wb-1", {key:"chloe-hw-1", h:430});
+MondayWhiteboard("hw-wb-2", {key:"chloe-hw-2", h:430});
+</script>
+</body>
+</html>

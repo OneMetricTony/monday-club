@@ -4,9 +4,16 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f1226">
 <title>Trig Sheet 4 — Monday 6–7 · Monday Club</title>
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
   .wb-reveal{opacity:0;transform:translateY(14px);transition:opacity .55s ease, transform .55s ease;margin:2px 0 22px}
   .wb-reveal.wb-in{opacity:1;transform:none}
+  .wb-row{display:flex;gap:14px;align-items:stretch}
+  .wb-row .wb-cell{flex:1 1 58%;min-width:0}
+  .wb-row .notes-cell{flex:1 1 42%;min-width:0;display:flex}
+  @media(max-width:760px){ .wb-row{flex-direction:column} }
 </style>
 </head>
 <body>
@@ -103,6 +110,7 @@ var TRIG = [
 MondayChallenge("trig-problems", TRIG, {});
 </script>
 <script src="../whiteboard.js"></script>
+<script src="../notes.js"></script>
 <script>
 (function(){
   var cards = document.querySelectorAll("#trig-problems .chal");
@@ -112,11 +120,13 @@ MondayChallenge("trig-problems", TRIG, {});
   cards.forEach(function(card, i){
     var wrap = document.createElement("div");
     wrap.className = "wb-reveal";
-    var holder = document.createElement("div");
-    holder.id = "wb-trig-" + i;
-    wrap.appendChild(holder);
+    wrap.innerHTML = '<div class="wb-row">' +
+      '<div class="wb-cell" id="wb-trig-' + i + '"></div>' +
+      '<div class="notes-cell" id="nt-trig-' + i + '"></div>' +
+    '</div>';
     card.insertAdjacentElement("afterend", wrap);
-    MondayWhiteboard(holder, {key:"chloe-trig-q" + (i + 1), h:430});
+    MondayWhiteboard("wb-trig-" + i, {key:"chloe-trig-q" + (i + 1), h:430});
+    MondayNotes("nt-trig-" + i, {key:"chloe-trig-q" + (i + 1)});
     if (io) io.observe(wrap); else wrap.classList.add("wb-in");
   });
 })();

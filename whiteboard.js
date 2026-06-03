@@ -62,6 +62,16 @@ window.MondayWhiteboard = function (root, opts) {
       img.src = data;
     } else {
       fillWhite();
+      // No saved board yet: draw an optional crude "solution-looking" sketch.
+      // It is NOT saved to localStorage, so the first real stroke (which triggers
+      // save()) overwrites it and the student's own work is never clobbered.
+      if (typeof opts.sketch === "function") {
+        try {
+          ctx.save();
+          opts.sketch(ctx, W, H);
+          ctx.restore();
+        } catch (e) {}
+      }
     }
   })();
 

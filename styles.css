@@ -161,3 +161,17 @@ h2{font-size:1.25rem;margin:1.2em 0 .4em}
 .muted{color:var(--soft);font-size:.9rem}
 .tag{display:inline-block;background:#0e1330;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;color:var(--soft);margin-left:8px}
 footer{margin-top:40px;text-align:center;color:var(--soft);font-size:12px}
+
+/* Collapsed session panels (.sesh <details>) — slim, full-width bar.
+   Only the COLLAPSED summary is shortened; expanded (.sesh[open]) keeps its
+   normal comfortable sizing. Higher specificity (element+class) so these win
+   over the page-level inline `.sesh > summary` rules regardless of load order. */
+details.sesh:not([open]){padding-top:0;padding-bottom:0}
+details.sesh:not([open]) > summary{
+  padding-top:5px;padding-bottom:5px;
+  min-height:0;line-height:1.15;
+}
+/* width stays full: .sesh is a block-level <details>, so the bar spans the
+   container; nothing above changes its display/width. Restore comfortable
+   sizing the moment it opens. */
+details.sesh[open] > summary{padding-top:11px;padding-bottom:11px;line-height:inherit}

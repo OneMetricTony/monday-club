@@ -495,7 +495,7 @@ MondayChallenge("trig-problems", TRIG, {});
         '<div class="wb-cell" id="wb-trig-' + i + '"></div>' +
       '</div>';
     card.insertAdjacentElement("afterend", d);
-    MondayWhiteboard("wb-trig-" + i, {key:"chloe-trig-q" + (i + 1), h:430, sketch: SKETCHES[i] || null});
+    MondayWhiteboard("wb-trig-" + i, {key:"chloe-trig-q" + (i + 1), h:430, sketch: SKETCHES[i] || null, note: "this whiteboard is live and saved after class"});
     if (io) io.observe(d); else d.classList.add("wb-in");
 
     // Per-question expand control: collapsed by default, only the math shows.

@@ -14,6 +14,9 @@ window.MondayWhiteboard = function (root, opts) {
   if (!root) return;
   var KEY = "mc_wb_" + (opts.key || location.pathname);
   var W = opts.w || 1200, H = opts.h || 700; // backing-store resolution (display scales to fit)
+  // Idle status label shown in the toolbar (flips briefly to "saved ✓" on save).
+  // Opt-in per board; default keeps the original wording for every other sheet.
+  var NOTE = opts.note || "saved automatically";
 
   if (!document.getElementById("mc-wb-style")) {
     var st = document.createElement("style");
@@ -48,7 +51,7 @@ window.MondayWhiteboard = function (root, opts) {
         '<button class="mc-wb-btn" data-tool="erase">Eraser</button>' +
         '<button class="mc-wb-btn" data-tool="clear">Clear</button>' +
         '<button class="mc-wb-btn" data-tool="expand">⤢ Expand</button>' +
-        '<span class="mc-wb-note" id="mc-wb-note">saved automatically</span>' +
+        '<span class="mc-wb-note" id="mc-wb-note">' + NOTE + '</span>' +
         '<span class="mc-wb-livedot" title="live: drawing now"></span>' +
       '</div>' +
       '<canvas class="mc-wb-canvas" width="' + W + '" height="' + H + '"></canvas>' +
@@ -94,7 +97,7 @@ window.MondayWhiteboard = function (root, opts) {
       try {
         localStorage.setItem(KEY, canvas.toDataURL("image/png"));
         note.textContent = "saved ✓";
-        setTimeout(function () { note.textContent = "saved automatically"; }, 1200);
+        setTimeout(function () { note.textContent = NOTE; }, 1200);
       } catch (e) { note.textContent = "couldn't save (storage full)"; }
     }, 300);
   }
@@ -163,7 +166,7 @@ window.MondayWhiteboard = function (root, opts) {
     try { localStorage.removeItem(KEY); } catch (e) {}
     net.send({ t: "clear" });
     note.textContent = "cleared";
-    setTimeout(function () { note.textContent = "saved automatically"; }, 1200);
+    setTimeout(function () { note.textContent = NOTE; }, 1200);
   };
 
   var wbEl = root.querySelector(".mc-wb");

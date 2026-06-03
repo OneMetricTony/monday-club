@@ -353,10 +353,269 @@
 </div>
 <script src="../whiteboard.js"></script>
 <script>
-MondayWhiteboard("hw-wb-1", {key:"chloe-hw-1", h:430});
-MondayWhiteboard("hw-wb-2", {key:"chloe-hw-2", h:430});
-MondayWhiteboard("hw-wb-3", {key:"chloe-hw-3", h:430});
-MondayWhiteboard("hw-wb-4", {key:"chloe-hw-4", h:430});
+(function () {
+  // ---- Crude chalk-style "solution-looking" sketches, one per problem. -----
+  // Drawn by the whiteboard ONLY when there is no saved board (whiteboard.js
+  // calls opts.sketch(ctx, W, H) on a fresh board and never re-runs it once the
+  // student starts drawing), so Chloe's own scribbles are never clobbered.
+  // ctx is the canvas 2D context; backing store is W=1200 × H=430. Kept rough
+  // on purpose — a few strokes + the key labels, like a quick board diagram.
+  // Same hand-drawn technique as the trig sheet: line()/arc()/circle()/poly()
+  // wobble + lay down 1–2 slightly offset passes; txt() is tilted a hair.
+  // One-time + decorative, so Math.random() is fine.
+  var CHALK = "#3a4256";
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+
+  function chalk(ctx) {
+    ctx.strokeStyle = CHALK; ctx.fillStyle = CHALK;
+    ctx.lineWidth = 2.4; ctx.lineCap = "round"; ctx.lineJoin = "round";
+    ctx.font = "22px Georgia, serif";
+  }
+
+  // Slightly hand-written labels: tiny rotation + sub-pixel jitter, crisp ink.
+  function txt(ctx, s, x, y, size) {
+    ctx.save();
+    if (size) ctx.font = size + "px Georgia, serif";
+    ctx.translate(x, y);
+    ctx.rotate(rnd(-0.022, 0.022));
+    ctx.globalAlpha = 0.92;
+    ctx.fillText(s, rnd(-0.6, 0.6), rnd(-0.6, 0.6));
+    ctx.restore();
+  }
+
+  // One wobbly pass between (a,b)->(c,d): segmented path nudged perpendicular,
+  // with a little end overshoot and jitter tapered toward the endpoints.
+  function _wobblePass(ctx, a, b, c, d, jit, over) {
+    var dx = c - a, dy = d - b, len = Math.hypot(dx, dy) || 1;
+    var ux = dx / len, uy = dy / len;
+    var nx = -uy, ny = ux;
+    var o1 = rnd(0, over), o2 = rnd(0, over);
+    var ax = a - ux * o1, ay = b - uy * o1;
+    var cx2 = c + ux * o2, cy2 = d + uy * o2;
+    var segs = Math.max(2, Math.round(len / 26));
+    ctx.beginPath();
+    ctx.moveTo(ax + nx * rnd(-jit, jit), ay + ny * rnd(-jit, jit));
+    for (var i = 1; i <= segs; i++) {
+      var t = i / segs;
+      var px = ax + (cx2 - ax) * t, py = ay + (cy2 - ay) * t;
+      var taper = Math.sin(Math.PI * t);
+      var j = jit * (0.4 + 0.6 * taper);
+      ctx.lineTo(px + nx * rnd(-j, j), py + ny * rnd(-j, j));
+    }
+    ctx.stroke();
+  }
+
+  function line(ctx, a, b, c, d) {
+    var lw = ctx.lineWidth, al = ctx.globalAlpha;
+    ctx.lineWidth = lw * rnd(0.85, 1.15);
+    ctx.globalAlpha = al * rnd(0.8, 0.95);
+    _wobblePass(ctx, a, b, c, d, 1.8, 5);
+    if (Math.random() < 0.7) {
+      ctx.lineWidth = lw * rnd(0.5, 0.8);
+      ctx.globalAlpha = al * rnd(0.28, 0.45);
+      _wobblePass(ctx, a + rnd(-1.4, 1.4), b + rnd(-1.4, 1.4),
+                       c + rnd(-1.4, 1.4), d + rnd(-1.4, 1.4), 2.2, 4);
+    }
+    ctx.lineWidth = lw; ctx.globalAlpha = al;
+  }
+
+  // Rough arc as stitched short chords with per-vertex radius/position jitter.
+  function _arcPass(ctx, x, y, r, s, e, jit) {
+    var span = e - s;
+    var steps = Math.max(6, Math.round(Math.abs(span) * r / 24));
+    ctx.beginPath();
+    for (var i = 0; i <= steps; i++) {
+      var ang = s + span * (i / steps) + rnd(-0.02, 0.02);
+      var rr = r + rnd(-jit, jit);
+      var px = x + Math.cos(ang) * rr + rnd(-0.8, 0.8);
+      var py = y + Math.sin(ang) * rr + rnd(-0.8, 0.8);
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+  }
+
+  function arc(ctx, x, y, r, s, e) {
+    var lw = ctx.lineWidth, al = ctx.globalAlpha;
+    ctx.lineWidth = lw * rnd(0.85, 1.15);
+    ctx.globalAlpha = al * rnd(0.8, 0.95);
+    _arcPass(ctx, x, y, r, s, e, 2.2);
+    if (Math.random() < 0.55) {
+      ctx.lineWidth = lw * rnd(0.5, 0.8);
+      ctx.globalAlpha = al * rnd(0.25, 0.4);
+      _arcPass(ctx, x, y, r + rnd(-1.5, 1.5), s, e, 2.6);
+    }
+    ctx.lineWidth = lw; ctx.globalAlpha = al;
+  }
+
+  function circle(ctx, x, y, r) { arc(ctx, x, y, r, 0, Math.PI * 2); }
+
+  // Small filled chalk dot (for coins / lattice points).
+  function dot(ctx, x, y, r) {
+    ctx.save();
+    ctx.globalAlpha = (ctx.globalAlpha || 1) * rnd(0.8, 0.95);
+    ctx.beginPath();
+    ctx.arc(x + rnd(-0.6, 0.6), y + rnd(-0.6, 0.6), r * rnd(0.85, 1.1), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Wobbly closed polygon through a flat [x0,y0,x1,y1,...] list.
+  function poly(ctx, pts) {
+    for (var i = 0; i < pts.length; i += 2) {
+      var j = (i + 2) % pts.length;
+      line(ctx, pts[i], pts[i + 1], pts[j], pts[j + 1]);
+    }
+  }
+
+  // Short arrow with a wobbly shaft + two head strokes.
+  function arrow(ctx, a, b, c, d) {
+    line(ctx, a, b, c, d);
+    var ang = Math.atan2(d - b, c - a), hl = 14;
+    line(ctx, c, d, c - hl * Math.cos(ang - 0.4), d - hl * Math.sin(ang - 0.4));
+    line(ctx, c, d, c - hl * Math.cos(ang + 0.4), d - hl * Math.sin(ang + 0.4));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Problem 1 — 12×12×12 cube, max exterior sum. Rough cube with a few unit
+  // divisions, a circled corner, and the running setup → answer labels.
+  // ---------------------------------------------------------------------------
+  function SKETCH_1(ctx) {
+    chalk(ctx);
+    var x = 120, y = 110, s = 200, dx = 90, dy = -60; // front origin + depth shift
+    // front face
+    poly(ctx, [x, y, x + s, y, x + s, y + s, x, y + s]);
+    // top + right faces (cabinet projection)
+    line(ctx, x, y, x + dx, y + dy);
+    line(ctx, x + s, y, x + s + dx, y + dy);
+    line(ctx, x + dx, y + dy, x + s + dx, y + dy);
+    line(ctx, x + s, y + s, x + s + dx, y + s + dy);
+    line(ctx, x + s + dx, y + dy, x + s + dx, y + s + dy);
+    // a couple of unit divisions on the front face
+    line(ctx, x + s / 3, y, x + s / 3, y + s);
+    line(ctx, x + 2 * s / 3, y, x + 2 * s / 3, y + s);
+    line(ctx, x, y + s / 3, x + s, y + s / 3);
+    line(ctx, x, y + 2 * s / 3, x + s, y + 2 * s / 3);
+    // circle a corner cube
+    circle(ctx, x + s, y + s, 26);
+    arrow(ctx, x + s + 30, y + s + 18, x + s + 86, y + s + 50);
+    txt(ctx, "corner: 100 + 2c", x + s + 90, y + s + 60, 20);
+    // running solution on the right
+    txt(ctx, "S = 72800 + 136c", 540, 80);
+    txt(ctx, "80000 ≤ S ≤ 85000", 540, 130);
+    txt(ctx, "53 ≤ c ≤ 89", 540, 180);
+    txt(ctx, "→ 37 values", 540, 240, 30);
+    arc(ctx, 700, 252, 70, 0.15, 0.9);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Problem 2 — 8×8 arithmetic grid, a 45 in column 5. Rough grid, "1" top-left,
+  // +a across / +b down arrows, circled 45 in column 5, the equation + answer.
+  // ---------------------------------------------------------------------------
+  function SKETCH_2(ctx) {
+    chalk(ctx);
+    var x = 90, y = 70, n = 8, cell = 38;
+    for (var i = 0; i <= n; i++) {
+      line(ctx, x, y + i * cell, x + n * cell, y + i * cell);   // rows
+      line(ctx, x + i * cell, y, x + i * cell, y + n * cell);   // cols
+    }
+    txt(ctx, "1", x + 10, y + 27, 20);                          // top-left entry
+    arrow(ctx, x + cell * 1.2, y - 18, x + cell * 3, y - 18);   // +a across
+    txt(ctx, "+a", x + cell * 1.5, y - 26, 20);
+    arrow(ctx, x - 22, y + cell * 1.2, x - 22, y + cell * 3);   // +b down
+    txt(ctx, "+b", x - 50, y + cell * 2.2, 20);
+    // column 5 is j=4 → 5th column of cells
+    var colx = x + 4 * cell;
+    circle(ctx, colx + cell / 2, y + 6.5 * cell, 22);           // a 45 low in col 5
+    txt(ctx, "45", colx + 6, y + 6.5 * cell + 7, 18);
+    txt(ctx, "col 5", colx - 4, y - 30, 18);
+    // working on the right
+    txt(ctx, "N = 1 + j·a + i·b", 470, 110);
+    txt(ctx, "4a + i·b = 44", 470, 165);
+    txt(ctx, "a + b ≤ 10", 470, 215);
+    txt(ctx, "→ 6 grids", 470, 275, 30);
+    arc(ctx, 560, 287, 60, 0.15, 0.9);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Problem 3 — complement of a sequence (generating functions). Scribbled
+  // C = x/(1−B), a short scrambled letter row, the cₙ recurrence, boxed answer.
+  // ---------------------------------------------------------------------------
+  function SKETCH_3(ctx) {
+    chalk(ctx);
+    txt(ctx, "C = x + B·C", 90, 90, 28);
+    txt(ctx, "C =", 90, 175, 34);
+    // fraction x / (1 − B)
+    txt(ctx, "x", 210, 150, 26);
+    line(ctx, 195, 168, 300, 168);
+    txt(ctx, "1 − B", 200, 200, 26);
+    // scrambled letter row (the "complement" reordering)
+    var letters = ["A", "D", "B", "F", "C", "E"];
+    for (var i = 0; i < letters.length; i++) {
+      var bx = 110 + i * 60, by = 290;
+      poly(ctx, [bx, by, bx + 46, by, bx + 46, by + 46, bx, by + 46]);
+      txt(ctx, letters[i], bx + 12, by + 33, 24);
+    }
+    txt(ctx, "cₙ", 90, 285, 24);
+    // right column: recurrence + boxed answer
+    txt(ctx, "cₙ = −cₙ₋₁ − cₙ₋₂", 560, 110);
+    txt(ctx, "…0, −3, 3, 0…", 560, 160, 20);
+    // boxed final answer
+    poly(ctx, [555, 200, 1010, 200, 1010, 255, 555, 255]);
+    txt(ctx, "→ b₂₀₂₅ = −6075", 575, 240, 28);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Problem 4 — flipping a triangle of coins. Small triangle of dots split into
+  // unit triangles, plus the (n−1)² / n(n−1)/2 counts and Chloe's data points.
+  // ---------------------------------------------------------------------------
+  function SKETCH_4(ctx) {
+    chalk(ctx);
+    var apexX = 280, apexY = 60, rows = 5, gap = 78;
+    // outer triangle
+    var lx = apexX - (rows - 1) * gap / 2, rx = apexX + (rows - 1) * gap / 2;
+    var baseY = apexY + (rows - 1) * gap * 0.9;
+    poly(ctx, [apexX, apexY, lx, baseY, rx, baseY]);
+    // coin lattice + a couple of internal grid lines = unit triangles
+    var pts = [];
+    for (var r = 0; r < rows; r++) {
+      var cy = apexY + r * gap * 0.9;
+      var roww = r * gap;
+      var sx = apexX - roww / 2;
+      var row = [];
+      for (var c = 0; c <= r; c++) row.push([sx + c * gap, cy]);
+      pts.push(row);
+    }
+    // draw the dividing lines (the / \ and ─ of each unit triangle)
+    for (var r2 = 0; r2 < rows - 1; r2++) {
+      var a = pts[r2], b = pts[r2 + 1];
+      // horizontal between the two rows where coins line up
+      if (r2 + 1 >= 1) line(ctx, b[0][0], b[0][1], b[b.length - 1][0], b[b.length - 1][1]);
+      for (var c2 = 0; c2 < a.length; c2++) {
+        line(ctx, a[c2][0], a[c2][1], b[c2][0], b[c2][1]);     // left slants
+        line(ctx, a[c2][0], a[c2][1], b[c2 + 1][0], b[c2 + 1][1]); // right slants
+      }
+    }
+    // the coins themselves
+    for (var rr = 0; rr < pts.length; rr++)
+      for (var cc = 0; cc < pts[rr].length; cc++)
+        dot(ctx, pts[rr][cc][0], pts[rr][cc][1], 8);
+    // shade-ish mark one unit triangle (just circle it)
+    circle(ctx, apexX, apexY + gap * 0.6, 24);
+    txt(ctx, "flip", apexX + 26, apexY + gap * 0.6, 18);
+    // labels on the right
+    txt(ctx, "(n−1)² unit △", 620, 110, 26);
+    txt(ctx, "n(n−1)/2 flips", 620, 165, 26);
+    txt(ctx, "3 → 4,  4 → 9", 620, 225, 24);
+    arc(ctx, 760, 238, 70, 0.15, 0.9);
+  }
+
+  var SKETCHES = [SKETCH_1, SKETCH_2, SKETCH_3, SKETCH_4];
+
+  MondayWhiteboard("hw-wb-1", {key:"chloe-hw-1", h:430, sketch:SKETCHES[0]});
+  MondayWhiteboard("hw-wb-2", {key:"chloe-hw-2", h:430, sketch:SKETCHES[1]});
+  MondayWhiteboard("hw-wb-3", {key:"chloe-hw-3", h:430, sketch:SKETCHES[2]});
+  MondayWhiteboard("hw-wb-4", {key:"chloe-hw-4", h:430, sketch:SKETCHES[3]});
+})();
 </script>
 <script>
 (function () {

@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0f1226">
+<title>2023 Gauss #22 · Gareth Sequences — Monday 4–5 · Monday Club</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .timer{position:sticky;top:8px;z-index:20;display:inline-flex;align-items:center;gap:8px;float:right;
+    background:#0e1330;border:1.5px solid var(--line);border-radius:999px;padding:8px 16px;
+    font-weight:800;font-variant-numeric:tabular-nums;font-size:1.05rem}
+  .timer.warn{border-color:var(--warn);color:var(--warn)}
+  .timer.up{border-color:var(--bad);color:var(--bad);animation:tpulse 1s infinite}
+  @keyframes tpulse{0%,100%{opacity:1}50%{opacity:.5}}
+  details.prob{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin:0 0 12px}
+  details.prob>summary{cursor:pointer;font-weight:600;list-style:none}
+  details.prob>summary::-webkit-details-marker{display:none}
+  details.prob .reveal-tag{color:var(--accent2);font-size:13px;font-weight:700;margin-left:8px}
+  details.prob .sol{margin-top:12px;border-left:3px solid var(--accent2);padding:10px 14px;background:#0e1330;border-radius:0 10px 10px 0;color:#cdd6ff}
+  details.prob.challenge{border-color:var(--accent2)}
+  details.prob.tips{background:#0e1330}
+  .pnum{display:inline-block;min-width:26px;height:26px;border-radius:8px;background:#1a2150;border:1px solid var(--line);text-align:center;line-height:26px;font-size:13px;margin-right:8px;padding:0 4px}
+  .callout{background:#0e1330;border:1px solid var(--line);border-left:4px solid var(--accent2);border-radius:0 14px 14px 0;padding:14px 18px;margin:0 0 16px}
+  .callout.problem{border-left-color:var(--warn)}
+  .teach{margin:6px 0 14px;line-height:1.6}
+  .qc ul,.teach ul{margin:.4em 0 .4em 1.1em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar"><div class="crumb"><a href="./">Monday 4–5</a> / 2023 Gauss #22</div>
+    <span class="timer" id="timer">⏱ 60:00</span></div>
+  <h1>🔁 Gareth Sequences — one problem, one hour</h1>
+  <p class="lede">Welcome back, and happy Monday! Today we get to play detective with a single deceptively simple problem from the 2023 Gauss Grade 7 contest: a "Gareth sequence" that starts 10, 8, where every new number is just the positive difference of the two before it. It looks like it could go on forever in a messy way, but hidden inside is a tidy repeating pattern, and once we spot it, summing thirty numbers becomes almost effortless. Over four quick fifteen-minute blocks we'll build the sequence by hand, hunt down its cycle, use that cycle to add cleverly instead of brute-force, and finish by inventing our own Gareth sequences to see what else this idea can do.</p>
+
+  <div class="callout problem">
+    <h3>📋 The problem — 2023 Gauss · Grade 7 · #22</h3>
+    <p>A <i>Gareth sequence</i> is a sequence in which each number after the second is the
+    <b>non-negative difference</b> of the two previous numbers, i.e. <code>aₙ = |aₙ₋₁ − aₙ₋₂|</code>.
+    For example, beginning 15, 12 gives 15, 12, 3, 9, 6, … .</p>
+    <p>A Gareth sequence begins <b>10, 8</b>. What is the <b>sum of the first 30 numbers</b>?</p>
+    <p class="muted">(A) 40 &nbsp; (B) 72 &nbsp; (C) 34 &nbsp; (D) 56 &nbsp; (E) 64</p>
+  </div>
+
+  <div class="callout"><h3>🎯 Today's goals</h3><ul><li>Generate a Gareth sequence accurately from a starting pair by repeatedly taking the absolute (non-negative) difference, e.g. confirming 10, 8 leads to 2, 6, 4, 2, 2, 0, ...</li><li>Identify when and how the sequence becomes periodic, recognizing the repeating block (2, 2, 0) and explaining why a 0 plus a repeated value forces a cycle</li><li>Use the cycle to compute the sum of the first 30 terms efficiently: 32 from the first six terms plus eight blocks of (2, 2, 0) worth 4 each, totaling 64 (answer E), instead of adding all thirty by hand</li><li>Explain in words why these sequences must eventually repeat (differences never grow, so values are bounded and must recur)</li><li>Generalize by testing new starting pairs, predicting whether the sequence settles to a (k, k, 0) cycle, and connecting the absolute difference to the GCD of the two starting numbers</li></ul></div>
+
+  <section class="section show">
+    <h2>Block 1 · Build the sequence <span class="tag">0–15 min</span></h2>
+    <p class="muted"><b>Goal:</b> Understand the Gareth rule a_n = |a(n-1) - a(n-2)| and generate the 10, 8 sequence by hand, one term at a time.</p>
+    <div class="teach"><p>A <b>Gareth sequence</b> has a simple rule: after the first two numbers, every new number is the <b>non-negative difference</b> of the two numbers right before it. "Non-negative difference" just means <b>always subtract the smaller number from the bigger one</b>, so your answer is never negative.</p><p>In symbols the rule looks like this:</p><ul><li><code>a_n = |a(n-1) - a(n-2)|</code></li></ul><p>Don't let the bars scare you. The two lines around the subtraction just say "make it positive." Here's the whole trick in plain words:</p><ul><li>Look at the <b>last two</b> numbers you wrote down.</li><li><b>Subtract the smaller from the larger.</b></li><li>Write that answer as the <b>next</b> number.</li><li>Now slide over and repeat with the new "last two."</li></ul><p>A couple of things that trip people up:</p><ul><li>If the two numbers are <b>equal</b>, the difference is <b>0</b> (for example, |2 - 2| = 0).</li><li>If one number is <b>0</b>, you still just take the difference (for example, |2 - 0| = 2).</li><li>The <b>order you write the numbers doesn't matter</b> for the subtraction, because |8 - 10| and |10 - 8| both equal 2.</li></ul><p>Our goal in this block is just to get comfortable <b>cranking out terms one at a time</b> for the start 10, 8. We're not adding anything up yet, we're only building the list and making sure each step is right.</p></div>
+    <div class="tip"><b>Worked example.</b> <p>Let's build the sequence that starts with <b>10, 8</b>. We always work with just the last two numbers.</p><ul><li><b>Start:</b> 10, 8 (these two are given).</li><li><b>3rd term:</b> last two are 10 and 8. Bigger minus smaller: |10 - 8| = <b>2</b>. List so far: 10, 8, 2.</li><li><b>4th term:</b> last two are 8 and 2. |8 - 2| = <b>6</b>. List: 10, 8, 2, 6.</li><li><b>5th term:</b> last two are 2 and 6. Subtract smaller from larger: |6 - 2| = <b>4</b>. List: 10, 8, 2, 6, 4.</li><li><b>6th term:</b> last two are 6 and 4. |6 - 4| = <b>2</b>. List: 10, 8, 2, 6, 4, 2.</li><li><b>7th term:</b> last two are 4 and 2. |4 - 2| = <b>2</b>. List: 10, 8, 2, 6, 4, 2, 2.</li><li><b>8th term:</b> last two are 2 and 2. They're equal, so |2 - 2| = <b>0</b>. List: 10, 8, 2, 6, 4, 2, 2, 0.</li><li><b>9th term:</b> last two are 2 and 0. |2 - 0| = <b>2</b>. List: 10, 8, 2, 6, 4, 2, 2, 0, 2.</li></ul><p>Now look closely at the tail end: we just got <b>2, 2, 0, 2</b>. After 2, 0 we get 2 again, and you can see a pattern forming: the block <b>2, 2, 0</b> keeps repeating from here on out. Try the next two yourself: last two are 0 and 2, so |2 - 0| = <b>2</b>; then last two are 2 and 2, so |2 - 2| = <b>0</b>. Sure enough, 2, 2, 0 again.</p><p>So the full start is <b>10, 8, 2, 6, 4</b>, and then <b>2, 2, 0</b> loops forever. Spotting that repeating block is exactly what we'll use later to find the sum without writing all 30 terms.</p></div>
+    <h3 style="margin-top:18px">Practice</h3>
+    <details class="prob ">
+      <summary><span class="pnum">1.1</span>Find the next THREE terms of a Gareth sequence that begins 7, 3. (Remember: each new term is the non-negative difference, so always subtract the smaller number from the larger one.)<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p>The rule says: each new term equals the bigger number minus the smaller number of the two terms right before it.</p><ol><li>Start: <b>7, 3</b>.</li><li>Next term: take 7 and 3. Bigger minus smaller = 7 - 3 = <b>4</b>. Sequence so far: 7, 3, 4.</li><li>Next term: now use the last two, which are 3 and 4. Bigger minus smaller = 4 - 3 = <b>1</b>. Sequence so far: 7, 3, 4, 1.</li><li>Next term: use the last two, 4 and 1. Bigger minus smaller = 4 - 1 = <b>3</b>. Sequence so far: 7, 3, 4, 1, 3.</li></ol><p>So the three new terms are 4, 1, 3.</p><p style="margin:.6em 0 0"><b>Answer:</b> 4, 1, 3</p></div>
+    </details>
+
+    <details class="prob ">
+      <summary><span class="pnum">1.2</span>A Gareth sequence begins 10, 8. Write out the first SIX terms by hand, one at a time.<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p>We already have the first two terms: <b>10, 8</b>. Now we build each new one as bigger minus smaller of the two before it.</p><ol><li>Term 3: from 10 and 8 -> 10 - 8 = <b>2</b>. So far: 10, 8, 2.</li><li>Term 4: from 8 and 2 -> 8 - 2 = <b>6</b>. So far: 10, 8, 2, 6.</li><li>Term 5: from 2 and 6 -> 6 - 2 = <b>4</b>. So far: 10, 8, 2, 6, 4.</li><li>Term 6: from 6 and 4 -> 6 - 4 = <b>2</b>. So far: 10, 8, 2, 6, 4, 2.</li></ol><p>The first six terms are 10, 8, 2, 6, 4, 2.</p><p style="margin:.6em 0 0"><b>Answer:</b> 10, 8, 2, 6, 4, 2</p></div>
+    </details>
+
+    <details class="prob ">
+      <summary><span class="pnum">1.3</span>A Gareth sequence begins 5, 5. Write out the first FOUR terms. What happens after the second term, and why? (Hint: watch what the difference does when two numbers are equal.)<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p>Start with <b>5, 5</b>. Apply the rule, bigger minus smaller, each time.</p><ol><li>Term 3: from 5 and 5 -> 5 - 5 = <b>0</b>. So far: 5, 5, 0.</li><li>Term 4: from 5 and 0 -> 5 - 0 = <b>5</b>. So far: 5, 5, 0, 5.</li></ol><p>The first four terms are 5, 5, 0, 5.</p><p><b>What happens:</b> when the two equal numbers (5 and 5) meet, their difference is 0, because a number minus itself is 0. That is the key idea behind why Gareth sequences eventually produce zeros: whenever two equal numbers sit next to each other, the next term is 0. (If you kept going you would get 5, 5, 0, 5, 5, 0, ... repeating forever.)</p><p style="margin:.6em 0 0"><b>Answer:</b> 5, 5, 0, 5 (the equal pair gives a difference of 0)</p></div>
+    </details>
+
+    <details class="prob qc-card">
+      <summary><span class="pnum">✓</span><b>Quick check.</b> Using the Gareth rule, what comes right after the numbers 4, 2 in our sequence (that is, the next term after 10, 8, 2, 6, 4, 2)?<ul class='qc'><li>6</li><li>2</li><li>0</li><li>8</li></ul><span class="reveal-tag">▸ Show answer</span></summary>
+      <div class="sol"><p>The next term is the non-negative difference of the last two numbers, 4 and 2: |4 - 2| = 2. You always subtract the smaller from the larger, so the answer is 2 (not 6, and not 0 since the numbers aren't equal).</p><p style="margin:.6em 0 0"><b>Answer:</b> 2</p></div>
+    </details>
+
+    <details class="prob challenge">
+      <summary><span class="pnum">★</span><b>Challenge.</b> A Gareth sequence uses the rule: each term after the first two is the non-negative difference of the previous two terms (always subtract the smaller from the larger). A certain Gareth sequence begins with two whole numbers, and its 5th term is 0 for the FIRST time at position 5. The two starting numbers a1 and a2 satisfy a1 greater than a2, both are between 1 and 9, and a1 + a2 = 11. Find ALL possible starting pairs (a1, a2), and for each one, write out the first 8 terms.<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><h2>Challenge: Hunting for the first 0</h2>
+
+<p><strong>The rule (reminder):</strong> each new term is the non-negative difference of the two before it. "Non-negative" just means we always subtract the smaller number from the larger, so we never get a negative. For example, |8-10| = 2.</p>
+
+<p><strong>What we are looking for.</strong> We need starting pairs (a1, a2) where:</p>
+<ul>
+  <li>a1 is bigger than a2,</li>
+  <li>both a1 and a2 are single digits from 1 to 9,</li>
+  <li>a1 + a2 = 11, and</li>
+  <li>the term in position 5 is the <em>first</em> 0 in the sequence (so a3 and a4 are NOT 0, but a5 IS 0).</li>
+</ul>
+
+<p><strong>Step 1: List the candidate pairs.</strong> Pairs of digits 1 to 9 with a1 &gt; a2 and adding to 11:</p>
+<p>(9,2), (8,3), (7,4), (6,5). (We stop at 6,5 because if a2 caught up to a1 they'd be equal, and 11 is odd so they can never be equal anyway.)</p>
+
+<p><strong>Step 2: Build each sequence by hand and check where the first 0 lands.</strong> I'll generate term by term, always subtracting smaller from larger.</p>
+
+<p><u>Pair (9,2):</u> a1=9, a2=2.<br>
+a3 = |2-9| = 7<br>
+a4 = |7-2| = 5<br>
+a5 = |5-7| = 2<br>
+First five: 9, 2, 7, 5, 2. The 5th term is 2, not 0. Reject.</p>
+
+<p><u>Pair (8,3):</u> a1=8, a2=3.<br>
+a3 = |3-8| = 5<br>
+a4 = |5-3| = 2<br>
+a5 = |2-5| = 3<br>
+First five: 8, 3, 5, 2, 3. The 5th term is 3, not 0. Reject.</p>
+
+<p><u>Pair (7,4):</u> a1=7, a2=4.<br>
+a3 = |4-7| = 3<br>
+a4 = |3-4| = 1<br>
+a5 = |1-3| = 2<br>
+First five: 7, 4, 3, 1, 2. The 5th term is 2, not 0. Reject.</p>
+
+<p><u>Pair (6,5):</u> a1=6, a2=5.<br>
+a3 = |5-6| = 1<br>
+a4 = |1-5| = 4<br>
+a5 = |4-1| = 3<br>
+First five: 6, 5, 1, 4, 3. The 5th term is 3, not 0. Reject.</p>
+
+<p><strong>Step 3: Read the result.</strong> None of the four pairs gives a 0 at position 5. In fact, none of them even hits a 0 in the first five terms. So there are <strong>no</strong> starting pairs that satisfy all the conditions.</p>
+
+<p><strong>Why this makes sense (the cool idea).</strong> A 0 only shows up right after two terms are <em>equal</em>, because the difference of two equal numbers is 0. To get a 0 at position 5, we'd need a3 and a4 to be equal. But a1 + a2 = 11 is odd, and the difference of two numbers keeps a kind of "odd/even fingerprint" that makes the pair of terms refuse to match up that early here. The lesson: building terms one at a time is the surest way to test a claim, and sometimes the honest answer is "it can never happen."</p>
+
+<p><strong>Sanity-check the full 8 terms for one pair</strong> (to practice going further), using (6,5):<br>
+6, 5, 1, 4, 3, 1, 2, 1. (a6=|3-4|? careful: a6=|4-3|=1, a7=|1-3|=2, a8=|2-1|=1.) Still no 0 by term 8 — it eventually drifts toward small numbers and lands in a repeating 1,1,0 block much later, never at position 5.</p><p style="margin:.6em 0 0"><b>Answer:</b> There are no such starting pairs. Checking all four candidates (9,2),(8,3),(7,4),(6,5), none has 0 as its 5th term (the 5th terms are 2, 3, 2, 3). Because a1+a2=11 is odd, two earlier terms can't become equal soon enough to force a 0 at position 5.</p></div>
+    </details>
+
+    <details class="prob tips"><summary>💡 Common mistakes &amp; tutor tips</summary><div class="sol"><ul>
+  <li><strong>Subtracting in the fixed order (always previous minus the one before) and writing negatives.</strong> A student computes 8-10 = -2 instead of 2, or gets stuck thinking they "can't" subtract. Tip: Remind them "non-negative difference" means always put the bigger number first: do |8-10| = 10-8 = 2. The answer is just the gap between the two numbers, and a gap is never negative.</li>
+  <li><strong>Using the wrong two numbers (skipping a term or reusing an old one).</strong> When the sequence gets long, students grab terms that aren't the two most recent ones. Tip: Have them physically point at or underline the last two numbers before each subtraction, then slide that "window" one step to the right each time: 10,8 → then 8,2 → then 2,6, and so on.</li>
+  <li><strong>Panicking at the 0 (term 8) or thinking the sequence ends there.</strong> Reaching ...2,2,0 some students think it stops, or they don't know what to do after a 0. Tip: Show that 0 is a perfectly normal term — just keep going: |0-2| = 2, then |2-2| = 0, then |2-0| = 2. The pattern keeps cycling 2,2,0 forever, it doesn't die.</li>
+  <li><strong>Not noticing the repeating block, so they re-derive every single term and make arithmetic slips.</strong> Grinding out all 30 terms by hand invites errors. Tip: After they reach 2,2,0,2,2,0, ask "what do you notice?" Let them spot the (2,2,0) loop themselves — that discovery is the whole point and sets up the sum shortcut for the next sub-lesson.</li>
+</ul></div></details>
+  </section>
+
+  <section class="section show">
+    <h2>Block 2 · Hunt for the Cycle <span class="tag">15–30 min</span></h2>
+    <p class="muted"><b>Goal:</b> Detect where a Gareth sequence starts repeating and find its cycle length (period 3: the block 2,2,0).</p>
+    <div class="teach"><p>Last time we just wrote out terms using the rule <code>a_n = |previous two subtracted|</code>. Now we go detective mode. Big secret: these sequences <b>always settle into a repeating loop</b>. Once you spot the loop, you never have to compute term-by-term again.</p>
+
+<p><b>How to spot a cycle:</b> a Gareth sequence is fully decided by the <b>pair</b> of numbers you're standing on. If you ever see the <b>same pair</b> show up again, everything after it must repeat in the exact same way. Same pair in, same future out.</p>
+
+<ul>
+<li><b>Watch the pairs, not single numbers.</b> Slide a window of two terms across the sequence.</li>
+<li><b>When a pair repeats, the cycle has begun.</b> The distance between the two appearances is the <b>cycle length</b> (also called the period).</li>
+<li><b>Why it must lock in:</b> the difference rule can never make a number bigger than the larger of the two before it. So the numbers can only shrink or hold — they can't run away to infinity. With small numbers, there are only so many possible pairs, so a repeat is forced eventually.</li>
+</ul>
+
+<p><b>The 0 is the trap door.</b> Watch what happens whenever a 0 appears: if you have a pair like (2, 0), the next term is |0 - 2| = 2, giving (0, 2). Then |2 - 0| = 2, giving (2, 2). Then |2 - 2| = 0, giving (2, 0) again. We're right back where we started. That's the loop snapping shut.</p></div>
+    <div class="tip"><b>Worked example.</b> <p><b>Goal:</b> hunt down the cycle in the 10, 8 sequence. Let's list terms and slide a two-term window across them.</p>
+
+<p>Terms: <code>10, 8, 2, 6, 4, 2, 2, 0, 2, 2, 0, 2, 2, 0, ...</code></p>
+
+<p><b>Step 1 — build the terms (quick refresher of the rule):</b></p>
+<ul>
+<li>|8 - 10| = 2</li>
+<li>|2 - 8| = 6</li>
+<li>|6 - 2| = 4</li>
+<li>|4 - 6| = 2</li>
+<li>|2 - 4| = 2</li>
+<li>|2 - 2| = 0</li>
+<li>|0 - 2| = 2</li>
+<li>|2 - 0| = 2</li>
+<li>|2 - 2| = 0  ... and here we go again.</li>
+</ul>
+
+<p><b>Step 2 — list the pairs (the sliding window):</b></p>
+<ul>
+<li>(10, 8) → (8, 2) → (2, 6) → (6, 4) → (4, 2) → (2, 2) → (2, 0) → (0, 2) → (2, 2) ...</li>
+</ul>
+
+<p><b>Step 3 — catch the repeat.</b> Look carefully: the pair <b>(2, 2)</b> shows up at the 6th-7th terms, and again at the 9th-10th terms. Same pair! From the moment (2, 2) first appears, the future is locked.</p>
+
+<p><b>Step 4 — measure the cycle length.</b> Starting from that first (2, 2), the terms go <code>2, 2, 0, 2, 2, 0, 2, 2, 0, ...</code>. The repeating block is <b>2, 2, 0</b> — that's <b>3 terms long</b>, so the cycle has period <b>3</b>.</p>
+
+<p><b>Step 5 — name where it starts.</b> The first 5 terms (10, 8, 2, 6, 4) are a one-time "warm-up" that never comes back. From the <b>6th term onward</b>, it's nothing but copies of 2, 2, 0 forever. That clean split — 5 warm-up terms, then endless (2,2,0) blocks — is exactly what we'll use next block to total up 30 terms fast.</p></div>
+    <h3 style="margin-top:18px">Practice</h3>
+    <details class="prob ">
+      <summary><span class="pnum">2.1</span>Here is the Gareth sequence that starts 10, 8 (the same one we've been studying): 10, 8, 2, 6, 4, 2, 2, 0, 2, 2, 0, 2, 2, 0, ... Once the sequence settles down, it keeps repeating the same little block of three numbers over and over. Write down that repeating block of three numbers, in order.<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p>Let's look down the list and find the part that keeps showing up again and again:</p><p>10, 8, 2, 6, 4, <b>2, 2, 0</b>, <b>2, 2, 0</b>, <b>2, 2, 0</b>, ...</p><p>The very start (10, 8, 2, 6, 4) only happens once. But after that, watch the pattern:</p><ul><li>2, 2, 0</li><li>then again 2, 2, 0</li><li>then again 2, 2, 0</li></ul><p>The same three numbers come back each time, in the same order. So the repeating block is <b>2, 2, 0</b>.</p><p style="margin:.6em 0 0"><b>Answer:</b> The repeating block is 2, 2, 0.</p></div>
+    </details>
+
+    <details class="prob ">
+      <summary><span class="pnum">2.2</span>In that same sequence 10, 8, 2, 6, 4, 2, 2, 0, 2, 2, 0, ..., two things: (a) How long is the repeating block (how many numbers before it starts over)? This length is called the PERIOD. (b) Which term number is the FIRST one where the repeating 2, 2, 0 pattern begins? (Count the terms: the 1st term is 10, the 2nd is 8, and so on.)<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p><b>Part (a): the period.</b></p><p>The block that repeats is 2, 2, 0. Count how many numbers are in it: 2 (that's one), 2 (that's two), 0 (that's three). So the block has 3 numbers. That means the period is <b>3</b>.</p><p><b>Part (b): where it starts.</b></p><p>Let's number every term and find where the first 2, 2, 0 begins:</p><table border='1' cellpadding='4' style='border-collapse:collapse'><tr><td>Term #</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr><tr><td>Value</td><td>10</td><td>8</td><td>2</td><td>6</td><td>4</td><td>2</td><td>2</td><td>0</td><td>2</td></tr></table><p>The first three terms (10, 8, 2) and the next two (6, 4) are part of the warm-up, not the repeating block. The first clean 2, 2, 0 starts at term 6 (which is 2), then term 7 is 2, and term 8 is 0. So the repeating pattern first begins at the <b>6th term</b>.</p><p style="margin:.6em 0 0"><b>Answer:</b> (a) The period is 3. (b) The repeating block first begins at the 6th term.</p></div>
+    </details>
+
+    <details class="prob ">
+      <summary><span class="pnum">2.3</span>Why does this sequence get STUCK repeating 2, 2, 0 forever and never break out? Explain it in your own words. Hint: think about what the rule a_n = |a_(n-1) - a_(n-2)| does, and check what happens right after you reach the pair 2, 0. Then explain why hitting a pair you've seen before guarantees a cycle.<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p>The key idea: each new term depends ONLY on the last two terms. So if the same PAIR of numbers ever shows up again, everything after it must repeat exactly the same way.</p><p>Let's trace it carefully starting from the part where it locks in. Look at the pair (2, 2):</p><ul><li>From 2, 2: next is |2 - 2| = 0. Now we have ..., 2, 2, 0.</li><li>From 2, 0: next is |0 - 2| = 2. Now we have ..., 2, 0, 2.</li><li>From 0, 2: next is |2 - 0| = 2. Now we have ..., 0, 2, 2.</li><li>From 2, 2: next is |2 - 2| = 0 ... and we are back to a pair (2, 2) we already saw!</li></ul><p>Because the rule only looks at the previous two numbers, the moment we land on the pair (2, 2) a second time, the sequence is forced to make the exact same next moves as before: 0, then 2, then 2, then 0, ... forever. It can never escape, because there is no memory of anything older than the last two terms.</p><p>So the sequence cycles through the three pairs (2,2) &rarr; (2,0) &rarr; (0,2) &rarr; back to (2,2), which on the number line reads off as the repeating block <b>2, 2, 0</b> with period 3.</p><p style="margin:.6em 0 0"><b>Answer:</b> Each term depends only on the previous two, so once a pair like (2, 2) repeats, all following terms must repeat too, locking the sequence into the 2, 2, 0 cycle forever.</p></div>
+    </details>
+
+    <details class="prob qc-card">
+      <summary><span class="pnum">✓</span><b>Quick check.</b> In a Gareth sequence you reach the pair (5, 0). What are the next two terms, and what does this tell you?<ul class='qc'><li>5 then 5; the sequence grows without stopping</li><li>5 then 5, giving (0,5) then (5,5) then (5,0) again — a cycle of length 3 has started</li><li>0 then 0; the sequence is stuck on zero forever</li><li>10 then 5; no cycle ever forms</li></ul><span class="reveal-tag">▸ Show answer</span></summary>
+      <div class="sol"><p>|0-5|=5 gives (0,5); then |5-0|=5 gives (5,5); then |5-5|=0 gives (5,0) again. The pair (5,0) returns, so the block 5,5,0 repeats forever — a period-3 cycle, exactly like 2,2,0 in our problem.</p><p style="margin:.6em 0 0"><b>Answer:</b> 5 then 5, giving (0,5) then (5,5) then (5,0) again — a cycle of length 3 has started</p></div>
+    </details>
+
+    <details class="prob challenge">
+      <summary><span class="pnum">★</span><b>Challenge.</b> Here's a tougher Gareth sequence to crack. This one begins 21, 13 (remember the rule: each new term is the non-negative difference of the two before it, so a_n = |a_(n-1) - a_(n-2)|).
+
+Three questions:
+(a) Write out terms until you spot a repeating block. What is the repeating block, and at which term does it first lock in?
+(b) What is the sum of the FIRST 100 terms?
+(c) Bonus brain-teaser: the number that the sequence eventually keeps repeating (with the 0) is special. What is it, and can you find a quick way to predict it from the two starting numbers 21 and 13 WITHOUT writing out the whole sequence?<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><h2>Challenge: The 21, 13 Gareth Sequence</h2>
+
+<p><strong>The rule again:</strong> each term after the second is the non-negative (absolute) difference of the two before it. So a_n = |a_(n-1) - a_(n-2)|.</p>
+
+<h3>Part (a): Build it and hunt for the cycle</h3>
+<p>Let's grind out terms one at a time. I'll show the subtraction for each:</p>
+<ul>
+<li>Start: <strong>21, 13</strong></li>
+<li>|13 - 21| = <strong>8</strong></li>
+<li>|8 - 13| = <strong>5</strong></li>
+<li>|5 - 8| = <strong>3</strong></li>
+<li>|3 - 5| = <strong>2</strong></li>
+<li>|2 - 3| = <strong>1</strong></li>
+<li>|1 - 2| = <strong>1</strong></li>
+<li>|1 - 1| = <strong>0</strong></li>
+<li>|0 - 1| = <strong>1</strong></li>
+<li>|1 - 0| = <strong>1</strong></li>
+<li>|1 - 1| = <strong>0</strong> ... and we're looping!</li>
+</ul>
+
+<p>So the full run begins:</p>
+<p style="font-family:monospace; background:#f4f4f4; padding:8px;">21, 13, 8, 5, 3, 2, 1, 1, 0, 1, 1, 0, 1, 1, 0, ...</p>
+
+<p><strong>The repeating block is (1, 1, 0)</strong>, and it first locks in at <strong>term 7</strong> (the first "1" of the steady pattern). After that it's (1, 1, 0) over and over forever.</p>
+
+<p><em>How did we know it was really a cycle and not just luck?</em> A cycle is guaranteed the moment a PAIR of consecutive terms repeats. The pair (1, 1) shows up at terms 7-8, and again at terms 10-11. Once a pair repeats, every term after it is forced to copy what came before, because each term depends only on the two right in front of it. The pattern is trapped.</p>
+
+<h3>Part (b): Sum of the first 100 terms</h3>
+<p>Split the 100 terms into two parts: the "warm-up" before the cycle, and the steady cycle.</p>
+
+<p><strong>Warm-up (terms 1-6):</strong> 21 + 13 + 8 + 5 + 3 + 2 = <strong>52</strong></p>
+
+<p><strong>Cycle part (terms 7-100):</strong> that's 100 - 6 = <strong>94 terms</strong>, all following the (1, 1, 0) block.</p>
+<p>Each full block has 3 terms and sums to 1 + 1 + 0 = 2. How many full blocks fit in 94 terms?</p>
+<p>94 = 3 x 31 + 1, so there are <strong>31 full blocks plus 1 leftover term</strong>.</p>
+<ul>
+<li>31 full blocks: 31 x 2 = <strong>62</strong></li>
+<li>1 leftover term: the cycle is 1, 1, 0, 1, 1, 0, ... so the term right after 31 complete blocks is the first of a new block, which is <strong>1</strong></li>
+</ul>
+
+<p><strong>Total = 52 + 62 + 1 = 115.</strong></p>
+
+<h3>Part (c): The bonus brain-teaser</h3>
+<p>The number the sequence settles into repeating (alongside 0) is <strong>1</strong>. Here's the slick shortcut: that steady value is always the <strong>greatest common divisor (GCD)</strong> of the two starting numbers!</p>
+<p>GCD of 21 and 13: since 13 is prime and doesn't divide 21, their only common factor is 1. So the steady value is 1 - exactly what we found.</p>
+<p><strong>Why?</strong> Repeatedly taking differences is secretly the same machine as the Euclidean algorithm for finding a GCD (the famous "keep subtracting the smaller from the larger" trick). Every Gareth sequence eventually grinds down to the pattern (g, g, 0) where g = GCD of the two starters. For example, 10 and 8 have GCD 2, which is why the contest sequence locked into (2, 2, 0). And 21, 13 have GCD 1, so it locks into (1, 1, 0). You can predict the steady block instantly without writing a single difference.</p>
+
+<h3>Quick recap</h3>
+<ul>
+<li>Watch for a repeating PAIR of terms - that's the signal a cycle has begun.</li>
+<li>The cycle here is (1, 1, 0), length 3, starting at term 7.</li>
+<li>Split the sum into warm-up plus whole-number-of-blocks plus leftover.</li>
+<li>The steady repeated value is the GCD of the two starting numbers - a free prediction.</li>
+</ul><p style="margin:.6em 0 0"><b>Answer:</b> (a) The repeating block is (1, 1, 0), first locking in at term 7. (b) The sum of the first 100 terms is 115. (c) The steady repeated value is 1, which equals GCD(21, 13); repeated differencing is the Euclidean algorithm, so any Gareth sequence settles into (g, g, 0) where g is the GCD of the two starting numbers.</answer>
+</invoke>
+</p></div>
+    </details>
+
+    <details class="prob tips"><summary>💡 Common mistakes &amp; tutor tips</summary><div class="sol"><ul>
+  <li><strong>Mistake: Declaring the cycle too early.</strong> Students see the early 2 (like in 10,8,2,6,4,2,2,0...) and shout "it's repeating!" before a true block locks in. <em>Tutor tip:</em> A real cycle means a PAIR of consecutive terms shows up again. The pair (2,2) reappears and is followed by 0 every time — that's the proof it's a true loop, not just one matching number.</li>
+  <li><strong>Mistake: Getting the period (cycle length) wrong.</strong> Some count the repeating block as length 2 (just "2,0") or length 4, instead of the correct 3 (2,2,0). <em>Tutor tip:</em> Write the terms in rows of 3 and stack them: 2,2,0 / 2,2,0 / 2,2,0. When the columns line up perfectly, the row length is your period. Here three terms per row line up, so the period is 3.</li>
+  <li><strong>Mistake: Marking the wrong starting point of the cycle.</strong> Students assume the cycle starts at term 1 and try to fit 10,8,2,6,4 into the pattern. <em>Tutor tip:</em> The "settling-in" terms (10,8,2,6,4) come BEFORE the loop. Circle the first 2,2,0 that begins repeating — that's term 6. Keep those first 5 terms separate when you add things up.</li>
+  <li><strong>Mistake: Not understanding WHY it locks into a cycle.</strong> Students treat the repeat as luck. <em>Tutor tip:</em> Once a 0 appears, the next term is |2-0|=2, then |0-2|... wait, carefully: after 2,0 you get |0-2|... walk it: 2,2,0 → 2,0 gives 2, then 2,2 gives 0, forever. Since differences can never grow bigger than the numbers you start with, the sequence is trapped in small numbers and MUST eventually repeat a pair — and once any pair repeats, everything after must repeat too.</li>
+</ul></div></details>
+  </section>
+
+  <section class="section show">
+    <h2>Block 3 · Sum Using the Cycle <span class="tag">30–45 min</span></h2>
+    <p class="muted"><b>Goal:</b> Find the sum of the first 30 Gareth-sequence terms by adding the pre-cycle part, then counting full cycles plus leftovers.</p>
+    <div class="teach"><p>Now we cash in everything we learned. We don't want to add 30 numbers one by one. Instead we use the <b>cycle</b> to do the heavy lifting. Here's the game plan, in 4 steps:</p><ul><li><b>Step 1 - Split the sequence.</b> Write out enough terms to see where the repeating block starts. For 10, 8 the terms are: 10, 8, 2, 6, 4, then <b>2, 2, 0</b> repeating forever. So the first 5 terms come <i>before</i> the cycle, and everything after is the block (2, 2, 0) over and over.</li><li><b>Step 2 - Add the "before" part.</b> Just add those first few terms by hand: 10+8+2+6+4 = 30.</li><li><b>Step 3 - Count cycles and leftovers.</b> We need 30 terms total. We already used 5, so 30 - 5 = 25 terms still to go. Each cycle is 3 terms long. How many full cycles fit in 25? Do 25 divided by 3 = 8 with remainder 1. So that's <b>8 full cycles</b> and <b>1 leftover term</b>.</li><li><b>Step 4 - Multiply and add.</b> One cycle (2, 2, 0) sums to 4. Eight cycles give 8 x 4 = 32. The 1 leftover term is the next term in the block, which is the first 2. Add it all: 30 + 32 + 2 = <b>64</b>.</li></ul><p>The big idea: <code>total = (before-sum) + (number of full cycles)x(cycle-sum) + (leftover terms)</code>. Multiplication replaces a giant addition, and the remainder tells you exactly which leftover terms to tack on from the start of the block.</p></div>
+    <div class="tip"><b>Worked example.</b> <p><b>Question:</b> The Gareth sequence starts 10, 8. What is the sum of the first 30 terms?</p><p><b>Step 1 - Find where the cycle starts.</b> Build terms with a_n = |a_(n-1) - a_(n-2)|:</p><ul><li>|8-10| = 2, so term 3 is 2</li><li>|2-8| = 6, so term 4 is 6</li><li>|6-2| = 4, so term 5 is 4</li><li>|4-6| = 2, |2-4| = 2, |2-2| = 0 ... and from here it's <b>2, 2, 0</b> forever.</li></ul><p>So the layout is: <b>10, 8, 2, 6, 4</b> (the 5 "before" terms), then the block (2, 2, 0) repeating.</p><p><b>Step 2 - Add the before part.</b> 10 + 8 + 2 + 6 + 4 = <b>30</b>.</p><p><b>Step 3 - Count cycles and leftovers.</b> Terms remaining = 30 - 5 = 25. Cycle length = 3. 25 / 3 = 8 remainder 1. So <b>8 full cycles</b> and <b>1 leftover term</b>.</p><p><b>Step 4 - Multiply and add.</b> Cycle sum = 2 + 2 + 0 = 4. Eight cycles = 8 x 4 = 32. The 1 leftover term is the first term of the block = 2. Now total it up:</p><ul><li>Before: 30</li><li>Cycles: 32</li><li>Leftover: 2</li></ul><p>30 + 32 + 2 = <b>64</b>.</p><p><b>Answer: (E) 64.</b> Quick sanity check: that one leftover 2 makes the difference between 62 and 64 - so getting the remainder right really matters!</p></div>
+    <div class="callout"><h3>🎯 The contest answer (E) 64</h3><div class="solution">
+  <p><strong>The rule:</strong> after the first two numbers, every new number is the positive difference (subtract the smaller from the bigger) of the two numbers right before it.</p>
+
+  <p><strong>Step 1 — Write out terms until you see a pattern.</strong> We start with 10, 8.</p>
+  <ul>
+    <li>10</li>
+    <li>8</li>
+    <li>|8 - 10| = 2</li>
+    <li>|2 - 8| = 6</li>
+    <li>|6 - 2| = 4</li>
+    <li>|4 - 6| = 2</li>
+    <li>|2 - 4| = 2</li>
+    <li>|2 - 2| = 0</li>
+    <li>|0 - 2| = 2</li>
+    <li>|2 - 0| = 2</li>
+    <li>|2 - 2| = 0</li>
+  </ul>
+  <p>So the sequence so far is: <strong>10, 8, 2, 6, 4, 2, 2, 0, 2, 2, 0, ...</strong></p>
+
+  <p><strong>Step 2 — Spot the repeating loop.</strong> Once we hit 2, 2, 0, it just keeps going: 2, 2, 0, 2, 2, 0, 2, 2, 0, ... forever. The block that repeats is <strong>(2, 2, 0)</strong>, and each block adds up to 2 + 2 + 0 = 4.</p>
+
+  <p><strong>Step 3 — Split the first 30 terms into two parts.</strong></p>
+  <p>The repeating part really gets going at the 6th term. So split like this:</p>
+  <ul>
+    <li><strong>First 5 terms:</strong> 10, 8, 2, 6, 4. Their sum is 10 + 8 + 2 + 6 + 4 = <strong>30</strong>.</li>
+    <li><strong>Terms 6 through 30:</strong> that's 30 - 5 = <strong>25 terms</strong>, and they are all just (2, 2, 0) blocks repeating.</li>
+  </ul>
+
+  <p><strong>Step 4 — Add up terms 6 through 30.</strong> Each block (2, 2, 0) is 3 terms. How many whole blocks fit in 25 terms? 25 ÷ 3 = 8 blocks with 1 left over.</p>
+  <ul>
+    <li>8 whole blocks = 8 × 4 = <strong>32</strong></li>
+    <li>1 leftover term: the next term after a block is a 2, so add <strong>2</strong></li>
+  </ul>
+  <p>Sum of terms 6 to 30 = 32 + 2 = <strong>34</strong>.</p>
+
+  <p><strong>Step 5 — Add the two parts together.</strong></p>
+  <p>Total = 30 + 34 = <strong>64</strong>.</p>
+
+  <p><strong>Answer: (E) 64</strong></p>
+</div></div>
+    <h3 style="margin-top:18px">Practice</h3>
+    <details class="prob ">
+      <summary><span class="pnum">3.1</span>A sequence has its terms equal to 4, 4, 0, 4, 4, 0, ... repeating the block (4, 4, 0) over and over. What is the sum of one full block, and what is the sum of the first 9 terms?<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p><strong>Step 1: Find the sum of one block.</strong></p><p>One block is (4, 4, 0). Add them up: 4 + 4 + 0 = 8.</p><p><strong>Step 2: Count how many full blocks are in the first 9 terms.</strong></p><p>Each block has 3 terms. So 9 terms = 9 / 3 = 3 full blocks, with nothing left over.</p><p><strong>Step 3: Multiply the block-sum by the number of blocks.</strong></p><p>3 blocks &times; 8 = 24.</p><p>So the first 9 terms add up to 24.</p><p style="margin:.6em 0 0"><b>Answer:</b> Block sum = 8; first 9 terms = 24.</p></div>
+    </details>
+
+    <details class="prob ">
+      <summary><span class="pnum">3.2</span>A sequence repeats the block (2, 2, 0) forever, starting from term 1: 2, 2, 0, 2, 2, 0, ... . What is the sum of the first 11 terms? (Watch out: 11 is not a multiple of 3, so there will be leftover terms.)<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p><strong>Step 1: Sum of one block.</strong></p><p>The block (2, 2, 0) adds up to 2 + 2 + 0 = 4.</p><p><strong>Step 2: How many full blocks fit, and how many terms are left over?</strong></p><p>Each block is 3 terms. Divide: 11 / 3 = 3 with remainder 2. So we get 3 full blocks (that's 3 &times; 3 = 9 terms) and 2 leftover terms.</p><p><strong>Step 3: Add up the full blocks.</strong></p><p>3 blocks &times; 4 = 12.</p><p><strong>Step 4: Add the leftover terms.</strong></p><p>After the full blocks, the next terms start a fresh block (2, 2, 0). The first 2 of those are 2 and 2, so the leftovers add 2 + 2 = 4.</p><p><strong>Step 5: Total.</strong></p><p>12 + 4 = 16.</p><p style="margin:.6em 0 0"><b>Answer:</b> 16</p></div>
+    </details>
+
+    <details class="prob ">
+      <summary><span class="pnum">3.3</span>This is the real contest problem. A Gareth sequence begins 10, 8 (each later term is the absolute difference of the two before it). The first 30 terms are 10, 8, 2, 6, 4, then the block (2, 2, 0) repeats forever. What is the sum of the first 30 terms?<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p><strong>Step 1: Add the pre-cycle terms (the part before the repeating pattern starts).</strong></p><p>The first 5 terms are 10, 8, 2, 6, 4. Their sum is 10 + 8 + 2 + 6 + 4 = 30.</p><p><strong>Step 2: Figure out how many terms are left after those 5.</strong></p><p>We want 30 terms total, and we've used 5. So 30 &minus; 5 = 25 terms are still to come, and these are all part of the repeating block (2, 2, 0).</p><p><strong>Step 3: Find the block-sum, then split the 25 terms into full blocks plus leftovers.</strong></p><p>One block (2, 2, 0) sums to 2 + 2 + 0 = 4. Each block is 3 terms. Divide: 25 / 3 = 8 with remainder 1. So we have 8 full blocks (8 &times; 3 = 24 terms) and 1 leftover term.</p><p><strong>Step 4: Add up the full blocks.</strong></p><p>8 blocks &times; 4 = 32.</p><p><strong>Step 5: Add the leftover term.</strong></p><p>The leftover is the first term of a fresh (2, 2, 0) block, which is 2. So leftovers add 2.</p><p><strong>Step 6: Put it all together.</strong></p><p>30 (pre-cycle) + 32 (full blocks) + 2 (leftover) = 64.</p><p>The answer is (E) 64.</p><p style="margin:.6em 0 0"><b>Answer:</b> 64, choice (E)</p></div>
+    </details>
+
+    <details class="prob qc-card">
+      <summary><span class="pnum">✓</span><b>Quick check.</b> Suppose the "before" part sums to 30 (5 terms), and after that the block (2, 2, 0) repeats. To get the sum of the first 30 terms, we found 25 terms remain. Why do we compute 25 divided by 3?<ul class='qc'><li>Because 3 is the sum of one cycle</li><li>Because each cycle is 3 terms long, so this tells us how many full cycles plus leftover terms fit</li><li>Because there are 3 numbers before the cycle starts</li><li>Because 30 minus 25 equals 3</li></ul><span class="reveal-tag">▸ Show answer</span></summary>
+      <div class="sol"><p>Each repeating block is 3 terms long, so 25 / 3 = 8 remainder 1 means 8 full cycles (24 terms) plus 1 leftover term. That gives 30 + 8x4 + 2 = 64.</p><p style="margin:.6em 0 0"><b>Answer:</b> Because each cycle is 3 terms long, so this tells us how many full cycles plus leftover terms fit</p></div>
+    </details>
+
+    <details class="prob challenge">
+      <summary><span class="pnum">★</span><b>Challenge.</b> A Gareth sequence begins 21, 6 (so 21, 6, 15, 9, 6, ... where each term after the second is the non-negative difference of the two before it). What is the sum of the FIRST 100 terms?<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><div style="font-family: 'Times New Roman', Georgia, serif; font-size: 16px; line-height: 1.6; color: #1a1a1a; max-width: 640px;">
+  <h3 style="font-size: 18px; margin: 0 0 10px;">Challenge: Sum the first 100 terms of 21, 6, ...</h3>
+
+  <p style="margin: 0 0 12px;">Same trick as the contest problem, just bigger numbers and a longer sum. The plan never changes: <strong>(1)</strong> write out terms until they settle into a repeating block, <strong>(2)</strong> add up the "warm-up" terms before the loop, <strong>(3)</strong> count how many full loops fit plus any leftovers, and <strong>(4)</strong> add it all together.</p>
+
+  <h4 style="font-size: 16px; margin: 16px 0 6px;">Step 1 — Write terms until it repeats</h4>
+  <p style="margin: 0 0 8px;">Start with 21, 6 and keep taking non-negative (absolute) differences:</p>
+  <ul style="margin: 0 0 12px; padding-left: 22px;">
+    <li>|6 - 21| = 15, |15 - 6| = 9, |9 - 15| = 6, |6 - 9| = 3, |3 - 6| = 3, |3 - 3| = 0</li>
+    <li>|0 - 3| = 3, |3 - 0| = 3, |3 - 3| = 0 &nbsp;&larr; the block <strong>3, 3, 0</strong> is back!</li>
+  </ul>
+  <p style="margin: 0 0 8px;">So the sequence is:</p>
+  <p style="margin: 0 0 12px; font-family: 'Courier New', monospace; background:#f4f4f4; padding:8px 10px; border-radius:6px;">21, 6, 15, 9, 6, 3, 3, 0, | 3, 3, 0, | 3, 3, 0, | ...</p>
+  <p style="margin: 0 0 12px;">The first <strong>8 terms</strong> (21, 6, 15, 9, 6, 3, 3, 0) are the warm-up. After that, the block <strong>3, 3, 0</strong> repeats forever.</p>
+
+  <h4 style="font-size: 16px; margin: 16px 0 6px;">Step 2 — Add the warm-up terms</h4>
+  <p style="margin: 0 0 12px;">21 + 6 + 15 + 9 + 6 + 3 + 3 + 0 = <strong>63</strong>.</p>
+
+  <h4 style="font-size: 16px; margin: 16px 0 6px;">Step 3 — Handle the leftover 92 terms</h4>
+  <p style="margin: 0 0 8px;">We want 100 terms total. We already used 8, so there are 100 - 8 = <strong>92 terms</strong> left, all inside the repeating 3, 3, 0 blocks.</p>
+  <p style="margin: 0 0 8px;">Each block is 3 terms long. How many whole blocks fit in 92?</p>
+  <p style="margin: 0 0 8px;">92 &divide; 3 = 30 remainder 2. So that's <strong>30 full blocks</strong> and <strong>2 leftover terms</strong>.</p>
+  <ul style="margin: 0 0 12px; padding-left: 22px;">
+    <li>One block sums to 3 + 3 + 0 = 6, so 30 blocks give 30 &times; 6 = <strong>180</strong>.</li>
+    <li>The 2 leftover terms are the start of the next block: 3, 3, which sum to <strong>6</strong>.</li>
+  </ul>
+
+  <h4 style="font-size: 16px; margin: 16px 0 6px;">Step 4 — Put it together</h4>
+  <p style="margin: 0 0 8px;">Total = warm-up + full blocks + leftovers = 63 + 180 + 6 = <strong>249</strong>.</p>
+  <p style="margin: 12px 0 0; padding:8px 10px; background:#eef6ee; border-radius:6px;"><strong>Answer: 249.</strong></p>
+
+  <p style="margin: 14px 0 0; font-size: 14px; color:#444;"><em>Watch-out:</em> the tempting mistake is to do 100 &divide; 3 right away. You can't — the first 8 terms are NOT part of the loop. Always peel off the warm-up first, then divide only the terms that are truly inside the repeating block.</p>
+</div><p style="margin:.6em 0 0"><b>Answer:</b> 249</p></div>
+    </details>
+
+    <details class="prob tips"><summary>💡 Common mistakes &amp; tutor tips</summary><div class="sol"><ul>
+<li><strong>Counting the cycle from the very start (term 1) instead of from where it actually begins.</strong> Students multiply the cycle-sum by 10 because they think all 30 terms cycle, forgetting that 10,8 and the lead-in 2,6,4 come BEFORE the (2,2,0) pattern locks in. <em>Tutor tip:</em> Have them draw a clear line in the list after the 5th term: "everything left of this line gets added by hand (10+8+2+6+4=30); only the stuff to the right cycles." Then they sum 5 + the cycling 25 separately.</li>
+
+<li><strong>Miscounting how many full cycles fit in the leftover terms.</strong> They do 30÷3 or 25÷3 carelessly and either get the block count wrong or forget the remainder entirely. <em>Tutor tip:</em> Walk it slowly: terms 6 through 30 is 30−6+1 = 25 terms. Then 25÷3 = 8 remainder 1, so 8 full (2,2,0) blocks plus 1 leftover term. Stress that "remainder 1" means one extra term still has to be added — it's not zero.</li>
+
+<li><strong>Forgetting the leftover term(s) after the last full cycle.</strong> They compute 8 blocks × 4 = 32, add 30, get 62, and never add the final extra 2. <em>Tutor tip:</em> Always ask "how many terms have I used up?" 30 (hand) ... wait, 5 hand-terms + 24 cycle-terms = 29, so there's 1 term I haven't touched. That missing term is the leftover 2 — circle it before adding.</li>
+
+<li><strong>Getting the sum of one cycle wrong (using 2+2+0 sloppily).</strong> Some write 2+2+0 = 5 or skip the 0, throwing off the multiplication. <em>Tutor tip:</em> Have them say the block sum out loud once and write it down clearly: 2+2+0 = 4. The 0 adds nothing but the block is still 3 terms long — keep "value of a block (4)" separate from "length of a block (3 terms)."</li>
+</ul></div></details>
+  </section>
+
+  <section class="section show">
+    <h2>Block 4 · Sub-lesson 4: Generalize & Extend <span class="tag">45–60 min</span></h2>
+    <p class="muted"><b>Goal:</b> Predict the long-run behaviour of any Gareth sequence, see why it always settles into a repeating block tied to the gcd, and use the count-the-blocks trick to sum a different starting pair.</p>
+    <div class="teach"><p>We already cracked 10, 8. Now let's become <b>fortune-tellers</b>: given ANY starting pair, can we predict the far future without writing 30 terms?</p>
+<p><b>Big idea 1 — every Gareth sequence shrinks, then loops.</b> Each new term is a difference, so the numbers can never grow bigger than the larger of the two you started with. Numbers that can only go down (or stay) must eventually settle. They always crash into a pattern like <code>x, x, 0</code> that repeats forever. For 10, 8 that loop was <code>2, 2, 0</code>.</p>
+<p><b>Big idea 2 — what is that repeating number?</b> It's the <b>greatest common divisor</b> (gcd) of your two starting numbers — the biggest number that divides both. For 10 and 8, the gcd is 2, and sure enough the loop is <code>2, 2, 0</code>. This is the same flavour as the Euclidean algorithm: keep subtracting the smaller from the larger and you grind down to the gcd. A Gareth sequence is secretly doing exactly that.</p>
+<ul>
+<li>Start 15, 12 → gcd is 3 → it loops on <code>3, 3, 0</code>.</li>
+<li>Start 10, 8 → gcd is 2 → it loops on <code>2, 2, 0</code>.</li>
+<li>Start 7, 7 → gcd is 7 → goes <code>7, 7, 0, 7, 7, 0, ...</code> right away.</li>
+</ul>
+<p><b>Big idea 3 — the summing trick transfers.</b> Any "find the pattern, then add up the first N terms" Gauss problem uses the same 3 moves: (1) list terms until you spot a repeating block, (2) figure out how many whole blocks fit and what's left over, (3) add = (early terms before the loop) + (number of blocks × block sum) + (leftover terms). Once you see this skeleton, you can reuse it on dozens of contest problems.</p></div>
+    <div class="tip"><b>Worked example.</b> <p><b>Harder variation:</b> A Gareth sequence begins <b>9, 6</b>. Find the sum of the first 30 terms. (New start, same skills.)</p>
+<p><b>Step 1 — predict before computing.</b> gcd(9, 6) = 3, so I expect the loop to be <code>3, 3, 0</code>. Let's confirm by building terms with a_n = |a_(n-1) - a_(n-2)|:</p>
+<ul>
+<li>9, 6 → |6-9| = 3</li>
+<li>9, 6, 3 → |3-6| = 3</li>
+<li>9, 6, 3, 3 → |3-3| = 0</li>
+<li>9, 6, 3, 3, 0 → |0-3| = 3</li>
+<li>9, 6, 3, 3, 0, 3 → |3-0| = 3, then |3-3| = 0 ...</li>
+</ul>
+<p>So the terms are: <b>9, 6, 3, 3, 0,</b> then <code>3, 3, 0</code> repeating. Predicted loop confirmed.</p>
+<p><b>Step 2 — split into "before the loop" + "the loop."</b> The first 5 terms are 9, 6, 3, 3, 0. Their sum = 9 + 6 + 3 + 3 + 0 = <b>21</b>.</p>
+<p><b>Step 3 — handle the remaining 25 terms (terms 6 through 30).</b> These are full <code>3, 3, 0</code> blocks. Each block is 3 terms and sums to 3 + 3 + 0 = 6.</p>
+<ul>
+<li>25 terms ÷ 3 per block = 8 whole blocks (that's 24 terms) with 1 term left over.</li>
+<li>8 blocks × 6 = 48.</li>
+<li>The 1 leftover term is the start of the next block, which is a <b>3</b>.</li>
+<li>So terms 6–30 sum to 48 + 3 = <b>51</b>.</li>
+</ul>
+<p><b>Step 4 — total.</b> 21 + 51 = <b>72</b>.</p>
+<p><b>Sanity check:</b> notice this is the SAME skeleton we used for 10, 8 (which gave 64). Same 5-terms-then-loop shape, just bigger numbers, so a bigger answer. The method didn't change at all — that's the whole point of "generalize."</p></div>
+    <h3 style="margin-top:18px">Practice</h3>
+    <details class="prob ">
+      <summary><span class="pnum">4.1</span>Write out the first 8 terms of the Gareth sequence that starts 6, 4. Then describe what block of three numbers repeats forever.<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p>We use the rule a_n = |a_(n-1) - a_(n-2)| (the non-negative difference of the two terms before it).</p><ul><li>Term 1: 6</li><li>Term 2: 4</li><li>Term 3: |4 - 6| = 2</li><li>Term 4: |2 - 4| = 2</li><li>Term 5: |2 - 2| = 0</li><li>Term 6: |0 - 2| = 2</li><li>Term 7: |2 - 0| = 2</li><li>Term 8: |2 - 2| = 0</li></ul><p>So the first 8 terms are: 6, 4, 2, 2, 0, 2, 2, 0.</p><p>Just like the 10, 8 sequence, once we hit a 2 followed by a 2, the sequence locks into the repeating block <strong>2, 2, 0</strong> forever.</p><p style="margin:.6em 0 0"><b>Answer:</b> 6, 4, 2, 2, 0, 2, 2, 0; the repeating block is 2, 2, 0.</p></div>
+    </details>
+
+    <details class="prob ">
+      <summary><span class="pnum">4.2</span>Make a Gareth sequence that starts 9, 6. List terms until it starts repeating, find the repeating block, and notice what that repeating number has to do with the greatest common factor (GCD) of 9 and 6.<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p>Apply a_n = |a_(n-1) - a_(n-2)| step by step:</p><ul><li>Term 1: 9</li><li>Term 2: 6</li><li>Term 3: |6 - 9| = 3</li><li>Term 4: |3 - 6| = 3</li><li>Term 5: |3 - 3| = 0</li><li>Term 6: |0 - 3| = 3</li><li>Term 7: |3 - 0| = 3</li><li>Term 8: |3 - 3| = 0</li></ul><p>So we get: 9, 6, 3, 3, 0, 3, 3, 0, ... and the repeating block is <strong>3, 3, 0</strong>.</p><p>Here is the cool connection: the GCD (greatest common factor) of 9 and 6 is 3, because 3 is the biggest number that divides both. That same 3 is exactly the number that fills the repeating block!</p><p>This is the same idea as the Euclidean algorithm: subtracting the smaller number from the larger over and over eventually leaves you with the GCD. That is why a Gareth sequence always settles into the block (g, g, 0), where g is the GCD of the two starting numbers. (For 10, 8 the GCD is 2, which is why that one ends in 2, 2, 0.)</p><p style="margin:.6em 0 0"><b>Answer:</b> 9, 6, 3, 3, 0, 3, 3, 0; repeating block 3, 3, 0; the 3 is the GCD of 9 and 6.</p></div>
+    </details>
+
+    <details class="prob ">
+      <summary><span class="pnum">4.3</span>A Gareth sequence begins 7, 3. What is the sum of its first 30 terms? (Hint: find where the repeating 3-term block starts, like we did for 10, 8.)<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><p>First build the sequence with a_n = |a_(n-1) - a_(n-2)|:</p><ul><li>Term 1: 7</li><li>Term 2: 3</li><li>Term 3: |3 - 7| = 4</li><li>Term 4: |4 - 3| = 1</li><li>Term 5: |1 - 4| = 3</li><li>Term 6: |3 - 1| = 2</li><li>Term 7: |2 - 3| = 1</li><li>Term 8: |1 - 2| = 1</li><li>Term 9: |1 - 1| = 0</li><li>Term 10: |0 - 1| = 1</li><li>Term 11: |1 - 0| = 1</li><li>Term 12: |1 - 1| = 0</li></ul><p>From term 7 onward we see 1, 1, 0 repeating. (Notice the GCD of 7 and 3 is 1, so the block is 1, 1, 0 — matching the rule from the last problem.) The block starts at term 7.</p><p><strong>Sum of the first 6 terms:</strong> 7 + 3 + 4 + 1 + 3 + 2 = 20.</p><p><strong>Terms 7 through 30:</strong> that is 30 - 6 = 24 terms. Each (1, 1, 0) block has 3 terms and sums to 2. 24 terms ÷ 3 = 8 full blocks, and 8 × 2 = 16.</p><p><strong>Total:</strong> 20 + 16 = 36.</p><p style="margin:.6em 0 0"><b>Answer:</b> 36</p></div>
+    </details>
+
+    <details class="prob qc-card">
+      <summary><span class="pnum">✓</span><b>Quick check.</b> A Gareth sequence starts 12, 8. Without writing all 30 terms, what number will the repeating block be made of (the value x in the x, x, 0 loop)?<ul class='qc'><li>2</li><li>4</li><li>8</li><li>12</li></ul><span class="reveal-tag">▸ Show answer</span></summary>
+      <div class="sol"><p>The looping value is the gcd of the two starting numbers. gcd(12, 8) = 4 (4 divides both 12 and 8, and nothing bigger does), so the sequence settles into the loop 4, 4, 0. (Quick check: 12, 8, 4, 4, 0, 4, 4, 0, ...)</p><p style="margin:.6em 0 0"><b>Answer:</b> 4</p></div>
+    </details>
+
+    <details class="prob challenge">
+      <summary><span class="pnum">★</span><b>Challenge.</b> A Gareth sequence starts with two whole numbers and follows the rule a_n = |a_(n-1) - a_(n-2)| (each term is the non-negative difference of the two before it). The sequence begins 18, 30. (a) Write out terms until you find the repeating block, and describe what number the sequence settles into repeating. (b) What is the sum of the first 30 terms? (c) Here is the cool pattern to discover: for a sequence starting a, b, the number it eventually "settles on" is always the gcd (greatest common divisor) of a and b — the largest number that divides both. Test this by predicting, WITHOUT writing out the whole sequence, the repeating number for a sequence that starts 24, 42, and explain why it makes sense that the differences can never shrink below the gcd.<span class="reveal-tag">▸ Reveal solution</span></summary>
+      <div class="sol"><h2>Gareth Sequences, the Euclidean Connection, and a Sum</h2>
+
+<h3>Part (a): Write out 18, 30 until it repeats</h3>
+<p>Remember the rule: every new term is the non-negative (absolute) difference of the two before it. Let's grind it out, one careful subtraction at a time.</p>
+<ul>
+<li>Term 1 = 18</li>
+<li>Term 2 = 30</li>
+<li>Term 3 = |30 - 18| = 12</li>
+<li>Term 4 = |12 - 30| = 18</li>
+<li>Term 5 = |18 - 12| = 6</li>
+<li>Term 6 = |6 - 18| = 12</li>
+<li>Term 7 = |12 - 6| = 6</li>
+<li>Term 8 = |6 - 12| = 6</li>
+<li>Term 9 = |6 - 6| = 0</li>
+<li>Term 10 = |0 - 6| = 6</li>
+<li>Term 11 = |6 - 0| = 6</li>
+<li>Term 12 = |6 - 6| = 0</li>
+<li>Term 13 = |0 - 6| = 6</li>
+<li>Term 14 = |6 - 0| = 6</li>
+<li>Term 15 = |6 - 6| = 0</li>
+</ul>
+<p>Look at terms 7, 8, 9: that's 6, 6, 0. Then terms 10, 11, 12 are 6, 6, 0 again. The block <strong>(6, 6, 0)</strong> repeats forever, exactly like the (2, 2, 0) block in our 10, 8 problem — just with a 6 instead of a 2. So the sequence settles into repeating the number <strong>6</strong>.</p>
+
+<h3>Part (b): Sum of the first 30 terms</h3>
+<p>This is the same trick as the contest problem: split the 30 terms into a "warm-up" part and a "repeating-block" part. The smart move is to choose the split so the repeating block lines up perfectly.</p>
+<p>The full list of the first 30 terms:</p>
+<p>18, 30, 12, 18, 6, 12, &nbsp; 6, 6, 0, &nbsp; 6, 6, 0, &nbsp; 6, 6, 0, &nbsp; 6, 6, 0, &nbsp; 6, 6, 0, &nbsp; 6, 6, 0, &nbsp; 6, 6, 0, &nbsp; 6, 6, 0</p>
+<p>Notice the clean (6, 6, 0) pattern starts right at <strong>term 7</strong> and never breaks. So let the warm-up be just the first 6 terms, and let the repeating part be everything from term 7 on.</p>
+<p><strong>Warm-up:</strong> the first 6 terms are 18, 30, 12, 18, 6, 12.<br>
+Their sum = 18 + 30 + 12 + 18 + 6 + 12 = <strong>96</strong>.</p>
+<p><strong>Repeating part:</strong> terms 7 through 30. That's 30 - 6 = 24 terms.<br>
+Each full block (6, 6, 0) has 3 terms and sums to 6 + 6 + 0 = 12.<br>
+How many full blocks fit in 24 terms? 24 = 3 × 8 exactly, so that's 8 full blocks and no leftovers — it lines up perfectly.</p>
+<ul>
+<li>8 full blocks: 8 × 12 = 96</li>
+</ul>
+<p>Repeating-part sum = <strong>96</strong>.</p>
+<p><strong>Total = warm-up + repeating part = 96 + 96 = 192.</strong></p>
+<p>Quick sanity check on the term count: 6 (warm-up) + 24 (rest) = 30. Good. And 24 = 3 × 8, so exactly 8 blocks with nothing left over. Good.</p>
+
+<h3>Part (c): The gcd / Euclidean-algorithm secret</h3>
+<p>Here's the beautiful idea. For a sequence starting a, b, the number it eventually settles on repeating is the <strong>gcd of a and b</strong> — the biggest number that divides both evenly.</p>
+<p>Check our examples:</p>
+<ul>
+<li>10, 8: gcd is 2 (largest number dividing both 10 and 8). Settled value = 2. &#10003;</li>
+<li>18, 30: gcd is 6 (6 divides 18 and 30). Settled value = 6. &#10003;</li>
+</ul>
+<p><strong>Prediction for 24, 42:</strong> I find the gcd without writing the sequence. 24 = 2&times;2&times;2&times;3, and 42 = 2&times;3&times;7. The factors they share are one 2 and one 3, so gcd = 2 &times; 3 = <strong>6</strong>. So the sequence starting 24, 42 will eventually repeat the block (6, 6, 0). Predicted settled number: <strong>6</strong>.</p>
+<p><strong>Why differences can never shrink below the gcd:</strong> Let g be the gcd of the starting pair. Then both starting numbers are multiples of g (that's what "divides both" means: 24 and 42 are both multiples of 6). Now here's the key: <em>if two numbers are both multiples of g, their difference is also a multiple of g.</em> For example, 42 and 24 are multiples of 6, and their difference 42 - 24 = 18 is also a multiple of 6. Since every new term is a difference of two earlier multiples of g, <strong>every single term in the whole sequence stays a multiple of g</strong>.</p>
+<p>So the terms can only ever be 0, g, 2g, 3g, ... They can never land on a positive number smaller than g, because there is no multiple of g between 0 and g. The differences keep shrinking (just like in the Euclidean algorithm for finding a gcd — that algorithm is literally "keep subtracting the smaller from the larger"), but the smallest positive value they can possibly reach is g itself. Once you hit g and 0, you're locked into g, g, 0, g, g, 0, ... forever.</p>
+<p>That's why these sequences ALWAYS fall into a (g, g, 0) loop: the gcd is a floor the differences can't break through, and subtracting equal numbers eventually produces a 0, which kicks off the loop.</p>
+
+<h3>The transfer skill (for other Gauss problems)</h3>
+<p>Whenever you see a "follow this rule, then sum a long stretch" problem: (1) generate terms until you spot a repeating block, (2) split the sum into the warm-up part plus a whole number of blocks plus leftovers, and (3) use division-with-remainder (like 24 = 3&times;8) to count blocks and leftovers. The same three-step recipe cracks the contest 10, 8 problem and this harder one — and picking your split so the blocks line up cleanly saves a lot of fuss.</p><p style="margin:.6em 0 0"><b>Answer:</b> (a) 18, 30, 12, 18, 6, 12, then the block (6, 6, 0) repeats forever — it settles on 6. (b) The sum of the first 30 terms is 192. (c) For 24, 42 the settled number is gcd(24, 42) = 6, so it loops (6, 6, 0); differences can never drop below the gcd because every term stays a multiple of the gcd, and there is no multiple of g strictly between 0 and g.</p></div>
+    </details>
+
+    <details class="prob tips"><summary>💡 Common mistakes &amp; tutor tips</summary><div class="sol"><ul>
+  <li><strong>Mistake: Assuming every Gareth sequence ends in the same (2,2,0) loop.</strong> Students see 10,8 settle into 2,2,0 and think all starting pairs do. <em>Tutor tip:</em> Have them run 15,12 by hand — it lands in 3,3,0,3,3,0... The repeating "small number" is the gcd of the two starts (gcd of 10 and 8 is 2; gcd of 15 and 12 is 3). The loop is always (g, g, 0), but g changes with the starting pair.</li>
+  <li><strong>Mistake: Not seeing the gcd / Euclidean-algorithm connection.</strong> They treat the shrinking numbers as random rather than as repeated subtraction. <em>Tutor tip:</em> Point out that |a - b| is exactly what the Euclidean algorithm does to find a common factor. Try 21,6: 21,6,15,9,6,3,3,0,3,3,0... — it shrinks toward gcd(21,6)=3. Connecting it to "find the biggest number that divides both" makes the far-future behaviour predictable instead of mysterious.</li>
+  <li><strong>Mistake: Re-deriving the whole sum from scratch on a new starting pair instead of reusing the method.</strong> Faced with a fresh pair, they list all 30 terms again term-by-term and make arithmetic slips. <em>Tutor tip:</em> Teach the transferable recipe for ALL Gauss "pattern + sum" problems: (1) generate terms until you spot the repeating block, (2) find the block length and its sum, (3) count how many full blocks fit plus leftover terms, (4) add the non-repeating head separately. Same 4 steps work no matter the starting numbers.</li>
+  <li><strong>Mistake: Mis-aligning the block when counting far-out terms (off-by-one on which term is which).</strong> When asked "what is the 100th term?" they lose track of where a block starts. <em>Tutor tip:</em> Have them clearly mark the "head" (terms before the loop starts) and number the looping terms from there, then use remainder/division: position-within-loop = (term number minus head length) mod (block length). Test it on a known term first (e.g. predict term 9 = 2 and check against the listed terms) before trusting it on term 100.</li>
+</ul></div></details>
+  </section>
+
+  <footer>Monday Club · 4–5 PM · built from 2023 Gauss Grade 7 #22 (CEMC, University of Waterloo)</footer>
+</div>
+<script>
+/* 60-minute countdown for the whole hour (resumes on refresh within the session) */
+(function(){
+  var el=document.getElementById("timer"), TOTAL=60*60, KEY="gareth_2023_deadline";
+  var dl=parseInt(sessionStorage.getItem(KEY)||"0",10);
+  if(!dl||dl<Date.now()){dl=Date.now()+TOTAL*1000;sessionStorage.setItem(KEY,String(dl));}
+  (function tick(){
+    var left=Math.max(0,Math.round((dl-Date.now())/1000)), m=Math.floor(left/60), s=left%60;
+    el.textContent="⏱ "+m+":"+(s<10?"0"+s:s);
+    el.classList.toggle("warn", left<=600&&left>0);
+    if(left<=0){el.textContent="⏱ Time's up!";el.classList.remove("warn");el.classList.add("up");return;}
+    setTimeout(tick,1000);
+  })();
+})();
+</script>
+</body>
+</html>
